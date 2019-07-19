@@ -1,0 +1,762 @@
+syntax="proto3";
+package c2game;
+
+import "p_enum.proto";
+
+option java_package = "cn.gyyx.proto.protobuf";
+
+option java_outer_classname = "p_struct";
+
+option optimize_for = SPEED;
+  
+
+
+//单个区域项
+message area_item {
+    int32 areaId = 1;
+    //是否已过关了开拓战
+    bool isOpenArea = 2;
+}
+
+//单个建筑项
+message city_building_item {
+    int64 guid = 1;
+    city_building_type buildingTypeID = 2;
+    int32 level = 3;
+    //建筑操作完成时间戳
+    int64 buildingOperateEndMillTime = 4;
+    //建筑操作类型
+    building_operate_type operateType = 5;
+    //------------------建筑摆放位置坐标------------------    
+    float posX = 6;    
+    float posY = 7;
+    float posZ = 8;
+}
+
+//单个军队项
+message warrior_item {
+    //士兵类型
+    atk_type type = 1;
+    int32 level = 2;
+    int32 num = 3;
+}
+//训练士兵信息
+message train_warrior{
+	//士兵类型
+    atk_type type 	 = 1;
+    int32 level 	 = 2;
+    int32 num 		 = 3;
+	//完成时间戳
+	int64 timeStamp = 4;
+}
+
+//资源信息项
+message res_num_item {
+    //资源类型
+    resource_type resType = 1;
+    int64 num = 2;
+}
+
+//背包 物品信息
+message goods_info {
+    int64 guid = 1;
+    int32 goodsId = 2;
+    int32 num = 3;
+	//装备道具额外信息
+	repeated equip_gem equipGem = 4;
+	//装备获取时间
+	int64 equipGrainTime = 5;
+}
+
+//装备宝石位置和id
+message equip_gem{
+	//宝石位置
+	gem_hole_place place = 1;
+	//宝石装备id
+	int32 gemID = 2;
+}
+
+//使用物品参数项
+message use_goods_item {
+    //当前物品的GUID
+    int64 goodsGuid = 1;
+    int32 goodsId = 2;
+    //使用数量
+    int32 useNum = 3;
+	//额外可选参数项
+	extra_args_items item = 4; 
+}
+//使用物品额外参数项
+message extra_args_items{
+	//加速物品参数
+    accelerate_goods_args accelerateArgs = 1;
+    //挖宝石物品可选参数
+    remove_gem_arg removeGemArg = 2;
+	//重置天赋书参数 不传此参数默认为重置玩家当前天赋
+	reset_talent_arg resetTalentArg = 3;
+	//天赋记忆书参数
+	talent_memeory_arg talentMemArg = 4;
+	//定点传送参数
+	fix_point_transfer_arg fixTransferArg = 5;
+	//召回行军队列参数(大地图士兵guid)
+	int64 recallMarchArg = 6;
+	//保存套装参数
+	save_suit_arg saveSuitArg = 7;
+}
+//保存套装参数
+message save_suit_arg{
+	//套装guid
+	int64 guid = 1;
+	//套装名字
+	string name = 2;
+	//装备信息
+	repeated equip_pos_and_guid equipInfo = 3;
+}
+//定点传送参数
+message fix_point_transfer_arg{
+	//左上角坐标 行
+	int32 row = 1;
+	//列
+	int32 col = 2;
+}
+//重置天赋书参数
+message reset_talent_arg{
+	//天赋书guid 0(默认)为当前玩家使用的天赋
+	int64 taletGuid = 1;
+	//是否套用
+	bool useMemeory = 2;
+}
+//天赋记忆书参数
+message talent_memeory_arg{
+	//天赋的guid
+	int64 talentGuid = 1;
+	//该天赋页的名字
+	string name = 2;
+	//天赋页设置信息
+	repeated talent_type_lv talentInfo = 3;
+}
+//一个天赋的信息
+message talent_type_lv{
+	//天赋类型
+	int32 talentType = 1;
+	//等级
+	int32 level = 2;
+}
+//加速物品参数
+message accelerate_goods_args {
+    //加速类型
+    accelerate_goods_type type = 1;
+    //要加速的建筑GUID
+    int64 buildingGuid = 2;
+    //使用通用加速类型时，实际要加速的类型
+    accelerate_goods_type subType = 3;
+	//加速行军速度参数(大地图士兵guid)
+	int64 speedMarchArg = 4;
+}
+//挖宝石物品参数
+message remove_gem_arg{
+	//装备guid
+    int64 equipGuid = 1;
+    //宝石位置枚举
+    gem_hole_place place = 2;
+    //宝石id
+    int32 gemGoodsId = 3;
+}
+
+//医院治疗队列信息
+message hospital_treat_queue{
+	//治疗伤兵信息
+	repeated warrior_item treatQueue = 1;
+	//治疗完成时间戳
+	int64 timeStamp = 2;
+}
+//研究院信息
+message research_queue{
+	//已解锁的研究项
+	repeated research_detail items = 1;
+	//研究队列项属于哪个大类
+	int32 classId = 2;
+	//研究队列 对应研究表id
+	int32 id = 3;
+	//研究队列完成时间戳
+	int64 timeStamp = 4;
+}
+//研究项信息
+message research_detail{
+	//研究大类
+	int32 classId = 1;
+	//该分类下解锁的研究项
+	repeated int32 researchTableId = 2;
+}
+
+//------------------大地图start----------------
+
+//大地图上的城堡单位
+message map_unit_town {
+    //玩家的guid
+    int64 playerGuid = 1;
+    float x = 2;
+    float y = 3;
+    int32 level = 4;
+    string name = 5;
+    int32 lookenFeelId = 6;
+    //是否城墙冒火
+    bool wallFire = 7;
+    //是否有盾
+    bool dun = 8;
+    //主城领主是否被绑架了
+    bool lock = 9;
+    //称号
+    string title = 10;
+    string factionCode = 11;
+}
+
+//大地图上的军队单位
+message map_unit_soldiers {
+    int64 soldiersGuid = 1;
+    int64 ownerGuid = 2;
+    string name = 3;
+    float curX = 4;
+    float curY = 5;
+    march_map_type marchMapType = 6;
+	march_state marchState = 7;
+    int64 marchStartTime = 8;
+    float startX = 9;
+    float startY = 10;
+    float endX = 11;
+    float endY = 12;
+    int64 marchEndTime = 13;
+    string factionCode = 14;
+}
+
+message map_unit_line{
+	int64 lineGuid=1;
+	int64 ownerGuid=2;
+	float curX=3;
+	float curY=4;
+	bool startPoint=5;
+	march_map_type marchMapType=6;
+	float startX=7;
+	float startY=8;
+	float endX=9;
+	float endY=10;
+    // 帮会GUID
+    int64 factionGuid = 11;
+    int64 soldierGuid = 12;
+}
+
+//资源点
+message map_unit_resource {
+    int64 resGuid = 1;
+    float posX = 2;
+    float posY = 3;
+    //资源类型
+    resource_type resType = 4;
+    int32 level = 5;
+    //当前资源量
+    int32 curResCnt = 6;
+    //总资源量
+    int32 totalResCnt = 7;
+    //完成采集时间戳
+    int64 endCollectTime = 8;
+    //占领者GUID
+    int64 ownerGuid = 9;
+    string ownerPlayerName = 10;
+    string ownerFactionCode = 11;
+    int64 ownerSoldierGuid = 12;
+}
+
+
+//野怪
+message map_unit_monster {
+    int64 monsterGuid = 1;
+    float posX = 2;
+    float posY = 3;
+    int32 monsterType = 4;
+    int32 monsterLv = 5;
+    //消失时间戳
+    int64 disappearTime = 6;
+    int64 hp = 7;
+    int64 maxHp = 8;
+    //占领者GUID(玩家与怪正在手动战斗)
+    int64 ownerGuid = 9;
+}
+//营地单位
+message map_unit_camp{
+	//营地guid
+	int64 campGuid = 1;
+	float posX = 2;
+    float posY = 3;	
+	int64 ownerGuid = 4;
+	int64 soldierGuid = 5;
+}
+//------------------大地图end----------------
+
+//单个军械项
+message armament_item {
+    //军械类型
+    armament_type type = 1;
+    //军械等级
+    int32 level = 2;
+}
+
+//--------------------------邮件start--------------------------
+
+//单个邮件项
+message mail_item {
+    //唯一id
+    int64 guid = 1;
+    //配置文件的对应一行的ID
+    int32 mailId = 2;
+    //收件时的系统秒数时间戳
+    int32 receiveSysSecTime = 3;
+    //是否已读
+    bool alreadyRead = 4;
+    //邮件文件动态参数
+    repeated string txtParamArray = 5;
+    //邮件是否已收藏
+    bool enshrine = 6;
+    //玩家发的邮件
+    mail_item_player_mail_arg playerMail = 7;
+}
+
+//玩家发的邮件参数
+message mail_item_player_mail_arg {
+    string title = 1;
+    string content = 2;
+
+    int64 senderGuid = 3;
+    //发件者头像ID
+    int32 senderAvatar = 4;
+    //发件者角色名
+    string senderName = 5;
+    //帮会代号
+    string senderFactionCode = 6;
+
+    int64 receiverGuid = 7;
+    int32 receiverAvatar = 8;
+    string receiverName = 9;
+    string receiverFactionCode = 10;
+    //邮件组
+    int64 group = 11;
+}
+
+//单个邮件项详细信息
+message mail_item_detail {
+    int64 guid = 1;
+    //系统邮件细节
+    mail_item_sys_mail_detail sysMail = 2;
+    //战报信息细节
+    mail_item_battlefield_report battleReport = 3;
+    //采集报告细节
+    mail_item_collect_report collectReport = 4;
+}
+
+//系统邮件细节
+message mail_item_sys_mail_detail {
+    //奖励的资源信息
+    repeated res_num_item resInfo = 1;
+    //奖励的物品信息
+    repeated mail_goodsId_num goodsInfo = 2;
+}
+//邮件奖励的物品信息
+message mail_goodsId_num {
+    int32 goodsId = 1;
+    int32 goodsNum = 2;
+}
+
+//邮件战报细节内容
+message mail_item_battlefield_report {
+    //战斗位置
+    int32 posX = 1;
+    int32 posY = 2;
+    int32 serverId = 3;
+
+    //玩家本人是否为防守方
+    bool defender = 4;
+    //战斗是否胜利
+    bool win = 5;
+    //是否俘获敌方执政官
+    bool captureConsul = 6;
+    //获得资源奖励
+    repeated res_num_item resInfo = 7;
+    //增加执政官经验值
+    int32 consulExp = 8;
+    //进攻方玩家简易信息
+    mail_battle_report_player_simple_info attackerInfo = 9;
+    //防守方玩家简易信息
+    mail_battle_report_player_simple_info defenderInfo = 10;
+
+    //进攻方小兵战损
+    repeated mail_battle_report_troops_casualty atkCasualty = 12;
+    //防守方小兵战损
+    repeated mail_battle_report_troops_casualty defCasualty = 13;
+}
+
+//邮件战报的小兵战损信息
+message mail_battle_report_troops_casualty {
+    //小兵类型
+    atk_type atkType = 1;
+    //派出该类型小兵的总数量
+    int32 num = 2;
+    //进医院数量
+    int32 hospitalized = 3;
+    //死亡数量
+    int32 deaths = 4;
+}
+
+//邮件战报的玩家简易信息
+message mail_battle_report_player_simple_info {
+    //玩家头像ID
+    int32 avatar = 1;
+    string playerName = 2;
+    //统御等级
+    int32 level = 3;
+    int32 vipLevel = 4;
+    //联盟等级
+    int32 factionLevel = 5;
+}
+
+//单个邮件，采集报告
+message mail_item_collect_report{
+    //资源等级
+    int32 collectLevel = 1;
+    //获得资源
+    repeated res_num_item resItems = 2;
+    int32 posX = 3;
+    int32 posY = 4;
+}
+
+//--------------------------邮件end--------------------------
+
+//锻造队列信息
+message forge_equipment_queue{
+	//装备id
+	int32 equipID = 1;
+	//装备guid
+	int64 equipGuid = 2;
+	//锻造完成时间
+	int64 timeStamp = 3;
+}
+//庇护所队列信息
+message sanctuary_queue{
+	//是否储藏领主
+	bool isHaveLord = 1;
+	//储藏士兵信息
+	repeated warrior_item warriorItem = 2;
+	//储藏结束时间戳
+	int64 endTimeStamp = 3;
+}
+//增援部队信息
+message reinforce_army{
+	//盟友的guid
+	int64 allyGuid = 1;
+	//部队信息
+	repeated warrior_item items = 2;
+}
+//联盟成员
+message faction_player {
+    ask_join_faction_item item = 1;
+    //玩家的帮会阶级
+    int32 factionStepLv = 6;
+}
+//申请加入联盟的单个请求项
+message ask_join_faction_item {
+    int64 playerGuid = 1;
+    string playerName = 2;
+    //玩家头像
+    int32 avatar = 3;
+    int64 fight = 4;
+    //杀小兵数
+    int64 killCnt = 5;
+    int64 lastOnlineTime = 6;
+}
+
+//帮会主面板单个项
+message faction_main_ui_item {
+    join_faction_item item = 1;
+    //已申请加入
+    bool alreadyRequest = 2;
+}
+//加入帮会单个帮会项
+message join_faction_item {
+    int64 factionGuid = 1;
+    string factionName = 2;
+    //联盟代号
+    string factionCode = 3;
+    //联盟徽章
+    repeated int32 factionBadge = 4;
+    //帮会战力
+    int64 fight = 5;
+    //当前人数
+    int32 factionPlayerCnt = 6;
+    //帮会礼物等级
+    int32 giftLv = 7;
+    language_type languageType = 8;
+	//是否公开招募，为false需要审核，为true直接加入
+	bool openRecruit = 9;
+	//帮会对外公告
+	string announcement = 10;
+	//帮会宣言
+	string declaration  = 11;
+	//服务器id
+	int32 serverId = 12;
+	//盟主昵称
+	string chairmanName = 13;
+	//盟主guid
+	int64 chairmanGuid = 14;
+}
+
+//炼金所信息
+message alchemy_info{
+	//位置1,2..
+	int32 position = 1;
+	//黑暗元素id
+	int32 id = 2;
+	//鉴定结束的时间 -1L表示未鉴定
+	int64 identityEndMillTime = 3;
+}
+//加速帮助UI面板信息项
+message help_item_info {
+    int64 playerGuid = 1;
+    int32 avatar = 2;
+    int32 factionStepLv = 3;
+    string playerName = 4;
+	//建筑guid 如果是研究为0
+    int64 buildGuid = 5;
+	string name = 6;
+    int32 lv = 7;
+    int32 helpCount = 8;
+	int32 maxCount = 9;
+	int64 guid = 10;
+}
+//帮助加速请求项
+message speed_faction_help_request_item {
+    int64 playerGuid = 1;
+    faction_help_type type = 2;
+}
+//加速帮助请求成功项
+message speed_faction_help_result_item {
+    int64 playerGuid = 1;
+    faction_help_type type = 2;
+    int32 researchId = 3;
+    city_building_type buildingType = 4;
+    int32 buildingLv = 5;
+    int32 helpCount = 6;
+}
+//天赋页数据
+message talent_page_info{
+	//天赋页guid
+	int64 talentGuid = 1;
+	//剩余荣誉点数
+	int32 talentPoint = 2;
+	//名字
+	string name = 3;
+	//天赋类型和等级
+	repeated talent_type_lv talentInfo = 4; 
+}
+//升级一个天赋的信息
+message upgrade_talent_info{
+	//升级天赋的类型
+	int32 talentType = 1;
+	//升多少级
+	int32 upgradeNum =2;
+}
+//行军队列军团信息
+message march_army_info{
+	int64 soldiersGuid = 1;
+    string name = 2;
+    march_map_type marchMapType = 3;
+	march_state marchState = 4;
+    int64 marchStartTime = 5;
+    float startX = 6;
+    float startY = 7;
+    float endX = 8;
+    float endY = 9;
+    int64 marchEndTime = 10;
+	//士兵信息
+	repeated warrior_item soldiersItems = 11;
+
+    //集结攻击创建时间
+    int64 massAtkCreateTime = 12;
+    //集结攻击准备结束时间
+    int64 massAtkEndReadyTime = 13;
+    //集结攻击发起者guid
+    int64 massAtkSponsorGuid = 14;
+    //集结攻击参与者guid
+    int64 massAtkParticipantGuid = 15;
+	//英雄id
+	repeated int32 heroId = 16;
+	//军械类型
+	armament_type type = 17;
+}
+
+// 参与集结攻击单个项
+message mass_attack_item{
+    int64 massGuid = 1;
+
+    //集结攻击发起者guid
+    int64 sponsorGuid = 2;
+    int32 sponsorAvatar = 3;
+    string sponsorName = 4;
+
+    //攻击目标类型
+    mass_attack_target_type targetType = 5;
+    int64 targetGuid = 6;
+    string targetName = 7;
+    string targetFactionCode = 8;
+    int32 targetAvatar = 9;
+
+    // 当前集结士兵数量
+    int64 curSoldiers = 10;
+    int64 maxSoldiers = 11;
+
+    // 集结状态
+    mass_state_type type = 12;
+    // 对应状态结束时间
+    int64 endTime = 13;
+    // 集结攻击创建时间
+    int64 createMassTime = 14;
+}
+
+// 集结攻击，某个玩家派出的士兵
+message mass_attack_detail_soldier_item{
+    int64 playerGuid = 1;
+    string playerName = 2;
+
+    int64 soldiersGuid = 3;
+    repeated warrior_item soldiers = 4;
+    //走到发起者主城时间戳
+    int64 massTime = 5;
+    //小兵出发开始去发起者家的时间戳
+    int64 soldierStartTime = 6;
+}
+
+//单个buff属性
+message buff_item{
+    attribute_type type = 1;
+    double buffNum = 2;
+}
+
+//单个礼物信息
+message gift_info{
+	//礼物guid
+	int64 giftGuid = 1;
+	//礼物id
+	int32 giftId = 2;
+	//礼物来源name
+	string fromName = 3;
+	//获取的时间戳 打开时间为-1L
+	int64 gainMillTime = 4;
+	//打开后获得的物品id
+	int32 itemId = 5;
+	//物品的数量
+	int32 itemNum = 6;
+}
+
+//穿戴玩家装备
+message equip_guid_id{
+    //装备guid
+    int64 equipGuid = 1;
+    //装备id
+    int32 equipId = 2;
+	//装备位置
+	lord_equip_place pos = 3;
+}
+
+//单个套装信息
+message equip_suit{
+	//套装guid
+	int64 guid = 1;
+	//套装名字
+	string name = 2;
+}
+
+//装备的位置和装备的guid
+message equip_pos_and_guid{
+	//装备位置
+	lord_equip_place pos = 1;
+	//装备guid
+	int64 equipGuid = 2;
+}
+
+//哨塔信息单个项
+message watchTower_soldier_info{
+	//士兵guid
+	int64 soldierGuid = 1;
+	//行军类型
+	march_map_type marchType = 2;
+	//开始时间
+	int64 startMillTime = 3;
+	//到达时间
+	int64 endMillTime = 4;
+	//玩家主城坐标
+	float row = 5;
+	float col = 6;
+}
+
+//哨塔军团具体信息
+message watchTower_army_info{
+	int64 soldierGuid = 1;
+	march_map_type marchType = 2;
+	int64 endMillTime = 3;
+	string playerName = 4;
+	string factionName = 5;
+	repeated warrior_item warriorItems = 6;
+	repeated hero_info heroInfos = 7 ;
+	//玩家主城坐标
+	float row = 8;
+	float col = 9;
+	//守护神信息
+}
+//英雄简单信息
+message hero_simple_info{
+	//英雄id 
+	int32 herorId = 1;
+	//英雄品质
+	int32 quality = 2;
+	//英雄军阶
+	int32 grade = 3;
+	//是否是领主
+	bool lord = 4;
+}
+//单个英雄信息
+message hero_info{
+	int32 id = 1;//英雄表格id
+	int32 curLv = 2;//等级
+	int32 curExp = 3;//经验
+	int32 quality = 4;//品质
+	int32 grade = 5;//军阶
+	repeated hero_equip equips = 6;//装备列表
+	bool defender = 7;//是否是守城英雄
+}
+//英雄装备
+message hero_equip{
+	hero_equip_pos pos = 1;
+	int32 equipIdd = 2;
+}
+
+message faction_diplomacy_leave_message_item {
+    // 玩家头像
+    int32 avatar = 1;
+    int64 playerGuid = 2;
+    string playerName = 3;
+    string content = 4;
+    // 留言时间
+    int64 msgTime = 5;
+    // 留言已删除
+    bool alreadyRemove = 6;
+    // 留言者帮会徽章
+    repeated int32 factionBadge = 7;
+    string factionCode = 8;
+    // 留言项的GUID
+    int64 msgGuid = 9;
+}
+
+//主线任务信息
+message one_quest_info{
+	//任务id
+	int32 questId = 1;
+	//任务状态
+	task_status status = 2;
+}

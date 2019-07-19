@@ -1,0 +1,605 @@
+syntax="proto3";
+import "p_enum.proto";
+import "p_struct.proto";
+package c2game;
+option java_package = "cn.gyyx.proto.protobuf";
+option java_outer_classname = "c2game_faction";
+option optimize_for = SPEED;
+
+
+//---------------联盟start------------------
+
+//进游戏后，通知玩家所在帮会的初始信息
+message g2c_join_game_init_faction_info {
+    int64 factionGuid = 1;
+    string factionCode = 2;
+    string nicknameInFaction = 3;
+    int32 factionStepLv = 4;
+}
+
+//请求创建联盟
+message c2g_create_faction {
+    string factionName = 1;
+    //帮会代号
+    string factionCode = 2;
+    //徽章
+    repeated int32 badge = 3;
+    //主要语言
+    language_type mainLanguage = 4;
+}
+//请求联盟UI面板信息
+message c2g_faction_main_ui {
+}
+//通知联盟UI面板信息
+message g2c_faction_main_ui {
+    int64 factionGuid = 1;
+    string factionName = 2;
+    //帮会代号
+    string factionCode = 3;
+    //徽章
+    repeated int32 badge = 4;
+    //帮主的GUID
+    int64 chairmanGuid = 5;
+    string chairmanName = 6;
+    int64 factionFight = 7;
+    int32 memberCnt = 8;                                                              
+    //服ID，所属王国
+    int32 serverId = 9;
+    //联盟锦标赛等级
+    int32 factionLevel = 10;
+    //主要语言
+    language_type mainLanguage = 11;
+    //标语
+    string slogan = 12;
+    //公告
+    string announcement = 13;
+    //对外宣言
+    string declaration = 14;
+    //是否公开招募
+    bool isOpenRecruit = 15;
+    //帮会礼物等级
+    int32 giftLevel = 16;
+    //帮会总杀小兵数量
+    int64 killCnt = 17;
+	//玩家在联盟中的昵称
+	string factionNickName = 18;
+	//帮会中玩家的阶级
+	int32 playerFactionLv = 19;
+}
+//请求验证帮会名字、代号是否合法、重复
+message c2g_check_faction_code_name {
+	string factionCode = 1;
+	string factionName = 2;
+}
+//通知验证帮会名字、代号合法、不重复
+message g2c_check_faction_code_name_ok {	
+}
+
+//----------加入联盟start------------------
+
+//请求加入联盟UI面板
+message c2g_join_faction_ui {
+}
+//通知加入联盟UI面板
+message g2c_join_faction_ui {
+    repeated faction_main_ui_item items = 1;
+}
+
+//请求加入联盟UI面板,搜索帮会
+message c2g_join_faction_ui_search {
+    string factionNameOrCode = 1;
+    language_type languageType = 3;
+}
+//加入联盟UI面板,搜索帮会
+message g2c_join_faction_ui_search_ok {
+    repeated faction_main_ui_item items = 1;
+}
+
+//请求申请加入联盟
+message c2g_join_faction {
+    int64 factionGuid = 1;
+}
+//通知申请加入联盟的结果
+message g2c_sync_join_faction_result{
+	int64 factionGuid = 1;
+	join_faction_result_type result = 2;
+}
+
+
+//请求玩家个人的申请入帮管理UI
+message c2g_join_faction_request_manager_ui {
+}
+//玩家个人的申请入帮管理UI
+message g2c_join_faction_request_manager_ui {
+    repeated join_faction_item items = 1;
+}
+
+//请求取消申请加入联盟
+message c2g_cancel_join_faction_request {
+    int64 factionGuid = 1;
+}
+//取消申请加入联盟操作OK
+message g2c_cancel_join_faction_request_ok {
+    int64 factionGuid = 1;
+}
+
+//----------加入联盟end------------------
+
+
+//----------联盟外交留言start------------------
+
+//请求联盟外交留言UI面板信息
+message c2g_faction_diplomacy_leave_message_list {
+    int64 factionGuid = 1;
+    int32 version = 2;
+}
+message g2c_faction_diplomacy_leave_message_list {
+    int64 factionGuid = 1;
+    int32 version = 2;
+    repeated faction_diplomacy_leave_message_item items = 3;
+}
+
+//请求发送外交留言
+message c2g_faction_diplomacy_leave_a_message {
+     int64 factionGuid = 1;
+     string content = 2;
+}
+message g2c_faction_diplomacy_leave_a_message_ok {
+    int64 factionGuid = 1;
+    faction_diplomacy_leave_message_item item = 2;
+}
+
+//请求删除外交留言
+message c2g_remove_faction_diplomacy_leave_message {
+    int64 factionGuid = 1;
+    int64 msgGuid = 2;
+}
+message g2c_remove_faction_diplomacy_leave_message_ok {
+    int64 factionGuid = 1;
+    int64 msgGuid = 2;
+}
+//----------联盟外交留言end------------------
+
+
+//----------联盟成员列表start------------------
+//请求联盟成员列表UI面板信息
+message c2g_faction_player_list {
+    int64 factionGuid = 1;
+}
+//通知联盟成员列表UI面板信息
+message g2c_faction_player_list {
+    repeated faction_player members = 1;
+}
+
+//请求罢免盟主
+message c2g_recall_faction_chairman {
+    int64 chairmanGuid = 1;
+}
+
+//请求升阶、降级联盟成员
+message c2g_change_faction_player_step_lv {
+    int64 playerGuid = 1;
+    int32 stepLv = 2;
+}
+//推联盟成员阶级变更
+message g2c_faction_player_step_lv_changed {
+    int64 playerGuid = 1;
+    //新的阶级
+    int32 stepLv = 2;
+}
+
+//请求逐出联盟成员
+message c2g_out_faction_player {
+    int64 playerGuid = 1;
+}
+//推逐出联盟成员消息，推给操作者和被踢者
+message g2c_out_faction_player {
+    int64 playerGuid = 1;
+}
+//----------联盟成员列表end------------------
+
+
+//----------联盟申请start------------------
+
+//请求联盟申请列表UI面板信息
+message c2g_join_faction_ask_ui {
+}
+//联盟申请列表UI面板信息
+message g2c_join_faction_ask_ui {
+    repeated ask_join_faction_item items = 1;
+}
+
+//请求处理某一加入联盟申请
+message c2g_handle_join_faction_ask {
+    //同意加入
+    bool agree = 1;
+    int64 askJoinPlayerGuid = 2;
+}
+//处理某一加入联盟申请
+message g2c_handle_join_faction_ask_ok {
+    int64 askJoinPlayerGuid = 1;
+    //同意加入
+    bool agree = 2;
+}
+
+//----------联盟申请end------------------
+
+//----------联盟礼物start------------------
+
+//请求联盟礼物UI面板信息
+message c2g_faction_gift_info{
+	//版本号
+	int32 version = 1;
+}
+message g2c_faction_gift_info_result{
+	//版本号
+	int32 version = 1;
+	//礼物等级
+	int32 giftLevel = 2;
+	//礼物经验
+	int64 giftExp = 3;
+	//黄金大礼物经验值
+	int64 energyExp = 4;
+	//礼物列表
+	repeated gift_info giftItems = 5;
+	//大礼包id
+	int32 giftBagId = 6;
+}
+//请求开启联盟礼物
+message c2g_open_faction_gift{
+	//礼物guid
+	int64 giftGuid = 1;
+}
+//开启联盟礼物返回
+message g2c_open_faction_gift_result{
+	//礼物guid
+	int64 giftGuid = 1;
+	//礼物id
+	int32 giftId = 2;
+	//礼物来源name
+	string fromName = 3;
+	//获取的时间戳 打开时间为-1L
+	int64 gainMillTime = 4;
+	//打开后获得的物品id
+	int32 itemId = 5;
+	//物品的数量
+	int32 itemNum = 6;
+	//联盟礼物等级
+	int32 giftLv = 7;
+	//联盟礼物经验值
+	int64 giftExp = 8;
+	//联盟大礼包经验
+	int64 energyExp = 9;
+	//大礼包id
+	int32 giftBagId = 10;
+}
+
+//请求开启所有联盟礼物
+message c2g_open_all_gift{
+}
+//打开的所有礼物
+message g2c_open_all_gift_result{
+	//开启的礼物列表
+	repeated gift_info  giftItems = 1;
+	//联盟礼物等级
+	int32 giftLv = 2;
+	//联盟礼物经验值
+	int64 giftExp = 3;
+	//联盟大礼包经验
+	int64 energyExp = 4;
+	//大礼包id
+	int32 giftBagId = 5;
+}
+
+//一键删除开启的联盟礼物
+message c2g_remove_all_open_gift{
+}
+message g2c_remove_all_open_gift{
+	//删除的礼物列表
+	repeated int64 giftGuid  = 1;
+}
+
+//删除一个开启的联盟礼物
+message c2g_remove_one_gift{
+	//礼物guid
+	int64 giftGuid = 1;
+}
+message g2c_remove_one_gift_result{
+	//删除的礼物guid
+	int64 giftGuid = 2;
+}
+//----------联盟礼物end------------------
+
+
+//请求联盟实例排名UI面板信息
+
+
+//----------联盟功能start------------------
+
+//请求修改联盟标语
+message c2g_change_faction_slogan {
+    string slogan = 1;
+}
+//修改联盟标语OK
+message g2c_change_faction_slogan_ok {
+    string slogan = 1;
+}
+
+//请求修改联盟内公告
+message c2g_change_faction_announcement {
+    string announcement = 1;
+}
+//修改联盟内公告OK
+message g2c_change_faction_announcement_ok {
+    string announcement = 1;
+}
+
+//请求修改联盟对外宣言
+message c2g_change_faction_declaration {
+    string declaration = 1;
+}
+//修改联盟对外宣言OK
+message g2c_change_faction_declaration_ok {
+    string declaration = 1;
+}
+
+//请求修改联盟主要语言
+message c2g_change_faction_language {
+    language_type mainLanguage = 1;
+}
+//修改联盟主要语言OK
+message g2c_change_faction_language_ok {
+    language_type mainLanguage = 1;
+}
+
+//请求修改联盟名字
+message c2g_change_faction_name {
+    string factionName = 1;
+}
+//修改联盟名字OK
+message g2c_change_faction_name_ok {
+    string factionName = 1;
+}
+
+//请求修改联盟代号
+message c2g_change_faction_code {
+    string factionCode = 1;
+}
+//修改联盟代号OK
+message g2c_change_faction_code_ok {
+    string factionCode = 1;
+}
+
+//请求修改联盟徽章
+message c2g_change_faction_badge {
+    //徽章
+    repeated int32 badge = 1;
+}
+//修改联盟徽章OK
+message g2c_change_faction_badge_ok {
+    //徽章
+    repeated int32 badge = 1;
+}
+
+//请求修改联盟服ID
+message c2g_change_faction_server_id {
+    int32 serverId = 1;
+}
+//修改联盟服ID OK
+message g2c_change_faction_server_id_ok {
+    int32 serverId = 1;
+}
+
+//请求修改联盟是否公开招募
+message c2g_change_faction_open_recruit {
+    //是否公开招募
+    bool openRecruit = 1;
+}
+//修改联盟是否公开招募
+message g2c_change_faction_open_recruit_ok {
+    //是否公开招募
+    bool openRecruit = 1;
+}
+
+//请求盟主让位
+message c2g_abdicate_faction_chairman {
+    //新盟主GUID
+    int64 chairmanGuid = 1;
+}
+//广播新盟主消息(帮会所有在线玩家)
+message g2c_new_faction_chairman {
+    //新盟主GUID
+    int64 chairmanGuid = 1;
+    string chairmanName = 2;
+    //true表示盟主让位，false表示罢免盟主
+    bool abdicate = 3;
+}
+
+//请求离开联盟
+message c2g_leave_faction {
+}
+message g2c_leave_faction_ok {
+}
+
+//请求解散联盟
+message c2g_remove_faction {
+}
+//广播联盟解散
+message g2c_broadcast_remove_faction {
+}
+
+//请求全盟发信
+message c2g_send_mail_to_faction_everyone {
+    //玩家发送标题
+    string title = 1;
+    //玩家发送内容
+    string content = 2;
+}
+
+//----------联盟功能end------------------
+
+//---------------联盟end------------------
+
+//---------------联盟战争(集结)start------------------
+
+//请求发起集结攻击
+message c2g_warring_faction_mass_attack {
+    //集结准备时长，分钟
+    int32 minute = 1;
+    //可以集结攻击的目标类型
+    mass_attack_target_type targetType = 2;
+    int64 targetGuid = 3;
+    //派出士兵信息
+    repeated warrior_item warriorItems = 4;
+    //军械信息
+    armament_item armamentItem = 5;
+}
+//发起集结攻击ok，推给发起者
+message g2c_warring_faction_mass_attack_ok {
+    //集结GUID
+    int64 massGuid = 1;
+    //集结准备结束时间戳
+    int64 endReadyTime = 2;
+}
+//广播同服帮会成员，有新的集结
+message g2c_broadcast_new_warring_faction_mass_attack {
+    int64 massGuid = 1;
+}
+
+//请求解散集结
+message c2g_remove_warring_faction_mass_attack {
+    int64 massGuid = 1;
+}
+//广播集结解散了
+message g2c_broadcast_remove_warring_faction_mass_attack {
+    int64 massGuid = 1;
+}
+
+//请求参与集结攻击面板信息
+message c2g_warring_faction_mass_attack_ui {
+}
+//通知参与集结攻击面板信息
+message g2c_warring_faction_mass_attack_ui {
+    repeated mass_attack_item items = 1;
+}
+
+//请求集结攻击项详细信息面板
+message c2g_warring_faction_mass_attack_detail {
+    int64 massGuid = 1;
+}
+//通知集结攻击项详细信息面板
+message g2c_warring_faction_mass_attack_detail {
+    int64 massGuid = 1;
+    repeated mass_attack_detail_soldier_item items = 2;
+}
+
+//请求加入集结
+message c2g_join_warring_faction_mass_attack {
+    int64 massGuid = 1;
+    repeated warrior_item soldiers = 2;
+    int64 sponsorGuid = 3;
+}
+//通知加入集结成功
+message g2c_join_warring_faction_mass_attack_ok {
+    int64 massGuid = 1;
+}
+
+//请求遣回盟友小兵
+message c2g_dismiss_ally_faction_mass_attack_soldier {
+    //盟友GUID
+    int64 allyGuid = 1;
+}
+//遣回盟友小兵ok
+message g2c_dismiss_ally_faction_mass_attack_soldier_ok {
+    int64 allyGuid = 1;
+    int64 soldiersGuid = 2;
+}
+//通知被遣回玩家，参与集结的部队被遣回
+message g2c_faction_mass_attack_dismiss_soldier {
+    int64 massGuid = 1;
+    int64 soldiersGuid = 2;
+}
+
+
+//--------集结防御--------
+
+//广播同服帮会成员，盟友被人集结攻击了
+message g2c_broadcast_new_faction_mass_defense {
+    int64 massGuid = 1;
+    int64 allyGuid = 2;
+}
+
+//请求协助盟友防御面板信息
+message c2g_faction_mass_assist_defense_ui {
+}
+//通知协助盟友防御面板信息
+message g2c_faction_mass_assist_defense_ui {
+    repeated mass_attack_item items = 1;
+}
+
+//请求协助盟友防御详细信息面板
+message c2g_faction_mass_assist_defense_detail {
+    int64 massGuid = 1;
+}
+//通知协助盟友防御项详细信息面板
+message g2c_faction_mass_assist_defense_detail {
+    int64 massGuid = 1;
+    repeated mass_attack_detail_soldier_item items = 2;
+}
+
+//---------------联盟战争(集结)end------------------
+
+//---------------联盟帮助start------------------
+
+//请求加速帮助UI面板信息
+message c2g_faction_help_ui_info {
+	//版本号
+	int32 version = 1;
+}
+message g2c_faction_help_ui_info_result {
+    //每日联盟币数量
+    int32 factionCoin = 1;
+	//版本号
+	int32 version = 2;
+    repeated help_item_info items = 3;
+}
+
+//请求加速帮助某一个成员
+message c2g_help_one_item {
+	//帮助项guid
+    int64 guid = 1;
+}
+message g2c_help_one_item_result {
+    //帮助的guid
+	int64 guid = 1;
+    //每日联盟币数量
+    int32 factionCoin = 2;
+}
+
+//请求加速帮助全体成员
+message c2g_help_all_item {
+}
+message g2c_help_all_item_result {
+	//删除的帮助项
+    repeated int64 items = 1;
+    //每日联盟币数量
+    int32 factionCoin = 2;
+}
+
+//请求帮助
+message c2g_request_help{
+	//帮助的建筑guid 为0就是帮助研究队列
+	int64 buildGuid = 1;
+}
+message g2c_request_help_result{
+	//建筑的guid 为0就是帮助研究队列
+	int64 buildGuid = 1;
+}
+
+//请求运输资源
+
+//请求增援盟友
+
+//请求驻扎
+
+//---------------联盟帮战end------------------

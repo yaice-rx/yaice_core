@@ -1,0 +1,27 @@
+###类型编号,Logo构成Type（1-图标2-背景3-底色）,资源
+ID ,Type,Res
+int,int,string
+101,1,icon_totems_01
+102,1,icon_totems_02
+103,1,icon_totems_03
+104,1,icon_totems_04
+105,1,icon_totems_05
+106,1,icon_totems_06
+107,1,icon_totems_07
+108,1,icon_totems_08
+201,2,icon_base_01
+202,2,icon_base_02
+203,2,icon_base_03
+204,2,icon_base_04
+205,2,icon_base_05
+206,2,icon_base_06
+207,2,icon_base_07
+208,2,icon_base_08
+301,3,FF5A5A
+302,3,FF7E39
+303,3,C6BB3F
+304,3,426C27
+305,3,48A2BC
+306,3,146AB3
+307,3,5C3DE0
+308,3,BC5DBC

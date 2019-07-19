@@ -1,0 +1,8 @@
+帮会阶级ID,收取礼物,全盟发信,提升成员阶级,降低成员阶级,驱逐成员,邀请入盟,管理联盟申请,编辑盟内公告,编辑对外公告,编辑联盟宣言,删除外交留言,编辑联盟书签,变更徽章,变更联盟名字代号,选择主要语言,公开招募,盟主让位,解散联盟,变更所属王国,发起罢免盟主时间（天）
+ID,GetGift,MailEveryOne,UpMemberStep,DownMemberStep,OutMember,InviteJoin,HandleJoinAsk,EditAnnouncement,EditForeignAnnouncement,EditDeclaration,DelForeignMsg,EditBookMark,EditBadge,EditNameCode,SelectLanguage,OpenRecruit,Abdicate,RemoveFaction,ChangeServerId,RecallChairmanTime
+int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int
+1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10
+2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9
+3,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7
+4,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,5
+5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0

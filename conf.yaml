@@ -1,0 +1,12 @@
+ZooConnectString: 127.0.0.1:2181
+ZooNameSpace: server
+TcpServicePortStart: 10001
+TcpServicePortEnd: 100100
+ServerPingServerInterval: 5000
+ExcelPath: ./config/
+PlayerCacheUpdateInterval: 5000
+PingMapCameraTimeout: 1000	#摄像头ping包超时时间
+OneLittleGridLength: 1	#每一个小建筑格子对应多少码距离
+OneVisionLittleGridNum: 50 #每一个视野区域对应小格子的个数
+WidthGridNum: 500 #横向有多少个格子
+HeightGridNum: 500 #纵向有多少个格子

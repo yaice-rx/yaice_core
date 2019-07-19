@@ -1,0 +1,796 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/game/map/map_until.go" line="17" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f20ab2f6-1a03-487e-bbd9-05aef43959a7" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="116016333">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="22" />
+          <entry key="project.open.time.0" value="3" />
+          <entry key="project.open.time.100" value="1" />
+          <entry key="project.open.time.102" value="1" />
+          <entry key="project.open.time.134" value="1" />
+          <entry key="project.open.time.19" value="1" />
+          <entry key="project.open.time.22" value="1" />
+          <entry key="project.open.time.23" value="1" />
+          <entry key="project.open.time.28" value="1" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.30" value="2" />
+          <entry key="project.open.time.31" value="2" />
+          <entry key="project.open.time.32" value="1" />
+          <entry key="project.open.time.35" value="1" />
+          <entry key="project.open.time.36" value="3" />
+          <entry key="project.open.time.37" value="2" />
+          <entry key="project.open.time.39" value="1" />
+          <entry key="project.open.time.41" value="1" />
+          <entry key="project.open.time.42" value="1" />
+          <entry key="project.open.time.44" value="2" />
+          <entry key="project.open.time.46" value="2" />
+          <entry key="project.open.time.50" value="2" />
+          <entry key="project.open.time.51" value="2" />
+          <entry key="project.open.time.52" value="2" />
+          <entry key="project.open.time.53" value="1" />
+          <entry key="project.open.time.55" value="2" />
+          <entry key="project.open.time.56" value="3" />
+          <entry key="project.open.time.59" value="1" />
+          <entry key="project.open.time.60" value="1" />
+          <entry key="project.open.time.61" value="2" />
+          <entry key="project.open.time.62" value="3" />
+          <entry key="project.open.time.65" value="1" />
+          <entry key="project.open.time.66" value="3" />
+          <entry key="project.open.time.67" value="1" />
+          <entry key="project.open.time.68" value="1" />
+          <entry key="project.open.time.69" value="1" />
+          <entry key="project.open.time.70" value="1" />
+          <entry key="project.open.time.73" value="1" />
+          <entry key="project.open.time.76" value="1" />
+          <entry key="project.open.time.79" value="1" />
+          <entry key="project.open.time.83" value="1" />
+          <entry key="project.open.time.84" value="2" />
+          <entry key="project.open.time.87" value="1" />
+          <entry key="project.open.time.89" value="1" />
+          <entry key="project.opened" value="64" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="LICENSE" value="1" />
+          <entry key="go" value="295" />
+          <entry key="lock" value="9" />
+          <entry key="md" value="1" />
+          <entry key="s" value="2" />
+          <entry key="yaml" value="17" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Go" value="295" />
+          <entry key="PLAIN_TEXT" value="11" />
+          <entry key="YAML" value="17" />
+          <entry key="x86 Plan9 Assembly" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="go" value="27668" />
+          <entry key="yaml" value="145" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Go" value="27668" />
+          <entry key="YAML" value="145" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.go.postfix.template.usages.trigger">
+        <counts>
+          <entry key=".append" value="8" />
+          <entry key=".len" value="9" />
+          <entry key=".nil" value="1" />
+          <entry key=".panic" value="1" />
+          <entry key=".println" value="2" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="-1644842235">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.open.time.34" value="1" />
+          <entry key="project.open.time.47" value="1" />
+          <entry key="project.opened" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="go" value="2483" />
+          <entry key="mod" value="59" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="DTD" value="59" />
+          <entry key="Go" value="2483" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="go" value="35" />
+          <entry key="mod" value="8" />
+          <entry key="sum" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="DTD" value="8" />
+          <entry key="Go" value="35" />
+          <entry key="PLAIN_TEXT" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.go.postfix.template.usages.trigger">
+        <counts>
+          <entry key=".println" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="YaIce" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/game/init.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="486">
+              <caret line="28" column="23" selection-start-line="28" selection-start-column="23" selection-end-line="28" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/connect/connect.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="496">
+              <caret line="46" column="44" lean-forward="true" selection-start-line="46" selection-start-column="44" selection-end-line="46" selection-end-column="44" />
+              <folding>
+                <element signature="e#17#155#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/client.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="222">
+              <caret line="10" column="29" lean-forward="true" selection-start-line="10" selection-start-column="29" selection-end-line="10" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/common/common.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="189">
+              <caret line="10" column="8" lean-forward="true" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/connect/etcd_connect.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="258">
+              <caret line="140" column="80" selection-start-line="140" selection-start-column="80" selection-end-line="140" selection-end-column="80" />
+              <folding>
+                <element signature="e#17#175#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>loadAllianceData</find>
+      <find>Configstuct</find>
+      <find>viphxin/xingo/logger</find>
+      <find>logger</find>
+      <find>WatchNodes</find>
+      <find>Write</find>
+      <find>l.Close</find>
+      <find>Close</find>
+      <find>Close()</find>
+    </findStrings>
+    <dirStrings>
+      <dir>F:\GoProgram\YaIce</dir>
+    </dirStrings>
+  </component>
+  <component name="GOROOT" path="F:\Golang" />
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/auth.go" />
+        <option value="$PROJECT_DIR$/core/core_interface.go" />
+        <option value="$PROJECT_DIR$/core/core_module.go" />
+        <option value="$PROJECT_DIR$/core/Temp/TempInterface.go" />
+        <option value="$PROJECT_DIR$/core/Temp/TempAllianceGiftData.go" />
+        <option value="$PROJECT_DIR$/conf/conf.go" />
+        <option value="$PROJECT_DIR$/conf/zk.go" />
+        <option value="$PROJECT_DIR$/core/Temp/TemplateData.go" />
+        <option value="$PROJECT_DIR$/core/RegisterHandlerMrg.go" />
+        <option value="$PROJECT_DIR$/core/RegisterRouterHandlerMrg.go" />
+        <option value="$PROJECT_DIR$/vendor/github.com/xtaci/kcp-go/sess.go" />
+        <option value="$PROJECT_DIR$/core/common.go" />
+        <option value="$PROJECT_DIR$/game/map/attack_town.go" />
+        <option value="$PROJECT_DIR$/game/map/vision.go" />
+        <option value="$PROJECT_DIR$/game/map/map_mrg.go" />
+        <option value="$PROJECT_DIR$/game/map/map_interface.go" />
+        <option value="$PROJECT_DIR$/game/Common/common.go" />
+        <option value="$PROJECT_DIR$/game/common/common.go" />
+        <option value="$PROJECT_DIR$/game/init_mrg.go" />
+        <option value="$PROJECT_DIR$/core/config_module.go" />
+        <option value="$PROJECT_DIR$/core/Temp/config_module.go" />
+        <option value="$PROJECT_DIR$/core/cache/cache_player.go" />
+        <option value="$PROJECT_DIR$/core/connect.go" />
+        <option value="$PROJECT_DIR$/core/eunm/resource.go" />
+        <option value="$PROJECT_DIR$/game/map/sort/town.go" />
+        <option value="$PROJECT_DIR$/game/map/sort/resource.go" />
+        <option value="$PROJECT_DIR$/core/register_router.go" />
+        <option value="$PROJECT_DIR$/game/map/sort/monster.go" />
+        <option value="$PROJECT_DIR$/core/model/model.go" />
+        <option value="$PROJECT_DIR$/core/job/job.go" />
+        <option value="$PROJECT_DIR$/game/mrg/common_mrg.go" />
+        <option value="$PROJECT_DIR$/game/map/map_const.go" />
+        <option value="$PROJECT_DIR$/core/connect/connect.go" />
+        <option value="$PROJECT_DIR$/game/map/map_until.go" />
+        <option value="$PROJECT_DIR$/core/model/player_model.go" />
+        <option value="$PROJECT_DIR$/game/mrg/cache_mrg.go" />
+        <option value="$PROJECT_DIR$/run.go" />
+        <option value="$PROJECT_DIR$/game/map/map_vision.go" />
+        <option value="$PROJECT_DIR$/core/core.go" />
+        <option value="$PROJECT_DIR$/game/mrg/map_mrg.go" />
+        <option value="$PROJECT_DIR$/core/temp/config_module.go" />
+        <option value="$PROJECT_DIR$/core/temp/TemplateData.go" />
+        <option value="$PROJECT_DIR$/conf.yaml" />
+        <option value="$PROJECT_DIR$/go.mod" />
+        <option value="$PROJECT_DIR$/game/map/map_terrain.go" />
+        <option value="$PROJECT_DIR$/core/common/common.go" />
+        <option value="$PROJECT_DIR$/core/connect/zook_connect.go" />
+        <option value="$PROJECT_DIR$/gate/login.go" />
+        <option value="$PROJECT_DIR$/game/init.go" />
+        <option value="$PROJECT_DIR$/core/connect/etcd_connect.go" />
+        <option value="$PROJECT_DIR$/client/client.go" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1726" />
+    <option name="y" value="113" />
+    <option name="width" value="1936" />
+    <option name="height" value="1138" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="YaIce" type="b2602c69:ProjectViewProjectNode" />
+              <item name="YaIce" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="YaIce" type="b2602c69:ProjectViewProjectNode" />
+              <item name="YaIce" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="YaIce" type="b2602c69:ProjectViewProjectNode" />
+              <item name="YaIce" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="YaIce" type="b2602c69:ProjectViewProjectNode" />
+              <item name="YaIce" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="YaIce" type="b2602c69:ProjectViewProjectNode" />
+              <item name="YaIce" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="connect" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="YaIce" type="b2602c69:ProjectViewProjectNode" />
+              <item name="YaIce" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="job" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="YaIce" type="b2602c69:ProjectViewProjectNode" />
+              <item name="YaIce" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="YaIce" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="ToolWindowTerminal.ShowToolbar" value="false" />
+    <property name="configurable.Global.GOPATH.is.expanded" value="true" />
+    <property name="configurable.Module.GOPATH.is.expanded" value="false" />
+    <property name="configurable.Project.GOPATH.is.expanded" value="true" />
+    <property name="go.gopath.indexing.explicitly.defined" value="true" />
+    <property name="go.vendoring.notification.had.been.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="go.vgo" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Golang\Gopath\src\YaIce\core\connect" />
+      <recent name="D:\Golang\Gopath\src\YaIce\game\mrg" />
+      <recent name="D:\Golang\Gopath\src\YaIce\core\common" />
+      <recent name="D:\Golang\Gopath\src\YaIce\core\Temp" />
+      <recent name="D:\Golang\Gopath\src\YaIce\game" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Go Build.ClientBuild">
+    <configuration name="ClientBuild" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="YaIce" />
+      <working_directory value="$PROJECT_DIR$/" />
+      <go_parameters value="-i" />
+      <parameters value="-type=client -internal_host=10.0.0.118 -external_host=10.0.0.118" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/run.go" />
+      <package value="YaIce" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="GameBuild" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
+      <module name="YaIce" />
+      <working_directory value="$PROJECT_DIR$/" />
+      <parameters value="-type=game -internal_host=10.0.0.118 -external_host=10.0.0.118" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/run.go" />
+      <package value="YaIce" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Go Build.ClientBuild" />
+      <item itemvalue="Go Build.GameBuild" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.GameBuild" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="1912" y="107" width="1936" height="1096" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6052632" visible="true" weight="0.15138593" />
+      <window_info id="Structure" order="1" sideWeight="0.39473686" side_tool="true" weight="0.14818764" />
+      <window_info id="Favorites" order="2" sideWeight="0.7568438" side_tool="true" weight="0.14498934" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49840087" weight="0.32942432" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.89285713" visible="true" weight="0.3891258" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7969083" weight="0.62366736" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32942432" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" x="1942" y="502" width="1876" height="305" id="Terminal" order="9" sideWeight="0.6316631" weight="0.3251599" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.10714286" side_tool="true" visible="true" weight="0.3891258" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4968017" visible="true" weight="0.117803834" />
+      <window_info id="Structure" order="1" sideWeight="0.5011136" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" sideWeight="0.50319827" side_tool="true" weight="0.15085287" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32942432" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32942432" />
+      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.42537314" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32942432" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.30810234" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>true</integration-enabled>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/game/map/map_const.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="7" column="25" lean-forward="true" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/map/sort/monster.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="25" column="45" lean-forward="true" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/map/map_until.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-138">
+          <caret line="14" column="4" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/init_mrg.go" />
+    <entry file="file://$PROJECT_DIR$/core/register_router.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/model/model.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="645">
+          <caret line="35" column="52" lean-forward="true" selection-start-line="35" selection-start-column="52" selection-end-line="35" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/model/player_model.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="5" column="45" lean-forward="true" selection-start-line="5" selection-start-column="45" selection-end-line="5" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/mrg/cache_mrg.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="17" column="19" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/conf.go">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/zk.go">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://F:/../Go/src/runtime/panic.go" />
+    <entry file="file://$PROJECT_DIR$/game/map/map_vision.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="131" column="6" selection-start-line="131" selection-start-column="6" selection-end-line="131" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/github.com/spf13/viper/viper.go" />
+    <entry file="file://$PROJECT_DIR$/vendor/github.com/samuel/go-zookeeper/zk/constants.go" />
+    <entry file="file://$PROJECT_DIR$/vendor/github.com/samuel/go-zookeeper/zk/conn.go" />
+    <entry file="file://$PROJECT_DIR$/vendor/github.com/samuel/go-zookeeper/zk/util.go" />
+    <entry file="file://$PROJECT_DIR$/vendor/github.com/coreos/go-etcd/LICENSE" />
+    <entry file="file://$PROJECT_DIR$/vendor/github.com/coreos/go-etcd/README.md" />
+    <entry file="file://$PROJECT_DIR$/../src/github.com/coreos/etcd/clientv3/snapshot/v3_snapshot.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="250" column="8" selection-start-line="250" selection-start-column="8" selection-end-line="250" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/temp/TemplateData.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="8" column="42" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/mrg/map_mrg.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="621">
+          <caret line="23" column="36" selection-start-line="23" selection-start-column="36" selection-end-line="23" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27">
+          <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/map/map_terrain.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-551">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/go.mod">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="729">
+          <caret line="27" column="27" lean-forward="true" selection-start-line="27" selection-start-column="27" selection-end-line="27" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/go.sum">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="10" column="24" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/temp/config_module.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1107">
+          <caret line="41" column="18" selection-start-line="41" selection-start-column="18" selection-end-line="41" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../pkg/mod/github.com/coreos/etcd@v3.3.10+incompatible/clientv3/config.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="32" column="7" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../pkg/mod/github.com/coreos/etcd@v3.3.10+incompatible/clientv3/client.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1458">
+          <caret line="74" column="29" selection-start-line="74" selection-start-column="23" selection-end-line="74" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Golang/src/context/context.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="213" column="5" selection-start-line="213" selection-start-column="5" selection-end-line="213" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Golang/src/net/tcpsock.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="322" column="40" lean-forward="true" selection-start-line="322" selection-start-column="40" selection-end-line="322" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/core.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="94" column="16" selection-start-line="94" selection-start-column="8" selection-end-line="94" selection-end-column="16" />
+          <folding>
+            <element signature="e#14#220#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gate/login.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7">
+          <caret line="31" column="14" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Golang/src/runtime/panic.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27">
+          <caret line="689" selection-start-line="689" selection-end-line="689" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Golang/src/net/iprawsock_posix.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="100" column="25" selection-start-line="100" selection-start-column="17" selection-end-line="100" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Golang/src/syscall/zsyscall_windows.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="1575" column="5" selection-start-line="1575" selection-start-column="5" selection-end-line="1575" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../pkg/mod/cloud.google.com/go@v0.37.4/bigtable/bttest/inmem.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7756">
+          <caret line="126" column="13" selection-start-line="126" selection-start-column="6" selection-end-line="126" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Golang/src/net/mockserver_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="173" column="34" selection-start-line="173" selection-start-column="34" selection-end-line="173" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Golang/src/internal/poll/fd_windows.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-779">
+          <caret line="292" column="5" selection-start-line="292" selection-start-column="5" selection-end-line="292" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Golang/src/net/fd_windows.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="29" column="15" selection-start-line="29" selection-start-column="15" selection-end-line="29" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../pkg/mod/golang.org/x/crypto@v0.0.0-20190701094942-4def268fd1a4/ssh/test/dial_unix_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="34" column="12" selection-start-line="34" selection-start-column="12" selection-end-line="34" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Golang/src/net/dial.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="614" column="15" selection-start-line="614" selection-start-column="15" selection-end-line="614" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Golang/src/net/net.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="379" column="4" selection-start-line="379" selection-start-column="4" selection-end-line="379" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../pkg/mod/github.com/coreos/etcd@v3.3.10+incompatible/clientv3/op.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7425">
+          <caret line="275" column="13" selection-start-line="275" selection-start-column="13" selection-end-line="275" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../pkg/mod/github.com/coreos/etcd@v3.3.10+incompatible/clientv3/watch.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="822">
+          <caret line="237" column="1" lean-forward="true" selection-start-line="237" selection-start-column="1" selection-end-line="237" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/connect/etcd_connect.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="140" column="80" selection-start-line="140" selection-start-column="80" selection-end-line="140" selection-end-column="80" />
+          <folding>
+            <element signature="e#17#175#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/init.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="28" column="23" selection-start-line="28" selection-start-column="23" selection-end-line="28" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/client.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="10" column="29" lean-forward="true" selection-start-line="10" selection-start-column="29" selection-end-line="10" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/common/common.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="10" column="8" lean-forward="true" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/job/job.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="577">
+          <caret line="25" column="34" lean-forward="true" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/connect/connect.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="496">
+          <caret line="46" column="44" lean-forward="true" selection-start-line="46" selection-start-column="44" selection-end-line="46" selection-end-column="44" />
+          <folding>
+            <element signature="e#17#155#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
