@@ -1,7 +1,7 @@
 ZooConnectString: 127.0.0.1:2181
 ZooNameSpace: server
-TcpServicePortStart: 10001
-TcpServicePortEnd: 100100
+PortStart: 10001
+PortEnd: 100100
 ServerPingServerInterval: 5000
 ExcelPath: ./config/
 PlayerCacheUpdateInterval: 5000

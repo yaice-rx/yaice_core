@@ -19,10 +19,10 @@ type ServerCore struct{
 	Config          *temp.ConfigModule	//配置数据
 	maxConnect		int					//最大连接数据
 	mutexConns      sync.Mutex
-	ConfigFileName 	string                       //配置文件名称
-	InternalHost 	string                         //内部连接ip
-	ExternalHost	string                         //外部连接ip
-	HttpPort		int                            //端口
+	ServerType 		string
+	ConfigFileName 	string                      //配置文件名称
+	InternalHost 	string                      //内部连接ip
+	ExternalHost	string                      //外部连接ip
 	Routers			*RegisterRouterRequest      //注册回调方法列表
 	TickTasks		map[string]func()             //tick函数列表
 	ConnectList 	map[*kcp.UDPSession]*connect.PlayerConn // uid->连接Conn
@@ -31,12 +31,8 @@ type ServerCore struct{
 
 func NewServerCore() *ServerCore {
 	s := new(ServerCore)
-	s.Config 		= temp.InitConfigData()
-	//初始化监听的接口
+	//最大连接数
 	s.maxConnect 	= 5000
-	s.Routers 		= new(RegisterRouterRequest)
-	s.TickTasks 	= make(map[string]func())
-	s.ConnectList 	= make(map[*kcp.UDPSession]*connect.PlayerConn)
 	//初始化数据库连接
 	s.DB 			= model.Init()
 	//开启定时任务
@@ -47,8 +43,9 @@ func NewServerCore() *ServerCore {
 }
 
 //初始化外网监听
-func (s *ServerCore)ServerExternalInit(listenPort int){
-	kcpListen, err 	:= kcp.ListenWithOptions(":"+strconv.Itoa(listenPort), nil, 10, 1)
+func (s *ServerCore)ServerExternalInit(){
+	listenPort :=  temp.ConfigCacheData.YamlConfigData.TcpServicePortStart
+	kcpListen, err 	:= kcp.ListenWithOptions(":"+strconv.Itoa(), nil, 10, 1)
 	defer func() {
 		kcpListen.Close()
 	}()

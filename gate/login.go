@@ -7,15 +7,14 @@ import (
 	"github.com/xtaci/kcp-go"
 	"io"
 	"net/http"
-	"strconv"
 )
 
-func Initialize(s *core.ServerCore){
+func Initialize(s *core.ServerCore,port string ,server_id string){
 	//读取配置文件中的zookeeper地址
 	//监听Http服务器
 	mux := http.NewServeMux()
 	mux.HandleFunc("/",  login)
-	http.ListenAndServe(":"+strconv.Itoa(s.HttpPort),mux)
+	http.ListenAndServe(":"+port,mux)
 }
 
 func handleMux(conn io.ReadWriteCloser) {

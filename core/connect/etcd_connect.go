@@ -6,17 +6,25 @@ import (
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	"github.com/sirupsen/logrus"
-	"strconv"
 	"sync"
 	"time"
 )
+
+type ServerConfigEtcd struct {
+	ServerName 	 	string `json:"server_name"`
+	InternalIP   	string `json:"internal_ip"`
+	InternalPort   	string `json:"internal_port"`
+	ExternalIP   	string `json:"external_ip"`
+	ExternalPort  	string `json:"external_port"`
+}
 
 type ClientDis struct {
 	sync.RWMutex
 	client 		*clientv3.Client
 	Endpoints   []string
-	serverId 	int
+	serverId 	string
 	serverType	string
+	path 		string
 	leaseRes    *clientv3.LeaseGrantResponse
 	keepAliveChan  <-chan *clientv3.LeaseKeepAliveResponse
 }
@@ -26,7 +34,7 @@ const ttl  = 200
 //初始化Etcd服务，
 //存储结构表如下：
 //			serverId:1=>{"gate_序号":地址，"game_序号"：地址},
-func InitEtcd(serverId int,serverType string)(*ClientDis,error){
+func InitEtcd(serverId string,serverType string)(*ClientDis,error){
 	etcdServerList :=  []string{"localhost:2379"}
 	etcdCli, err := clientv3.New(clientv3.Config{
 		Endpoints:   etcdServerList,
@@ -41,6 +49,7 @@ func InitEtcd(serverId int,serverType string)(*ClientDis,error){
 		client:etcdCli,
 		serverId:serverId,
 		serverType:serverType,
+		path:serverId+"/"+serverType,
 	},nil
 }
 
@@ -50,7 +59,7 @@ func (c *ClientDis)RegisterNode(key string ,value string){
 	}
 	c.grantSetLeaseKeepAlive(ttl)
 	c.Lock()
-	path := strconv.Itoa(c.serverId)+"/"+c.serverType+"/"+key
+	path := c.path+"/"+key
 	putResp, err := c.client.Put(context.TODO(),path,value,clientv3.WithLease(c.leaseRes.ID));
 	if err != nil{
 		fmt.Println(err)
@@ -93,8 +102,8 @@ func (c *ClientDis)listenLease(){
 
 //获取节点数据
 func (c *ClientDis)GetNodesInfo(key string)([]string,error){
-	path := strconv.Itoa(c.serverId)+"/"+c.serverType+"/"+key
-	resp, err := c.client.Get(context.TODO(),path)
+	path := c.path+"/"+key
+	resp, err := c.client.Get(context.TODO(),path, clientv3.WithPrefix())
 	if err != nil {
 		return nil,err
 	}
@@ -104,7 +113,7 @@ func (c *ClientDis)GetNodesInfo(key string)([]string,error){
 //监听节点数据变化
 func (this *ClientDis) WatchNodes(key string){
 	watcher := clientv3.NewWatcher(this.client)
-	path := strconv.Itoa(this.serverId)+"/"+this.serverType
+	path := this.path+"/"+key
 	for {
 		rch := watcher.Watch(context.TODO(), path, clientv3.WithPrefix())
 		for wresp := range rch {
@@ -128,7 +137,7 @@ func (this *ClientDis) extractAddrs(resp *clientv3.GetResponse) []string {
 	}
 	for i := range resp.Kvs {
 		if v := resp.Kvs[i].Value; v != nil {
-			addrs = append(addrs, string(v))
+			addrs = append(addrs, string(resp.Kvs[i].Key)+"  "+string(v))
 		}
 	}
 	return addrs
@@ -137,7 +146,7 @@ func (this *ClientDis) extractAddrs(resp *clientv3.GetResponse) []string {
 func (this *ClientDis)DelNode(key string)  {
 	this.Lock()
 	defer this.Unlock()
-	path := strconv.Itoa(this.serverId)+"/"+this.serverType+"/"+key
+	path := this.path+"/"+key
 	response,err := this.client.Delete(context.TODO(),path,clientv3.WithPrefix())
 	if nil != err{
 		logrus.Println(err.Error())

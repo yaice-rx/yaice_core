@@ -1,10 +1,11 @@
 package temp
+
 //配置文件数据
-type ConfigStruct struct {
+type yamlConfigData struct {
 	ZooConnectString string `yaml:"ZooConnectString"`
 	ZooNameSpace string	`yaml:"ZooNameSpace"`
-	TcpServicePortStart int	`yaml:"TcpServicePortStart"`
-	TcpServicePortEnd	int	`yaml:"TcpServicePortEnd"`
+	PortStart int	`yaml:"PortStart"`
+	PortEnd	int	`yaml:"PortEnd"`
 	ServerPingServerInterval	int	`yaml:"ServerPingServerInterval"`
 	ExcelPath	string	`yaml:"ExcelPath"`
 	PlayerCacheUpdateInterval	int	`yaml:"PlayerCacheUpdateInterval"`
@@ -16,7 +17,7 @@ type ConfigStruct struct {
 }
 
 //联盟礼物
-type TemplateAliianceGift struct {
+type templateAliianceGift struct {
 	GiftId int
 	GiftType int
 	ChestExp int
@@ -24,20 +25,20 @@ type TemplateAliianceGift struct {
 }
 
 //联盟
-type TempAllianceGiftLv struct {
+type tempAllianceGiftLv struct {
 	ID int
 	BigGiftPro string
 	Exp int
 }
 
 //联盟成员等级
-type TempAllianceRank struct {
+type tempAllianceRank struct {
 	ID int
 	Num int
 }
 
 //地图信息
-type TempArea struct {
+type tempArea struct {
 	ID 				int
 	UnlockBuilding 	string
 	AmountMax 		string
@@ -52,7 +53,7 @@ type TempArea struct {
 }
 
 //军械
-type TempArmaments struct {
+type tempArmaments struct {
 	ID	int
 	Type	int
 	Level	int
@@ -73,14 +74,14 @@ type TempArmaments struct {
 }
 
 //军械库等级
-type TempArmory struct {
+type tempArmory struct {
 	ID	int
 	LevelUp		string
 	AddBuff		string
 }
 
 //箭塔
-type TempArrowTower struct {
+type tempArrowTower struct {
 	ID	int
 	Atk	int	//攻击
 	Def	int	//防御
@@ -97,28 +98,28 @@ type TempArrowTower struct {
 }
 
 //集会所配置
-type TempAssembly struct {
+type tempAssembly struct {
 	ID	int //##集会所配置
 	LevelUp	int //集结部队上限
 	ExtraBuff	int //满级效果（BUFFID#效果值万分比）
 }
 
 //兵营配置
-type TempBarracks struct {
+type tempBarracks struct {
 	ID	int //##level
 	TrainingCnt int //训练数量
 	AddBuff		int	//附加buff（ID#值，万分比）
 }
 
 //Buffer
-type TempBuffDes struct {
+type tempBuffDes struct {
 	ID		int	//##BUFFID
 	ID1		int	//字段ID
 	Type	int	//数值类型（0-特殊，1-数值，2-百分比）
 }
 
 //主城
-type TempCastle struct {
+type tempCastle struct {
 	ID			int //##市政厅相关功能
 	MarchCnt	int	//行军队列
 	HelpCnt		int	//帮助次数
@@ -134,7 +135,7 @@ type TempCastle struct {
 }
 
 //建筑
-type TempCityBuilding struct {
+type tempCityBuilding struct {
 	ID	int	//编号
 	UID	int	//建筑唯一配置ID
 	Type	int	//建筑类型（1政府建筑2军事建筑3资源建筑4守护神建筑）
@@ -157,14 +158,14 @@ type TempCityBuilding struct {
 }
 
 //使馆
-type TempEmbassy struct {
+type tempEmbassy struct {
 	ID	int	//##使馆配置
 	LevelUp	int	//援军上限
 	ExtraBuff	string //满级效果（BUFFID#效果值万分比）
 }
 
 //装备
-type TempEquipment struct {
+type tempEquipment struct {
 	ID	int
 	EquipID	int
 	Type	int
@@ -181,13 +182,13 @@ type TempEquipment struct {
 }
 
 //装备套装
-type TempEquipSource struct {
+type tempEquipSource struct {
 	ID	int
 	Source	string
 }
 
 //联盟权限
-type TempFactionChmod struct {
+type tempFactionChmod struct {
 	ID	int //帮会阶级ID
 	GetGift	int	//收取礼物
 	MailEveryOne	int	//全盟发信
@@ -212,47 +213,47 @@ type TempFactionChmod struct {
 }
 
 //锻造厂
-type TempFactory struct {
+type tempFactory struct {
 	ID	int
 	ForgingSpeed int	//装备锻造速度（buffid201）增加（万分比）
 }
 
 //农场
-type TempFarm struct {
+type tempFarm struct {
 	ID	int	//##农场
 	Produce	int	//粮食产量（小时）
 	Capacity	int //粮食容量
 }
 
 //攻击阵型
-type TempFormationTarget struct {
+type tempFormationTarget struct {
 	ID	int	//id
 	Formation1	int //阵型1(1步兵阵2骑兵阵3弓兵阵）
 	AtkProportion1 string	//兵种被攻击顺序(默认顺序：步骑弓）
 }
 
 //常量
-type TempGdConst struct {
+type tempGdConst struct {
 	ID	int	//##描述
 	INT_value	int//数值
 	StrValue	string//字符串
 }
 
 //宝石属性
-type TempGemProperty struct {
+type tempGemProperty struct {
 	ID	int
 	Property string //宝石属性（buffid#万分比值;)
 }
 
 //仓库
-type TempGranary struct {
+type tempGranary struct {
 	ID	int	//##仓库内容
 	INT_NormalCnt	int//仓库容量（除金币）
 	INT_CoinCnt int//金币容量
 }
 
 //英雄装备
-type TempHeroEquip struct {
+type tempHeroEquip struct {
 	ID	int
 	Quality	int
 	Level	int
@@ -276,141 +277,141 @@ type TempHeroEquip struct {
 }
 
 //医院
-type TempHospital struct {
+type tempHospital struct {
 
 }
 
 //初始数据
-type TempInitial struct {
+type tempInitial struct {
 
 }
 
 //部件
-type TempItem struct {
+type tempItem struct {
 
 }
 
 //宝箱
-type TempItemChest struct {
+type tempItemChest struct {
 
 }
 
 //商店
-type TempItemShop struct {
+type tempItemShop struct {
 
 }
 
 //研究院属性
-type TempLibrary struct {
+type tempLibrary struct {
 
 }
 
 //领主
-type TempLordLevel struct {
+type tempLordLevel struct {
 
 }
 
 //邮件
-type TempMail	struct {
+type tempMail	struct {
 
 }
 
 //庄园
-type TempManor	struct {
+type tempManor	struct {
 
 }
 
 //地图资源等级刷新范围表
-type TempMapLv	struct {
+type tempMapLv	struct {
 
 }
 
 //地图资源刷新
-type TempMapTile struct {
+type tempMapTile struct {
 
 }
 
 //市集
-type TempMarket struct {
+type tempMarket struct {
 
 }
 
 //矿场
-type TempMine struct {
+type tempMine struct {
 
 }
 
 //采石场
-type TempQuarry struct {
+type tempQuarry struct {
 
 }
 
 //任务
-type TempQuest struct {
+type tempQuest struct {
 
 }
 
 //怪物刷新配置
-type TempRallyMonster struct {
+type tempRallyMonster struct {
 
 }
 
 //学院子类
-type TempResearch struct {
+type tempResearch struct {
 
 }
 
 //学院大类
-type TempResearchClass struct {
+type tempResearchClass struct {
 
 }
 
 //钻石消耗资源
-type TempResexchg struct {
+type tempResexchg struct {
 
 }
 
 //伐木场
-type TempSawmill struct {
+type tempSawmill struct {
 
 }
 
 //技能
-type TempSkill struct {
+type tempSkill struct {
 
 }
 
 //套装
-type TempSpecialEquip struct {
+type tempSpecialEquip struct {
 
 }
 
 //天赋
-type TempTalent struct {
+type tempTalent struct {
 
 }
 
 //天赋类型
-type TempTalentClass struct {
+type tempTalentClass struct {
 
 }
 
 //哨塔
-type TempTower struct {
+type tempTower struct {
 
 }
 
 //城墙
-type TempWalls struct {
+type tempWalls struct {
 
 }
 
 //主城等级
-type TempWarFever struct {
+type tempWarFever struct {
 
 }
 
 //士兵
-type TempWarriorData struct {
+type tempWarriorData struct {
 
 }
