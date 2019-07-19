@@ -15,15 +15,7 @@ import (
 
 var conn *kcp.UDPSession
 func Initialize(core *core.ServerCore){
-	etcdCli,_ := connect.InitEtcd(1,"game")
-	//etcdCli.RegisterNode("1","test-=-=-=-=")
-	time.Sleep(2 * time.Second)
-	etcdCli.DelNode("1")
-	select {
-
-	}
-
-	kcpconn, err := kcp.DialWithOptions("10.0.0.10:10001", nil, 10, 1)
+	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
 	defer  kcpconn.Close()
 	if err != nil {
 		fmt.Println("kcp err",err.Error())
@@ -31,7 +23,7 @@ func Initialize(core *core.ServerCore){
 	}
 	conn = kcpconn
 	job.JoinJob(1,pingHandler)
-	//go handleKcpConn(conn)
+	go handleKcpConn(conn)
 	select {}
 }
 
@@ -67,7 +59,7 @@ func SendMsg(conn *kcp.UDPSession,protoNumber int,data []byte) {
 
 
 func handleKcpConn(conn *kcp.UDPSession) {
-	buf := make([]byte, 65535)
+ 	buf := make([]byte, 65535)
 	for {
 		num, err := conn.Read(buf)
 		if err != nil {

@@ -8,7 +8,9 @@ import (
 	"YaIce/game/map/sort"
 	"YaIce/game/mrg"
 	"YaIce/protobuf"
-	"github.com/sirupsen/logrus"
+	"encoding/json"
+	"fmt"
+	"strconv"
 )
 
 func register(router *core.RegisterRouterRequest){
@@ -17,12 +19,45 @@ func register(router *core.RegisterRouterRequest){
 	router.RegisterRouterHandler(&c2game.C2GJoinMap{},mrg.JoinMapHandler)
 }
 func Initialize(core *core.ServerCore,server_id string){
-	//连接etcd，获取连接地址，通知网管服务器，开启地址监听
-	etcdCli,_ := connect.InitEtcd(server_id,core.ServerType)
 	//加载配置文件
 	temp.InitConfigData()
 	//注册路由
 	register(core.Routers)
+	//连接etcd，获取连接地址，通知网管服务器，开启地址监听
+	etcdCli,_ := connect.InitEtcd(server_id,core.ServerType)
+	//监听外网端口
+	ExternalPort := core.ServerExternalInit()
+	if ExternalPort == -1{
+		panic("All ports are occupied")
+		return
+	}
+
+	select {
+
+	}
+	InternalPort := 10002;//core.ServerInternalInit()
+	if InternalPort == -1{
+		panic("All ports are occupied")
+		return
+	}
+	//组装自己的json
+	etcdJson := connect.ServerConfigEtcd{
+		ServerName:core.ServerType,
+		InternalIP:core.InternalHost,
+		InternalPort:strconv.Itoa(InternalPort),
+		ExternalIP:core.ExternalHost,
+		ExternalPort:strconv.Itoa(ExternalPort),
+	}
+	//序列化本服务的内容
+	jsonString,jsonErr := json.Marshal(etcdJson)
+	if nil != jsonErr{
+		panic("make json data error")
+	}
+	fmt.Println(string(jsonString))
+	//向etcd注册服务内容
+	etcdCli.RegisterNode("",string(jsonString))
+	//-------------------------------------加载路由、初始化数据-------------------------------------------------//
+
 	//缓存DB数据
 	mrg.InitCacheDBData()
 	//初始化地形
@@ -35,21 +70,6 @@ func Initialize(core *core.ServerCore,server_id string){
 	sort.InitResource()
 	//初始化城市
 	sort.InitTown()
-	//监听外网端口
-	core.ServerExternalInit()
-	//组装自己的json
-	etcdJson := connect.ServerConfigEtcd{
-		ServerName:core.ServerType,
-		InternalIP:core.InternalHost,
-		ExternalIP:core.ExternalHost,
-	}
-	content,err := etcdCli.GetNodesInfo("")
-	if err != nil{
-		logrus.Debug(err.Error())
-		return
-	}
-	logrus.Println(content)
-	go etcdCli.WatchNodes("0")
 }
 
 

@@ -4,6 +4,7 @@ import (
 	"YaIce/core/common"
 	"fmt"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"strconv"
 )
@@ -22,7 +23,7 @@ func (c *ConfigModule)loadYamlConfigData()  {
 		fmt.Printf("Unmarshal: %v", err)
 	}
 	c.mutex.Unlock()
-	c.yamlConfigData = configData
+	c.YamlConfigData = configData
 }
 
 //加载礼物数据
@@ -39,7 +40,7 @@ func (c *ConfigModule) loadAllianceGiftData(){
 			ChestExp :chestExp,
 			ItemChestId :itemChestItem,
 		}
-		c.tempGiftList = append(c.tempGiftList,tempData)
+		c.TempGiftList = append(c.TempGiftList,tempData)
 	}
 }
 
@@ -54,7 +55,7 @@ func (c *ConfigModule) loadAllianceGiftLvData() {
 			BigGiftPro :data[i][1],
 			Exp :exp,
 		}
-		c.tempGiftLvList = append(c.tempGiftLvList,tempData)
+		c.TempGiftLvList = append(c.TempGiftLvList,tempData)
 	}
 }
 
@@ -68,6 +69,6 @@ func (c *ConfigModule) loadAllianceRankData() {
 			ID: id,
 			Num :number,
 		}
-		c.tempRankList = append(c.tempRankList,tempData)
+		c.TempRankList = append(c.TempRankList,tempData)
 	}
 }

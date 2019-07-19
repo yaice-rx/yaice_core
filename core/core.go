@@ -9,7 +9,9 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"github.com/xtaci/kcp-go"
+	"google.golang.org/grpc"
 	"io"
+	"net"
 	"runtime"
 	"strconv"
 	"sync"
@@ -31,6 +33,7 @@ type ServerCore struct{
 
 func NewServerCore() *ServerCore {
 	s := new(ServerCore)
+	s.Routers 		= new(RegisterRouterRequest)
 	//最大连接数
 	s.maxConnect 	= 5000
 	//初始化数据库连接
@@ -43,18 +46,56 @@ func NewServerCore() *ServerCore {
 }
 
 //初始化外网监听
-func (s *ServerCore)ServerExternalInit(){
-	listenPort :=  temp.ConfigCacheData.YamlConfigData.TcpServicePortStart
-	kcpListen, err 	:= kcp.ListenWithOptions(":"+strconv.Itoa(), nil, 10, 1)
+func (s *ServerCore)ServerExternalInit()int{
+	for port := temp.ConfigCacheData.YamlConfigData.PortStart; port <= temp.ConfigCacheData.YamlConfigData.PortEnd; port++{
+		_port :=  s.ServerListenAccpet(port)
+		if -1 != _port{
+			return _port
+		}
+	}
+	return -1
+}
+
+//初始化内网监听
+func (s *ServerCore)ServerInternalInit()int{
+	//从zookeeper中获取登陆服务器的ip
+	server := grpc.NewServer()
+	//注册路由
+	RegisterGrpc(server)
+
+	for port := temp.ConfigCacheData.YamlConfigData.PortStart; port <= temp.ConfigCacheData.YamlConfigData.PortEnd; port++{
+		address, err := net.Listen("tcp", ":"+strconv.Itoa(port))
+		if err == nil {
+			err := server.Serve(address)
+			if err == nil {
+				return port;
+			}
+		}
+	}
+	return -1
+
+}
+
+//监听端口
+func (s *ServerCore)ServerListenAccpet(port int)int{
+	kcpListen, err 	:= kcp.ListenWithOptions(":"+strconv.Itoa(port), nil, 10, 1)
+	if nil != err{
+		return -1
+	}
+
 	defer func() {
 		kcpListen.Close()
 	}()
-	if err != nil {
-		panic(err.Error())
-	}
+
 	go func(){
 		for{
 			conn, err := kcpListen.AcceptKCP()
+			if nil != err{
+				continue
+			}
+			if nil == conn{
+				continue
+			}
 			if len(s.ConnectList) >= s.maxConnect{
 				fmt.Println("too many connections")
 				continue
@@ -62,29 +103,19 @@ func (s *ServerCore)ServerExternalInit(){
 			//todo 从在线cache用户中取值
 			if nil == s.ConnectList[conn]{
 				//todo 从登陆服务器取值，获取该用户已经登陆
-
 				s.mutexConns.Lock()
 				_conn := connect.InitPlayerConn(conn)
 				s.ConnectList[conn] = _conn
 				s.mutexConns.Unlock()
 			}
 			//分配请求句柄
-			if  err == nil {
-				go s.handleMux(conn)
-			} else {
-				fmt.Println(err.Error())
-			}
-
+			go s.handleMux(conn)
 		}
 	}()
-	select {
-	}
+	return port
 }
 
-func (s *ServerCore)ServerInternalInit(){
-	//从zookeeper中获取登陆服务器的ip
 
-}
  //处理数据
 func (s *ServerCore)handleMux(conn *kcp.UDPSession) {
 	var buffer = make([]byte,1024)
