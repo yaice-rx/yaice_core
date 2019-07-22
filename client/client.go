@@ -15,12 +15,12 @@ import (
 
 var conn *kcp.UDPSession
 func Initialize(core *core.ServerCore){
-	etcdCli,_ := connect.InitEtcd("1","game")
+	connect.InitEtcd("1","game")
 	//etcdCli.RegisterNode("1","test-=-=-=-=")
 	time.Sleep(2 * time.Second)
-	data,_ := etcdCli.GetNodesInfo("")
+	data,_ := connect.EtcdClient.GetNodesInfo("")
 	fmt.Println(data)
-	
+
 	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
 	defer  kcpconn.Close()
 	if err != nil {

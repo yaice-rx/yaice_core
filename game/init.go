@@ -17,13 +17,17 @@ func register(router *core.RegisterRouterRequest){
 	router.RegisterRouterHandler(&c2game.C2GPing{},mrg.PingHandler)
 	router.RegisterRouterHandler(&c2game.C2GJoinMap{},mrg.JoinMapHandler)
 }
+
 func Initialize(core *core.ServerCore,server_id string){
 	//加载配置文件
 	temp.InitConfigData()
 	//注册路由
 	register(core.Routers)
 	//连接etcd，获取连接地址，通知网管服务器，开启地址监听
-	etcdCli,_ := connect.InitEtcd(server_id,core.ServerType)
+	if err := connect.InitEtcd(server_id,core.ServerType); nil != err{
+		panic("Etcd Start Failed")
+		return
+	}
 	//监听外网端口
 	ExternalPort := core.ServerExternalInit()
 	if ExternalPort == -1{
@@ -50,7 +54,7 @@ func Initialize(core *core.ServerCore,server_id string){
 		panic("make json data error")
 	}
 	//向etcd注册服务内容
-	etcdCli.RegisterNode("",string(jsonString))
+	connect.EtcdClient.RegisterNode("",string(jsonString))
 	//-------------------------------------加载路由、初始化数据-------------------------------------------------//
 	InitServerImpl()
 	//阻塞

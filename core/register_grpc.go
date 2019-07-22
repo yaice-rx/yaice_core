@@ -4,6 +4,11 @@ import (
 	"google.golang.org/grpc"
 )
 
-func  RegisterGrpc(server *grpc.Server){
+func  RegisterServerGrpc(server *grpc.Server){
 	//echo.RegisterEchoServer(server, &EchoServerImp{})
+}
+
+
+func RegisterClientGrpc(){
+
 }

@@ -20,9 +20,9 @@ func main() {
 	external_host := flag.String("external_host", "", "external host")
 	//外网监听http端口
 	http_port := flag.String("http_port", "8080", "host port")
-
-	server_id := flag.String("server_id","-1","server_id")
-
+	//服务器id
+	server_group_id := flag.String("server_group_id","","server_group_id")
+	//解析数据
 	flag.Parse()
 	//配置
 	core := core.NewServerCore()
@@ -30,13 +30,14 @@ func main() {
 	core.ExternalHost 	= *internal_host
 	core.InternalHost 	= *external_host
 	core.ServerType		= *serverType
+	core.ServerGroupId = *server_group_id
 	//初始化调用对应的服务
 	switch *serverType {
 		case "gate":
-			gate.Initialize(core,*http_port,*server_id)
+			gate.Initialize(core,*http_port,*server_group_id)
 			return
 		case "game":
-			game.Initialize(core,*server_id)
+			game.Initialize(core,*server_group_id)
 			return
 		case "client":
 			client.Initialize(core)

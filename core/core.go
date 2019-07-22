@@ -6,13 +6,13 @@ import (
 	"YaIce/core/job"
 	"YaIce/core/model"
 	"YaIce/core/temp"
+	"encoding/json"
 	"fmt"
-	"github.com/spf13/viper"
+	"github.com/sirupsen/logrus"
 	"github.com/xtaci/kcp-go"
 	"google.golang.org/grpc"
 	"io"
 	"net"
-	"runtime"
 	"strconv"
 	"sync"
 )
@@ -22,6 +22,7 @@ type ServerCore struct{
 	maxConnect		int					//最大连接数据
 	mutexConns      sync.Mutex
 	ServerType 		string
+	ServerGroupId	string						//服务器组编号
 	ConfigFileName 	string                      //配置文件名称
 	InternalHost 	string                      //内部连接ip
 	ExternalHost	string                      //外部连接ip
@@ -43,8 +44,6 @@ func NewServerCore() *ServerCore {
 	s.DB 			= model.Init()
 	//开启定时任务
 	go job.CallJob()
-	//检测客户端->服务器是否超时
-	job.JoinJob(4,s.checkConnectTimeOut)
 	return s
 }
 
@@ -59,13 +58,13 @@ func (s *ServerCore)ServerExternalInit()int{
 	return -1
 }
 
-//初始化内网监听
+//初始化内网监听（grpc）
 func (s *ServerCore)ServerInternalInit()int{
 	//从zookeeper中获取登陆服务器的ip
 	server := grpc.NewServer()
 	//注册路由
-	RegisterGrpc(server)
-
+	RegisterServerGrpc(server)
+	//获取 端口
 	for port := temp.ConfigCacheData.YamlConfigData.PortStart; port <= temp.ConfigCacheData.YamlConfigData.PortEnd; port++{
 		address, err := net.Listen("tcp", ":"+strconv.Itoa(port))
 		if err == nil {
@@ -76,13 +75,13 @@ func (s *ServerCore)ServerInternalInit()int{
 	return -1
 }
 
-//监听端口
+//监听端口(kcp)
 func (s *ServerCore)ServerListenAccpet(port int)int{
 	kcpListen, err 	:= kcp.ListenWithOptions(":"+strconv.Itoa(port), nil, 10, 1)
 	if nil != err{
 		return -1
 	}
-
+	//启动grpc
 	go func(){
 		for{
 			conn, err := kcpListen.AcceptKCP()
@@ -106,15 +105,14 @@ func (s *ServerCore)ServerListenAccpet(port int)int{
 				s.mutexConns.Unlock()
 			}
 			//分配请求句柄
-			go s.handleMux(conn)
+			go s.handleKcpMux(conn)
 		}
 	}()
 	return port
 }
 
-
- //处理数据
-func (s *ServerCore)handleMux(conn *kcp.UDPSession) {
+ //（kcp）处理数据
+func (s *ServerCore)handleKcpMux(conn *kcp.UDPSession) {
 	var buffer = make([]byte,1024)
 	for {
 		n,e := conn.Read(buffer)
@@ -133,43 +131,31 @@ func (s *ServerCore)handleMux(conn *kcp.UDPSession) {
 	}
 }
 
-//加载配置文件
-func (s *ServerCore)loadConfig() string {
-	v := viper.New()
-	//设置读取的配置文件
-	v.SetConfigName("conf")
-	//添加读取的配置文件路径
-	v.AddConfigPath("./")
-	//windows环境下为%GOPATH，linux环境下为$GOPATH
-	var str string
-	switch runtime.GOOS {
-		case "darwin":
-			str = "%GOPATH/src/YaIce"
-			break
-		case "windows":
-			str = "%GOPATH/src/YaIce"
-			break
-		case "linux":
-			str = "$GOPATH/src/YaIce"
-			break
-	}
-	v.AddConfigPath(str)
-	//设置配置文件类型
-	v.SetConfigType("yaml")
-	if err := v.ReadInConfig();err == nil {
-		return v.GetString("ExcelPath")
-	}
-	return ""
+//注册服务器内部
+func (s *ServerCore)RegisterInternalService(){
+	//连接auth服务器
+	ConnectInternalService(s.ServerGroupId+"/auth")
+	//连接Relation服务器
+	ConnectInternalService("/relation")
 }
 
-//检查链接是否超时
-func (s *ServerCore)checkConnectTimeOut(){
-	/*for k,v := range s.ConnectList{
-		if v.updateConnectTime + 5 < time.Now().Unix() {
-			s.ConnectList[k] = nil
+func ConnectInternalService(path string){
+	jsonData,err :=  connect.EtcdClient.GetNodesInfo(path)
+	if nil != err{
+		logrus.Debug(err.Error())
+		return
+	}
+
+	for i := 0; i < len(jsonData);i++{
+		var etcdData connect.ServerConfigEtcd
+		json.Unmarshal([]byte(jsonData[i]),&etcdData)
+		conn, err := grpc.Dial(etcdData.InternalIP+":"+etcdData.InternalPort, grpc.WithInsecure())
+		if nil != err{
+			continue
 		}
-	}*/
+	}
 }
+
 
 
 

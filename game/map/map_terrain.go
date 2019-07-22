@@ -1,7 +1,7 @@
 package _map
 
 import (
-	"YaIce/core/common"
+	"YaIce/core/temp"
 	"github.com/sirupsen/logrus"
 	"strconv"
 	"strings"
@@ -12,8 +12,7 @@ var MapTerrainData [][]int
 
 //初始化类型
 func InitTerrain(){
-
-	txtData := common.ReadTXTData("WorldMapPosition")
+	txtData := temp.ReadTXTData("WorldMapPosition")
 	if nil == txtData {
 		logrus.Error("WorldMapPosition data nil")
 		panic("WorldMapPosition data nil")

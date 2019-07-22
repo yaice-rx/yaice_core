@@ -31,10 +31,12 @@ type ClientDis struct {
 
 const ttl  = 200
 
+var EtcdClient *ClientDis
+
 //初始化Etcd服务，
 //存储结构表如下：
 //			serverId:1=>{"gate_序号":地址，"game_序号"：地址},
-func InitEtcd(serverId string,serverType string)(*ClientDis,error){
+func InitEtcd(serverId string,serverType string) error{
 	etcdServerList :=  []string{"localhost:2379"}
 	etcdCli, err := clientv3.New(clientv3.Config{
 		Endpoints:   etcdServerList,
@@ -42,15 +44,16 @@ func InitEtcd(serverId string,serverType string)(*ClientDis,error){
 	})
 	if nil != err {
 		logrus.Debug(err.Error())
-		return nil,err
+		return err
 	}
-	return &ClientDis{
+	EtcdClient = &ClientDis{
 		Endpoints:etcdServerList,
 		client:etcdCli,
 		serverId:serverId,
 		serverType:serverType,
 		path:serverId+"/"+serverType,
-	},nil
+	}
+	return nil
 }
 
 func (c *ClientDis)RegisterNode(key string ,value string){
@@ -101,8 +104,7 @@ func (c *ClientDis)listenLease(){
 }
 
 //获取节点数据
-func (c *ClientDis)GetNodesInfo(key string)([]string,error){
-	path := c.path+"/"+key
+func (c *ClientDis)GetNodesInfo(path string)([]string,error){
 	resp, err := c.client.Get(context.TODO(),path, clientv3.WithPrefix())
 	if err != nil {
 		return nil,err
@@ -137,7 +139,7 @@ func (this *ClientDis) extractAddrs(resp *clientv3.GetResponse) []string {
 	}
 	for i := range resp.Kvs {
 		if v := resp.Kvs[i].Value; v != nil {
-			addrs = append(addrs, string(resp.Kvs[i].Key)+"  "+string(v))
+			addrs = append(addrs, string(string(v)))
 		}
 	}
 	return addrs
@@ -149,7 +151,7 @@ func (this *ClientDis)DelNode(key string)  {
 	path := this.path+"/"+key
 	response,err := this.client.Delete(context.TODO(),path,clientv3.WithPrefix())
 	if nil != err{
-		logrus.Println(err.Error())
+		logrus.Println("Error:",err.Error())
 	}
 	logrus.Println("Delete node",response.Deleted)
 

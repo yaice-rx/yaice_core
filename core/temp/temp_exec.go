@@ -1,7 +1,6 @@
 package temp
 
 import (
-	"YaIce/core/common"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
@@ -28,7 +27,7 @@ func (c *ConfigModule)loadYamlConfigData()  {
 
 //加载礼物数据
 func (c *ConfigModule) loadAllianceGiftData(){
-	data := common.ReadCSVData("AllianceGift")
+	data := ReadCSVData("AllianceGift")
 	for  i := 0; i< len(data);i++{
 		giftId,_ := strconv.Atoi(data[i][0])
 		giftType,_ := strconv.Atoi(data[i][2])
@@ -46,7 +45,7 @@ func (c *ConfigModule) loadAllianceGiftData(){
 
 //联盟大礼包
 func (c *ConfigModule) loadAllianceGiftLvData() {
-	data := common.ReadCSVData("AllianceGiftLv")
+	data := ReadCSVData("AllianceGiftLv")
 	for  i := 0; i< len(data);i++{
 		id,_ := strconv.Atoi(data[i][0])
 		exp,_ := strconv.Atoi(data[i][2])
@@ -61,7 +60,7 @@ func (c *ConfigModule) loadAllianceGiftLvData() {
 
 //联盟成员等级
 func (c *ConfigModule) loadAllianceRankData() {
-	data := common.ReadCSVData("AllianceRank")
+	data := ReadCSVData("AllianceRank")
 	for  i := 0; i< len(data);i++{
 		id,_ := strconv.Atoi(data[i][0])
 		number,_ := strconv.Atoi(data[i][1])
@@ -72,3 +71,4 @@ func (c *ConfigModule) loadAllianceRankData() {
 		c.TempRankList = append(c.TempRankList,tempData)
 	}
 }
+
