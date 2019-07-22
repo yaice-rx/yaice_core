@@ -69,12 +69,8 @@ func (s *ServerCore)ServerInternalInit()int{
 	for port := temp.ConfigCacheData.YamlConfigData.PortStart; port <= temp.ConfigCacheData.YamlConfigData.PortEnd; port++{
 		address, err := net.Listen("tcp", ":"+strconv.Itoa(port))
 		if err == nil {
-			err := server.Serve(address)
-			if err == nil {
-				return port;
-			}else {
-				fmt.Println(err.Error())
-			}
+			go server.Serve(address)
+			return port;
 		}
 	}
 	return -1

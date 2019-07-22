@@ -9,7 +9,6 @@ import (
 	"YaIce/game/mrg"
 	"YaIce/protobuf"
 	"encoding/json"
-	"fmt"
 	"strconv"
 )
 
@@ -25,17 +24,14 @@ func Initialize(core *core.ServerCore,server_id string){
 	register(core.Routers)
 	//连接etcd，获取连接地址，通知网管服务器，开启地址监听
 	etcdCli,_ := connect.InitEtcd(server_id,core.ServerType)
-
 	//监听外网端口
 	ExternalPort := core.ServerExternalInit()
-	fmt.Println("监听外网端口：",ExternalPort)
 	if ExternalPort == -1{
 		panic("All ports are occupied")
 		return
 	}
-
+	//监听内网端口
 	InternalPort := core.ServerInternalInit()
-	fmt.Println("监听内网端口：",InternalPort)
 	if InternalPort == -1{
 		panic("All ports are occupied")
 		return
@@ -53,11 +49,15 @@ func Initialize(core *core.ServerCore,server_id string){
 	if nil != jsonErr{
 		panic("make json data error")
 	}
-	fmt.Println(string(jsonString))
 	//向etcd注册服务内容
 	etcdCli.RegisterNode("",string(jsonString))
 	//-------------------------------------加载路由、初始化数据-------------------------------------------------//
+	InitServerImpl()
+	//阻塞
+	select {}
+}
 
+func InitServerImpl(){
 	//缓存DB数据
 	mrg.InitCacheDBData()
 	//初始化地形
