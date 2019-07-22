@@ -3,7 +3,6 @@ package client
 import (
 	"YaIce/core"
 	"YaIce/core/common"
-	"YaIce/core/connect"
 	"YaIce/core/job"
 	"YaIce/protobuf"
 	"fmt"
@@ -28,19 +27,13 @@ func Initialize(core *core.ServerCore){
 }
 
 func  pingHandler(){
+	fmt.Println("-!-!-!")
 	gmCommand := c2game.C2GGmCommand{Command:"test",Params:[]string{"2312312"}}
 	data, err := proto.Marshal(&gmCommand)
 	if err != nil {
 		log.Fatalln("Marshal client data error: ", err)
 	}
 	SendMsg(conn,common.ProtocalNumber("c2g_gm_command"),data)
-	gmPing := c2game.C2GPing{}
-	_data, _err := proto.Marshal(&gmPing)
-	fmt.Println(_data)
-	if _err != nil {
-		log.Fatalln("Marshal client data error: ", err)
-	}
-	SendMsg(conn,common.ProtocalNumber("c2g_ping"),_data)
 }
 
 

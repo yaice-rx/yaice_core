@@ -25,17 +25,17 @@ func Initialize(core *core.ServerCore,server_id string){
 	register(core.Routers)
 	//连接etcd，获取连接地址，通知网管服务器，开启地址监听
 	etcdCli,_ := connect.InitEtcd(server_id,core.ServerType)
+
 	//监听外网端口
 	ExternalPort := core.ServerExternalInit()
+	fmt.Println("监听外网端口：",ExternalPort)
 	if ExternalPort == -1{
 		panic("All ports are occupied")
 		return
 	}
 
-	select {
-
-	}
-	InternalPort := 10002;//core.ServerInternalInit()
+	InternalPort := core.ServerInternalInit()
+	fmt.Println("监听内网端口：",InternalPort)
 	if InternalPort == -1{
 		panic("All ports are occupied")
 		return

@@ -33,7 +33,10 @@ type ServerCore struct{
 
 func NewServerCore() *ServerCore {
 	s := new(ServerCore)
+	//初始化路由
 	s.Routers 		= new(RegisterRouterRequest)
+	//初始化连接容量
+	s.ConnectList	= make(map[*kcp.UDPSession]*connect.PlayerConn)
 	//最大连接数
 	s.maxConnect 	= 5000
 	//初始化数据库连接
@@ -69,11 +72,12 @@ func (s *ServerCore)ServerInternalInit()int{
 			err := server.Serve(address)
 			if err == nil {
 				return port;
+			}else {
+				fmt.Println(err.Error())
 			}
 		}
 	}
 	return -1
-
 }
 
 //监听端口
@@ -83,14 +87,11 @@ func (s *ServerCore)ServerListenAccpet(port int)int{
 		return -1
 	}
 
-	defer func() {
-		kcpListen.Close()
-	}()
-
 	go func(){
 		for{
 			conn, err := kcpListen.AcceptKCP()
 			if nil != err{
+				fmt.Println(err.Error())
 				continue
 			}
 			if nil == conn{

@@ -3,6 +3,7 @@ package mrg
 import (
 	"YaIce/core/connect"
 	"YaIce/protobuf"
+	"fmt"
 	"github.com/golang/protobuf/proto"
 	"log"
 	"time"
@@ -10,6 +11,7 @@ import (
 
 //Gm命令处理
 func  CommandHandler(conn *connect.PlayerConn,content []byte){
+	fmt.Println("-----------------")
 	data := c2game.C2GGmCommand{}
 	c2g_proto := c2game.C2GSyncTime{ClientTime:"test current time :"+time.Now().String()}
 	err := proto.Unmarshal(content,&data)
