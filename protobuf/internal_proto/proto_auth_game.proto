@@ -1,0 +1,31 @@
+syntax="proto3";
+package internal_proto;
+
+//游戏服务器注册到网管服务
+message GameConnectServiceRequest{
+
+}
+
+//接收注册的消息
+message GameConnectServiceReply{
+    bool isConnected=1;
+}
+
+service ServiceConnect {
+    rpc RegisterServiceRequest (GameConnectServiceRequest) returns (GameConnectServiceReply){};
+}
+
+
+//请求玩家是否登陆
+message GamePlayerLoginRequest{
+    string guid=1;
+}
+
+//验证玩家是否登陆
+message GamePlayerLoginReply{
+    string token=1;
+}
+
+service LoginVerify {
+    rpc LoginVerifyRequest (GamePlayerLoginRequest) returns (GamePlayerLoginReply){};
+}

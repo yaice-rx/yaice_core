@@ -1,7 +1,7 @@
 package sort
 
 import (
-	"YaIce/protobuf"
+	"YaIce/protobuf/external"
 	"github.com/satori/go.uuid"
 )
 

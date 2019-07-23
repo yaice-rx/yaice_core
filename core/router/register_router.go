@@ -1,4 +1,4 @@
-package core
+package router
 
 import (
 	"YaIce/core/common"
@@ -31,7 +31,6 @@ func ( mux *RegisterRouterRequest)RegisterRouterHandler(msgObj proto.Message,han
 func (mux *RegisterRouterRequest)CallRouterHandler(protoNo int,conn *connect.PlayerConn,data []byte) {
 	mux.mu.RLock()
 	defer mux.mu.RUnlock()
-
 	if mux.m[protoNo] != nil {
 		mux.m[protoNo](conn,data)
 	}

@@ -7,7 +7,7 @@ import (
 	"YaIce/game/map"
 	"YaIce/game/map/sort"
 	"YaIce/game/mrg"
-	"YaIce/protobuf"
+	"YaIce/protobuf/external"
 	"encoding/json"
 	"strconv"
 )
@@ -40,6 +40,9 @@ func Initialize(core *core.ServerCore,server_id string){
 		panic("All ports are occupied")
 		return
 	}
+	//开启服务连接
+	core.RegisterGateService();
+	core.RegisterRelationService();
 	//组装自己的json
 	etcdJson := connect.ServerConfigEtcd{
 		ServerName:core.ServerType,

@@ -2,7 +2,7 @@ package mrg
 
 import (
 	"YaIce/core/connect"
-	"YaIce/protobuf"
+	"YaIce/protobuf/external"
 	"fmt"
 	"github.com/golang/protobuf/proto"
 	"log"

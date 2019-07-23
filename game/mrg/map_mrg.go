@@ -3,7 +3,7 @@ package mrg
 import (
 	"YaIce/core/connect"
 	"YaIce/game/map"
-	"YaIce/protobuf"
+	"YaIce/protobuf/external"
 	"github.com/golang/protobuf/proto"
 )
 

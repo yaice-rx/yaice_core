@@ -5,7 +5,7 @@ import (
 	"YaIce/core/common"
 	"YaIce/core/connect"
 	"YaIce/core/job"
-	"YaIce/protobuf"
+	"YaIce/protobuf/external"
 	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/xtaci/kcp-go"
