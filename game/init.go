@@ -67,7 +67,6 @@ func Initialize(){
 	if nil != jsonErr{
 		panic("make json data error")
 	}
-
 	//向服务中注册自己节点数据
 	etcd_service.EtcdClient.RegisterNode("",string(jsonString))
 	//-------------------------------------Etcd End-------------------------------------//

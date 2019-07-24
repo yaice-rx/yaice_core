@@ -20,6 +20,8 @@ func Initialize(){
 	time.Sleep(2 * time.Second)
 	data,_ := etcd_service.EtcdClient.GetNodesInfo("")
 	fmt.Println(data)
+	etcd_service.EtcdClient.WatchNodes("");
+
 
 	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
 	defer  kcpconn.Close()

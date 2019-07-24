@@ -32,6 +32,7 @@ func InitEtcd(serverId string,serverType string) error{
 		serverId:serverId,
 		serverType:serverType,
 		path:serverId+"/"+serverType,
+		ServiceList:make(map[string]string),
 	}
 	return nil
 }
@@ -73,10 +74,9 @@ func (c *ClientDis)listenLease(){
 		select {
 		case res :=  <- c.keepAliveChan:
 			if nil == res{
-				fmt.Println("lease close")
+				logrus.Error("租期续约失败，请查看Etcd日志")
 				return
 			}
-			fmt.Println("lease success")
 			break;
 		}
 	}
@@ -101,9 +101,12 @@ func (this *ClientDis) WatchNodes(key string){
 			for _, event := range wresp.Events {
 				switch (event.Type) {
 				case mvccpb.PUT:
-					fmt.Println("PUT事件",event.Kv.Key,event.Kv.Value)
+					//todo 维护一个列表
+					fmt.Println("PUT事件",string(event.Kv.Key),string(event.Kv.Value))
+					this.ServiceList[string(event.Kv.Key)] = string(event.Kv.Value)
 				case mvccpb.DELETE:
-					fmt.Println("DELETE事件",event.Kv.Key,event.Kv.Value)
+					//todo  从列表中删除
+					delete(this.ServiceList, string(event.Kv.Key))
 				}
 			}
 		}

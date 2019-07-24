@@ -20,6 +20,7 @@ type ClientDis struct {
 	serverId 	string
 	serverType	string
 	path 		string
+	ServiceList  map[string]string
 	leaseRes    *clientv3.LeaseGrantResponse
 	keepAliveChan  <-chan *clientv3.LeaseKeepAliveResponse
 }
