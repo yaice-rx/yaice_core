@@ -1,9 +1,8 @@
 package client
 
 import (
-	"YaIce/core"
 	"YaIce/core/common"
-	"YaIce/core/connect"
+	"YaIce/core/etcd_service"
 	"YaIce/core/job"
 	"YaIce/protobuf/external"
 	"fmt"
@@ -14,11 +13,12 @@ import (
 )
 
 var conn *kcp.UDPSession
-func Initialize(core *core.ServerCore){
-	connect.InitEtcd("1","game")
+
+func Initialize(){
+	etcd_service.InitEtcd("1","game")
 	//etcdCli.RegisterNode("1","test-=-=-=-=")
 	time.Sleep(2 * time.Second)
-	data,_ := connect.EtcdClient.GetNodesInfo("")
+	data,_ := etcd_service.EtcdClient.GetNodesInfo("")
 	fmt.Println(data)
 
 	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
@@ -40,7 +40,7 @@ func  pingHandler(){
 	if err != nil {
 		log.Fatalln("Marshal client data error: ", err)
 	}
-	SendMsg(conn,common.ProtocalNumber("c2g_gm_command"),data)
+	SendMsg(conn, common.ProtocalNumber("c2g_gm_command"),data)
 }
 
 

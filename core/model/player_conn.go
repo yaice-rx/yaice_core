@@ -1,4 +1,4 @@
-package connect
+package model
 
 import (
 	"YaIce/core/common"
@@ -24,10 +24,6 @@ type ConnectInterface interface {
 	Destroy()
 }
 
-func (conn *PlayerConn)GetPlayerGuid()string{
-	return conn.guid
-}
-
 //初始化用户连接信息
 func InitPlayerConn(conn *kcp.UDPSession)*PlayerConn{
 	return &PlayerConn{
@@ -35,6 +31,10 @@ func InitPlayerConn(conn *kcp.UDPSession)*PlayerConn{
 		session:conn,
 		updateConnectTime:time.Now().Unix(),
 	}
+}
+
+func (conn *PlayerConn)GetPlayerGuid()string{
+	return conn.guid
 }
 
 //发送数据

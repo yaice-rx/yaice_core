@@ -18,10 +18,10 @@ var ConfigCacheData *ConfigModule
 
 //初始化配置表数据
 func InitConfigData(){
-	confClass := new(ConfigModule)
-	confClass.loadYamlConfigData()
-	confClass.loadAllianceGiftData()
-	confClass.loadAllianceGiftLvData()
-	confClass.loadAllianceRankData()
-	ConfigCacheData = confClass
+	ConfigCacheData = new(ConfigModule)
+	ConfigCacheData.loadYamlConfigData()
+	ConfigCacheData.loadAllianceGiftData()
+	ConfigCacheData.loadAllianceGiftLvData()
+	ConfigCacheData.loadAllianceRankData()
+
 }

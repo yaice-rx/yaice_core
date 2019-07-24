@@ -1,7 +1,7 @@
 package mrg
 
 import (
-	"YaIce/core/connect"
+	"YaIce/core/model"
 	"YaIce/protobuf/external"
 	"fmt"
 	"github.com/golang/protobuf/proto"
@@ -10,7 +10,7 @@ import (
 )
 
 //Gm命令处理
-func  CommandHandler(conn *connect.PlayerConn,content []byte){
+func  CommandHandler(conn *model.PlayerConn,content []byte){
 	fmt.Println("-----------------")
 	data := c2game.C2GGmCommand{}
 	c2g_proto := c2game.C2GSyncTime{ClientTime:"test current time :"+time.Now().String()}
@@ -22,7 +22,7 @@ func  CommandHandler(conn *connect.PlayerConn,content []byte){
 }
 
 //处理ping包
-func  PingHandler(connect *connect.PlayerConn,content []byte)  {
+func  PingHandler(connect *model.PlayerConn,content []byte)  {
 	data := c2game.C2GPing{}
 	err := proto.Unmarshal(content,&data)
 	if err != nil {

@@ -14,7 +14,6 @@ var mutex sync.Mutex
 
 //读取csv数据
 func ReadCSVData(fileName string) [][]string {
-
 	mutex.Lock()
 	csvFile, err := os.Open(ConfigCacheData.YamlConfigData.ExcelPath+fileName+".csv")
 	defer csvFile.Close()

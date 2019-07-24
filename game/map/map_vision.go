@@ -1,7 +1,7 @@
 package _map
 
 import (
-	"YaIce/core/connect"
+	"YaIce/core/model"
 	"YaIce/game/map/sort"
 	"github.com/satori/go.uuid"
 	"time"
@@ -98,7 +98,7 @@ func (v *VisionList)constructNeighbor(col,row int){
 }
 
 //把对应的观察者添加到对应的区域
-func (v *VisionList) AddObserver(x , y int,connect *connect.PlayerConn){
+func (v *VisionList) AddObserver(x , y int,connect *model.PlayerConn){
 	//把对应的坐标转换成对应的视野格子坐标
 	col := int(x/visionRangeNum)
 	row := int(y/visionRangeNum)
@@ -120,7 +120,7 @@ func (v *VisionList) AddObserver(x , y int,connect *connect.PlayerConn){
 }
 
 //推送视野内的数据给玩家
-func (v *VisionList)PushVisionDataToPlayer(col,row int,player *connect.PlayerConn){
+func (v *VisionList)PushVisionDataToPlayer(col,row int,player *model.PlayerConn){
 
 	//todo 推送自己信息
 

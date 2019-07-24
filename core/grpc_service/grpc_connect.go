@@ -1,9 +1,8 @@
-package connect
+package grpc_service
 
 import (
-	"YaIce/core"
+	"YaIce/core/config"
 	"YaIce/core/etcd_service"
-	"YaIce/core/grpc_service"
 	"YaIce/core/temp"
 	"encoding/json"
 	"github.com/sirupsen/logrus"
@@ -14,11 +13,12 @@ import (
 )
 
 //开启grpc服务模式
-func ServerInternalInit()int{
+func ServiceGRPCInit()int{
 	//从zookeeper中获取登陆服务器的ip
 	server := grpc.NewServer()
 	//注册路由
-	grpc_service.RegisterServiceGrpc(server)
+	RegisterServiceGrpc(server)
+
 	reflection.Register(server)
 	//获取 端口
 	for port := temp.ConfigCacheData.YamlConfigData.PortStart; port <= temp.ConfigCacheData.YamlConfigData.PortEnd; port++{
@@ -34,7 +34,7 @@ func ServerInternalInit()int{
 //连接网管服务器内部
 func RegisterGateService(){
 	//连接auth服务器
-	ConnectService(core.ServerCoreHandler.ServerGroupId+"/auth")
+	ConnectService(config.ServiceConfigData.ServerGroupId+"/auth")
 }
 
 func RegisterRelationService(){
@@ -56,6 +56,6 @@ func ConnectService(path string){
 		if nil != err{
 			continue
 		}
-		grpc_service.RegisterClientGrpc(conn)
+		RegisterClientGrpc(conn)
 	}
 }

@@ -1,7 +1,6 @@
 package gate
 
 import (
-	"YaIce/core"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/xtaci/kcp-go"
@@ -9,7 +8,7 @@ import (
 	"net/http"
 )
 
-func Initialize(s *core.ServerCore,port string ,server_id string){
+func Initialize(port string ,server_id string){
 	//读取配置文件中的zookeeper地址
 	//监听Http服务器
 	mux := http.NewServeMux()
