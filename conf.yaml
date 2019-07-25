@@ -1,5 +1,5 @@
-ZooConnectString: 127.0.0.1:2181
-ZooNameSpace: server
+EtcdConnectString: 127.0.0.1:2181
+EtcdNameSpace: YaIce_Service
 PortStart: 20001
 PortEnd: 20100
 ServerPingServerInterval: 5000

@@ -46,3 +46,15 @@ func GetProtoName(t proto.Message)string{
 		return ""
 	}
 }
+
+//连个字符串的key合并
+func MergeMapString(varA map[string]string,varB  map[string]string)map[string]string{
+	data := make(map[string]string, len(varA)+len(varB))
+	for k,v := range varA{
+		data[k] = v
+	}
+	for k,v := range varB{
+		data[k] = v
+	}
+	return data
+}

@@ -2,8 +2,8 @@ package temp
 
 //配置文件数据
 type yamlConfigData struct {
-	ZooConnectString string `yaml:"ZooConnectString"`
-	ZooNameSpace string	`yaml:"ZooNameSpace"`
+	EtcdConnectString string `yaml:"EtcdConnectString"`
+	EtcdNameSpace string	`yaml:"EtcdNameSpace"`
 	PortStart int	`yaml:"PortStart"`
 	PortEnd	int	`yaml:"PortEnd"`
 	ServerPingServerInterval	int	`yaml:"ServerPingServerInterval"`

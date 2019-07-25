@@ -1,7 +1,6 @@
 package grpc_service
 
 import (
-	"YaIce/core/config"
 	"YaIce/core/etcd_service"
 	"YaIce/core/temp"
 	"encoding/json"
@@ -31,17 +30,6 @@ func ServiceGRPCInit()int{
 	return -1
 }
 
-//连接网管服务器内部
-func RegisterGateService(){
-	//连接auth服务器
-	ConnectService(config.ServiceConfigData.ServerGroupId+"/auth")
-}
-
-func RegisterRelationService(){
-	//连接Relation服务器
-	ConnectService("/relation")
-}
-
 //连接服务器
 func ConnectService(path string){
 	jsonData,err :=  etcd_service.EtcdClient.GetNodesInfo(path)
@@ -49,9 +37,9 @@ func ConnectService(path string){
 		logrus.Debug(err.Error())
 		return
 	}
-	for i := 0; i < len(jsonData);i++{
+	for _,value := range jsonData{
 		var etcdData etcd_service.ServerConfigEtcd
-		json.Unmarshal([]byte(jsonData[i]),&etcdData)
+		json.Unmarshal([]byte(value),&etcdData)
 		conn, err := grpc.Dial(etcdData.InternalIP+":"+etcdData.InternalPort, grpc.WithInsecure())
 		if nil != err{
 			continue

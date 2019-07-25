@@ -21,8 +21,8 @@ func main() {
 	external_host 	:= flag.String("external_host", "", "external host")
 	//外网监听http端口
 	http_port 		:= flag.String("http_port", "8080", "host port")
-	//服务器id
-	server_group_id := flag.String("server_group_id","","server_group_id")
+	//服务分组Id 如果为中心服务，则在启动参数中不添加,默认为common，中心服务器
+	server_group_id := flag.String("server_group_id","common","server_group_id")
 	//解析数据
 	flag.Parse()
 	//配置

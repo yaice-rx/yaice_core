@@ -26,7 +26,7 @@ func Initialize(){
 	//加载配置文件
 	temp.InitConfigData()
 	//连接etcd，获取连接地址，通知网管服务器，开启地址监听
-	if err := etcd_service.InitEtcd(config.ServiceConfigData.ServerGroupId,config.ServiceConfigData.ServerType);
+	if err := etcd_service.InitEtcd("YaIce_Service");
 		nil != err{
 		panic("Etcd Start Failed")
 		return
@@ -48,9 +48,6 @@ func Initialize(){
 		return
 	}
 	//-------------------------------------End-------------------------------------//
-	//开启服务连接
-	grpc_service.RegisterGateService();
-	grpc_service.RegisterRelationService();
 	//-------------------------------------加载路由、初始化数据-------------------------------------//
 	InitServerImpl()
 	//-------------------------------------ETCD 服务发现内容-------------------------------------//
@@ -68,7 +65,10 @@ func Initialize(){
 		panic("make json data error")
 	}
 	//向服务中注册自己节点数据
-	etcd_service.EtcdClient.RegisterNode("",string(jsonString))
+	etcd_service.EtcdClient.RegisterNode(
+		config.ServiceConfigData.ServerGroupId+""+config.ServiceConfigData.ServerType,string(jsonString))
+	//开启服务连接
+
 	//-------------------------------------Etcd End-------------------------------------//
 	//阻塞
 	select {}
