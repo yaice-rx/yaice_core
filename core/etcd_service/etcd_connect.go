@@ -1,16 +1,14 @@
 package etcd_service
 
 import (
-	"YaIce/core/common"
 	"YaIce/core/config"
 	"YaIce/core/grpc_service"
-	"YaIce/core/temp"
 	"context"
 	"encoding/json"
+	"errors"
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	"github.com/sirupsen/logrus"
-	"google.golang.org/grpc"
 	"time"
 )
 
@@ -22,8 +20,8 @@ var EtcdClient *ClientDis
 //存储结构表如下：
 //serverId:1=>{"gate_序号":地址，"game_序号"：地址},
 func InitEtcd(serviceName string) error{
-	etcdServerList :=  []string{"localhost:2379"}
-	etcdCli, err := clientv3.New(clientv3.Config{
+	etcdServerList 	:=  []string{"localhost:2379"}
+	etcdCli, err 	:= clientv3.New(clientv3.Config{
 		Endpoints:   etcdServerList,
 		DialTimeout: 5 * time.Second,
 	})
@@ -35,35 +33,33 @@ func InitEtcd(serviceName string) error{
 		Endpoints:etcdServerList,
 		client:etcdCli,
 		serviceName:serviceName,
-		path:serviceName,
-		ServiceList:make(map[string]string),
+		path:config.ServiceConfigData.ServerGroupId+"/"+serviceName,
+		ServiceList:make(map[string]*EtcdConnStruct),
 	}
+
+	if(config.ServiceConfigData.IsConnect){
+		InternalPort := grpc_service.ServiceGRPCInit()
+		if InternalPort == -1{
+			return errors.New("grpc service start faild")
+		}
+		config.ServiceConfigData.InternalPort = InternalPort
+	}
+
 	//连接成功的时候，获取(同组)服务列表
-	groupList,err := EtcdClient.GetNodesInfo(config.ServiceConfigData.ServerGroupId)
-	if nil != err {
-		logrus.Debug("数据获取失败，Error Msg：",err.Error())
-		return err
-	}
+	EtcdClient.GetNodesInfo(config.ServiceConfigData.ServerGroupId)
 	//获取公用服务器列表
-	commonList,err := EtcdClient.GetNodesInfo("common")
-	if nil != err {
-		logrus.Debug("数据获取失败，Error Msg：",err.Error())
-		return err
-	}
-	//添加服务列表
-	EtcdClient.ServiceList = common.MergeMapString(groupList,commonList);
+	EtcdClient.GetNodesInfo("common")
 	return nil
 }
 
 //注册节点
-func (c *ClientDis)RegisterNode(key string ,value string){
+func (c *ClientDis)RegisterNode(value string){
 	if nil == c {
 		return
 	}
 	c.grantSetLeaseKeepAlive(ttl)
 	c.Lock()
-	path := c.path+"/"+key
-	_, err := c.client.Put(context.TODO(),path,value,clientv3.WithLease(c.leaseRes.ID));
+	_, err := c.client.Put(context.TODO(),c.path,value,clientv3.WithLease(c.leaseRes.ID));
 	if err != nil{
 		logrus.Debug("数据注册失败，Error Msg：",err.Error())
 		return
@@ -87,7 +83,7 @@ func (c *ClientDis)grantSetLeaseKeepAlive(ttl int64) error{
 	return nil
 }
 
-//监听
+//监测是否续约
 func (c *ClientDis)listenLease(){
 	for  {
 		select {
@@ -102,13 +98,35 @@ func (c *ClientDis)listenLease(){
 }
 
 //获取节点数据
-func (c *ClientDis)GetNodesInfo(path string)(map[string]string,error){
-	path = temp.ConfigCacheData.YamlConfigData.EtcdNameSpace+"/"+path
-	resp, err := c.client.Get(context.TODO(),path, clientv3.WithPrefix())
+func (this *ClientDis)GetNodesInfo(path string){
+	resp, err := this.client.Get(context.TODO(),path, clientv3.WithPrefix())
 	if err != nil {
-		return nil,err
+		logrus.Error("Etcd 获取内容失败")
+		return
 	}
-	return c.extractAddrs(resp),nil
+	//连接服务
+	for key,value := range this.extractAddrs(resp){
+		//排除自己
+		if key == this.path{
+			continue
+		}
+		//不需要其他连接
+		var _conf config.ServiceConfig
+		json.Unmarshal([]byte(value),&_conf)
+		if !_conf.IsConnect{
+			continue
+		}
+		//连接grpc服务
+		conn := grpc_service.ConnectGRPCService([]byte(value))
+		if conn == nil{
+			continue;
+		}
+		//添加服务列表中
+		this.ServiceList[key] = &EtcdConnStruct{
+			ConfigData:value,
+			Connect:conn,
+		}
+	}
 }
 
 //监听节点数据变化
@@ -122,7 +140,19 @@ func (this *ClientDis) WatchNodes(key string){
 				switch (event.Type) {
 				case mvccpb.PUT:
 					//todo 维护一个列表
-					this.ServiceList[string(event.Kv.Key)] = string(event.Kv.Value)
+					var _conf config.ServiceConfig
+					json.Unmarshal(event.Kv.Value,&_conf)
+					if !_conf.IsConnect{
+						continue
+					}
+					conn := grpc_service.ConnectGRPCService(event.Kv.Value)
+					if nil == conn {
+						continue
+					}
+					this.ServiceList[string(event.Kv.Key)] = &EtcdConnStruct{
+						ConfigData:string(event.Kv.Value),
+						Connect:conn,
+					}
 				case mvccpb.DELETE:
 					//todo  从列表中删除
 					delete(this.ServiceList, string(event.Kv.Key))
@@ -158,17 +188,3 @@ func (this *ClientDis)DelNode(key string)  {
 	}
 	logrus.Println("Delete node",response.Deleted)
 }
-
-//启动GRPC
-func (this *ClientDis)Start(){
-	for _,value := range this.ServiceList{
-		var etcdData ServerConfigEtcd
-		json.Unmarshal([]byte(value),&etcdData)
-		conn, err := grpc.Dial(etcdData.InternalIP+":"+etcdData.InternalPort, grpc.WithInsecure())
-		if nil != err{
-			continue
-		}
-		grpc_service.RegisterClientGrpc(conn)
-	}
-}
-

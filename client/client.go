@@ -16,12 +16,14 @@ var conn *kcp.UDPSession
 
 func Initialize(){
 	etcd_service.InitEtcd("YaIce_Service")
-	//etcdCli.RegisterNode("1","test-=-=-=-=")
-	time.Sleep(2 * time.Second)
-	data,_ := etcd_service.EtcdClient.GetNodesInfo("1")
-	fmt.Println("---------------------")
-	fmt.Println(data)
-	etcd_service.EtcdClient.WatchNodes("");
+
+
+
+
+
+
+
+
 
 
 	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)

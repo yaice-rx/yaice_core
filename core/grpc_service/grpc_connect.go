@@ -1,23 +1,24 @@
 package grpc_service
 
 import (
-	"YaIce/core/etcd_service"
+	"YaIce/core/config"
 	"YaIce/core/temp"
 	"encoding/json"
+	"github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"net"
 	"strconv"
 )
 
-//开启grpc服务模式
+//监听grpc端口
 func ServiceGRPCInit()int{
 	//从zookeeper中获取登陆服务器的ip
 	server := grpc.NewServer()
 	//注册路由
 	RegisterServiceGrpc(server)
-
 	reflection.Register(server)
 	//获取 端口
 	for port := temp.ConfigCacheData.YamlConfigData.PortStart; port <= temp.ConfigCacheData.YamlConfigData.PortEnd; port++{
@@ -30,20 +31,22 @@ func ServiceGRPCInit()int{
 	return -1
 }
 
-//连接服务器
-func ConnectService(path string){
-	jsonData,err :=  etcd_service.EtcdClient.GetNodesInfo(path)
+//启动连接GRPCService服务
+func ConnectGRPCService(connectConfigData []byte)*grpc.ClientConn{
+	var serviceConfig config.ServiceConfig
+	json.Unmarshal(connectConfigData,&serviceConfig)
+	conn, err := grpc.Dial(serviceConfig.InternalHost+":"+strconv.Itoa(serviceConfig.InternalPort),
+		grpc.WithInsecure(),
+		grpc.WithUnaryInterceptor(
+			grpc_retry.UnaryClientInterceptor(
+				//当遇到此类错误，重连，否则都不予重新连接机会
+				grpc_retry.WithCodes(codes.Canceled,codes.DataLoss,codes.Unavailable),
+				//重连次数
+				grpc_retry.WithMax(3))),
+	)
 	if nil != err{
-		logrus.Debug(err.Error())
-		return
+		logrus.Error("服务连接IP："+serviceConfig.InternalHost+"失败，Error Msg :",err.Error())
+		return nil
 	}
-	for _,value := range jsonData{
-		var etcdData etcd_service.ServerConfigEtcd
-		json.Unmarshal([]byte(value),&etcdData)
-		conn, err := grpc.Dial(etcdData.InternalIP+":"+etcdData.InternalPort, grpc.WithInsecure())
-		if nil != err{
-			continue
-		}
-		RegisterClientGrpc(conn)
-	}
+	return conn
 }

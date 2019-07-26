@@ -6,14 +6,6 @@ import (
 	"sync"
 )
 
-type ServerConfigEtcd struct {
-	ServerName 	 	string `json:"server_name"`
-	InternalIP   	string `json:"internal_ip"`
-	InternalPort   	string `json:"internal_port"`
-	ExternalIP   	string `json:"external_ip"`
-	ExternalPort  	string `json:"external_port"`
-}
-
 type EtcdConnStruct struct {
 	ConfigData  string
 	Connect		*grpc.ClientConn
@@ -25,7 +17,7 @@ type ClientDis struct {
 	Endpoints   	[]string
 	serviceName		string
 	path 			string
-	ServiceList  	map[string]string
+	ServiceList  	map[string]*EtcdConnStruct
 	leaseRes    	*clientv3.LeaseGrantResponse
 	keepAliveChan  	<-chan *clientv3.LeaseKeepAliveResponse
 }
