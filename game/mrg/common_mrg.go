@@ -1,6 +1,7 @@
 package mrg
 
 import (
+	"YaIce/core/etcd_service"
 	"YaIce/core/model"
 	"YaIce/protobuf/external"
 	"fmt"
@@ -28,4 +29,8 @@ func  PingHandler(connect *model.PlayerConn,content []byte)  {
 	if err != nil {
 		log.Fatalln("Unmarshal data error: ", err)
 	}
+}
+
+
+func RegisterHandler(connect *model.PlayerConn,content []byte)  {
 }

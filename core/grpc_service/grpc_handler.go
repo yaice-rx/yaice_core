@@ -11,6 +11,7 @@ type ServiceRegister struct {
 
 func (s *ServiceRegister)RegisterServiceRequest(  ctx context.Context,
 	args *internal_proto.GameConnectServiceRequest)(response *internal_proto.GameConnectServiceReply, err error) {
+		//todo  处理client连接
 	return &internal_proto.GameConnectServiceReply{},nil
 }
 

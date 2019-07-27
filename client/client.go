@@ -16,16 +16,6 @@ var conn *kcp.UDPSession
 
 func Initialize(){
 	etcd_service.InitEtcd("YaIce_Service")
-
-
-
-
-
-
-
-
-
-
 	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
 	defer  kcpconn.Close()
 	if err != nil {

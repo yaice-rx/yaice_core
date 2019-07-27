@@ -17,6 +17,7 @@ import (
 func registerRouter(){
 	router.RouterListPtr.RegisterRouterHandler(&c2game.C2GGmCommand{},mrg.CommandHandler)
 	router.RouterListPtr.RegisterRouterHandler(&c2game.C2GPing{},mrg.PingHandler)
+	router.RouterListPtr.RegisterRouterHandler(&c2game.C2GRegister{},mrg.RegisterHandler)
 	router.RouterListPtr.RegisterRouterHandler(&c2game.C2GJoinMap{},mrg.JoinMapHandler)
 }
 

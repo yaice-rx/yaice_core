@@ -36,7 +36,6 @@ func InitEtcd(serviceName string) error{
 		path:config.ServiceConfigData.ServerGroupId+"/"+serviceName,
 		ServiceList:make(map[string]*EtcdConnStruct),
 	}
-
 	if(config.ServiceConfigData.IsConnect){
 		InternalPort := grpc_service.ServiceGRPCInit()
 		if InternalPort == -1{
@@ -44,7 +43,6 @@ func InitEtcd(serviceName string) error{
 		}
 		config.ServiceConfigData.InternalPort = InternalPort
 	}
-
 	//连接成功的时候，获取(同组)服务列表
 	EtcdClient.GetNodesInfo(config.ServiceConfigData.ServerGroupId)
 	//获取公用服务器列表
