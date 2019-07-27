@@ -9,7 +9,9 @@ import (
 	"YaIce/game/map"
 	"YaIce/game/map/sort"
 	"YaIce/game/mrg"
+	"YaIce/game/service_connect"
 	"YaIce/protobuf/external"
+	"YaIce/protobuf/internal_proto"
 	"encoding/json"
 	"github.com/sirupsen/logrus"
 )
@@ -19,6 +21,14 @@ func registerRouter(){
 	router.RouterListPtr.RegisterRouterHandler(&c2game.C2GPing{},mrg.PingHandler)
 	router.RouterListPtr.RegisterRouterHandler(&c2game.C2GRegister{},mrg.RegisterHandler)
 	router.RouterListPtr.RegisterRouterHandler(&c2game.C2GJoinMap{},mrg.JoinMapHandler)
+}
+
+//处理内部链接
+func registerInterRouter() {
+	if nil != etcd_service.EtcdClient.LocalServer {
+		internal_proto.RegisterServiceConnectServer(etcd_service.EtcdClient.LocalServer, &service_connect.ServiceRegister{})
+		internal_proto.RegisterLoginVerifyServer(etcd_service.EtcdClient.LocalServer, &service_connect.LoginVerify{})
+	}
 }
 
 func Initialize(){
@@ -33,6 +43,8 @@ func Initialize(){
 	}
 	//注册路由
 	registerRouter()
+	//注册内部路由，必须放在etcd连接之后
+	registerInterRouter()
 	//-------------------------------------KCP-------------------------------------//
 	//监听外网端口
 	ExternalPort := kcp_service.ServerExternalInit()

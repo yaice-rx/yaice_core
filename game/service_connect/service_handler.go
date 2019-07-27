@@ -1,4 +1,4 @@
-package grpc_service
+package service_connect
 
 import (
 	"YaIce/protobuf/internal_proto"

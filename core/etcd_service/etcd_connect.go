@@ -143,6 +143,10 @@ func (this *ClientDis) WatchNodes(key string){
 					if !_conf.IsConnect{
 						continue
 					}
+					if nil != this.ServiceList[string(event.Kv.Key)] {
+						//如果已连接节点，无须再连接
+						continue
+					}
 					conn := grpc_service.ConnectGRPCService(event.Kv.Value)
 					if nil == conn {
 						continue

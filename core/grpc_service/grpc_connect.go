@@ -2,6 +2,7 @@ package grpc_service
 
 import (
 	"YaIce/core/config"
+	"YaIce/core/etcd_service"
 	"YaIce/core/temp"
 	"encoding/json"
 	"github.com/grpc-ecosystem/go-grpc-middleware/retry"
@@ -17,8 +18,8 @@ import (
 func ServiceGRPCInit()int{
 	//从zookeeper中获取登陆服务器的ip
 	server := grpc.NewServer()
+	etcd_service.EtcdClient.LocalServer = server
 	//注册路由
-	RegisterServiceGrpc(server)
 	reflection.Register(server)
 	//获取 端口
 	for port := temp.ConfigCacheData.YamlConfigData.PortStart; port <= temp.ConfigCacheData.YamlConfigData.PortEnd; port++{
