@@ -1,0 +1,1 @@
+protoc.exe --go_out=plugins=grpc:.  ./proto_grpc.proto ./response.proto ./request.proto ./proto_struct.proto

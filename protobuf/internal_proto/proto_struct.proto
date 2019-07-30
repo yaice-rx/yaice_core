@@ -1,0 +1,18 @@
+syntax="proto3";
+package internal_proto;
+
+message Request_HeaderStruct{
+    string uid = 1;
+}
+
+
+//游戏服务器注册到网管服务
+message Request_ConnectStruct{
+
+}
+
+//接收注册的消息
+message Response_ConnectStruct{
+    bool isConnected=1;
+}
+

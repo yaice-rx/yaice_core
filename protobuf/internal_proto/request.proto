@@ -1,0 +1,7 @@
+syntax="proto3";
+package internal_proto;
+import "proto_struct.proto";
+
+message MsgBodyRequest{
+    Request_ConnectStruct  connect = 1;
+}

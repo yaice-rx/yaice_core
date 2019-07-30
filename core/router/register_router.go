@@ -10,7 +10,7 @@ import (
 //注册客户端请求协议
 type RouterList struct {
 	mu    sync.RWMutex
-	m     map[int]func(conn *model.PlayerConn,content []byte)
+	m     map[int32]func(conn *model.PlayerConn,content []byte)
 }
 
 var RouterListPtr   *RouterList
@@ -27,14 +27,14 @@ func ( mux *RouterList)RegisterRouterHandler(msgObj proto.Message,handler func(c
 	defer mux.mu.Unlock()
 
 	if mux.m == nil {
-		mux.m = make(map[int]func(conn *model.PlayerConn,content []byte))
+		mux.m = make(map[int32]func(conn *model.PlayerConn,content []byte))
 	}
 	protocolNum := common.ProtocalNumber(msgName)
 	mux.m[protocolNum] = handler
 }
 
 //调用注册方法
-func (mux *RouterList)CallRouterHandler(protoNo int,conn *model.PlayerConn,data []byte) {
+func (mux *RouterList)CallRouterHandler(protoNo int32,conn *model.PlayerConn,data []byte) {
 	mux.mu.RLock()
 	defer mux.mu.RUnlock()
 	if mux.m[protoNo] != nil {

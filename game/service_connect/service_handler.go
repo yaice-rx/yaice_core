@@ -1,45 +1,35 @@
 package service_connect
 
 import (
+	"YaIce/core/common"
+	"YaIce/core/etcd_service"
+	"YaIce/core/grpc_service"
 	"YaIce/protobuf/internal_proto"
-	"context"
+	"errors"
 )
 
-type ServiceRegister struct {
-
-}
-
-func (s *ServiceRegister)RegisterServiceRequest(  ctx context.Context,
-	args *internal_proto.GameConnectServiceRequest)(response *internal_proto.GameConnectServiceReply, err error) {
-		//todo  处理client连接
-	return &internal_proto.GameConnectServiceReply{},nil
-}
-
-//客户端连接
-func RegisterServiceRequest(client internal_proto.ServiceConnectClient){
-	var request internal_proto.GameConnectServiceRequest
-	response, _ := client.RegisterServiceRequest(context.Background(), &request) //调用远程方法
-	if response.IsConnected {
-		
+//组装客户端发送信息
+func SendClientMsg(serverName string,msg interface{})error{
+	if nil != etcd_service.EtcdClient.ConnServiceList[serverName]{
+		return errors.New("server not exist")
 	}
-}
-
-type LoginVerify struct {
-
-}
-
-func (s *LoginVerify)LoginVerifyRequest(  ctx context.Context,
-	args *internal_proto.GamePlayerLoginRequest)(response *internal_proto.GamePlayerLoginReply, err error) {
-	return &internal_proto.GamePlayerLoginReply{
-		Token:"-----------------",
-	},nil
-}
-
-func LoginVerifyRequest( client internal_proto.LoginVerifyClient) {
-	var request internal_proto.GamePlayerLoginRequest
-	request.Guid = "++++++++++++++++";
-	response, _ := client.LoginVerifyRequest(context.Background(), &request) //调用远程方法
-	if("" != response.Token){
-
+	var msgProtoNumber int32
+	var msgData *internal_proto.MsgBodyRequest
+	switch msg.(type) {
+	case internal_proto.Request_ConnectStruct:
+		msgData = &internal_proto.MsgBodyRequest{
+			Connect: &internal_proto.Request_ConnectStruct{
+			},
+		}
+		msgProtoNumber = common.ProtocalNumber(common.GetProtoName(&internal_proto.MsgBodyRequest{}))
+		break;
 	}
+	data := &internal_proto.C_ServiceMsgRequest{
+		MsgHandlerNumber:msgProtoNumber,
+		Header:etcd_service.EtcdClient.Header,
+		Struct:msgData,
+	}
+	return grpc_service.RegisterServiceRequest(*etcd_service.EtcdClient.ConnServiceList[serverName].Connect,data);
 }
+
+

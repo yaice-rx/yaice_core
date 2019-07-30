@@ -16,6 +16,12 @@ var conn *kcp.UDPSession
 
 func Initialize(){
 	etcd_service.InitEtcd("YaIce_Service")
+
+
+	select {
+
+	}
+
 	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
 	defer  kcpconn.Close()
 	if err != nil {
@@ -39,7 +45,7 @@ func  pingHandler(){
 }
 
 
-func SendMsg(conn *kcp.UDPSession,protoNumber int,data []byte) {
+func SendMsg(conn *kcp.UDPSession,protoNumber int32,data []byte) {
 	if conn != nil {
 		content := common.IntToBytes(protoNumber)
 		content = append(content, data...)

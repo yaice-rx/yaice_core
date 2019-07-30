@@ -1,0 +1,23 @@
+syntax="proto3";
+package internal_proto;
+import "response.proto";
+import "request.proto";
+import "proto_struct.proto";
+
+//客户端请求服务器->服务消息
+message C_ServiceMsgRequest{
+    int32 msgHandlerNumber = 1;//处理消息协议号 msgHandlerNumber 对应C_ServiceMsgRequest中的MsgStruct
+    Request_HeaderStruct header = 2;
+    MsgBodyRequest struct = 3;
+}
+
+//客户端收到服务器->消息
+message S_ServiceMsgReply{
+    int32 msgHandlerNumber = 1;//处理消息协议号 msgHandlerNumber 对应C_ServiceMsgRequest中的MsgStruct
+    ReviceBodyResponse struct = 2;
+}
+
+
+service ServiceConnect {
+    rpc RegisterServiceRequest (C_ServiceMsgRequest) returns (stream  S_ServiceMsgReply){};
+}

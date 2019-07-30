@@ -9,9 +9,7 @@ import (
 	"YaIce/game/map"
 	"YaIce/game/map/sort"
 	"YaIce/game/mrg"
-	"YaIce/game/service_connect"
 	"YaIce/protobuf/external"
-	"YaIce/protobuf/internal_proto"
 	"encoding/json"
 	"github.com/sirupsen/logrus"
 )
@@ -25,10 +23,6 @@ func registerRouter(){
 
 //处理内部链接
 func registerInterRouter() {
-	if nil != etcd_service.EtcdClient.LocalServer {
-		internal_proto.RegisterServiceConnectServer(etcd_service.EtcdClient.LocalServer, &service_connect.ServiceRegister{})
-		internal_proto.RegisterLoginVerifyServer(etcd_service.EtcdClient.LocalServer, &service_connect.LoginVerify{})
-	}
 }
 
 func Initialize(){
