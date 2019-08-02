@@ -1,6 +1,7 @@
 package grpc_service
 
 import (
+	"YaIce/core/common"
 	"YaIce/core/config"
 	"YaIce/protobuf/internal_proto"
 	"context"
@@ -9,12 +10,17 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"io"
 	"strconv"
+	"time"
 )
+type Client struct {
+	clientConn 		*internal_proto.ServiceConnectClient
+}
 
 //启动连接GRPCService服务
-func ConnectGRPCService(connectConfigData []byte)*internal_proto.ServiceConnectClient{
+func ConnectGRPCService(connectConfigData []byte)*Client{
 	var serviceConfig config.ServiceConfig
 	json.Unmarshal([]byte(connectConfigData),&serviceConfig)
 	conn, err := grpc.Dial(serviceConfig.InternalHost+":"+strconv.Itoa(serviceConfig.InternalPort),
@@ -30,12 +36,36 @@ func ConnectGRPCService(connectConfigData []byte)*internal_proto.ServiceConnectC
 		return nil
 	}
 	client := internal_proto.NewServiceConnectClient(conn)
-	return &client
+	return &Client{
+		clientConn:&client,
+	}
+}
+
+//组装客户端发送信息
+func (this *Client)SendMsg(msg interface{})error{
+	var msgProtoNumber int32
+	var msgData *internal_proto.MsgBodyRequest
+	switch msg.(type) {
+	case internal_proto.Request_ConnectStruct:
+		msgData = &internal_proto.MsgBodyRequest{
+			Connect: &internal_proto.Request_ConnectStruct{
+			},
+		}
+		msgProtoNumber = common.ProtocalNumber(common.GetProtoName(&internal_proto.MsgBodyRequest{}))
+		break;
+	}
+	data := &internal_proto.C_ServiceMsgRequest{
+		MsgHandlerNumber:msgProtoNumber,
+		Struct:msgData,
+	}
+	return registerServiceRequest(*this.clientConn,data);
 }
 
 //客户端调用
-func RegisterServiceRequest(client internal_proto.ServiceConnectClient,r *internal_proto.C_ServiceMsgRequest)error {
-	stream, err := client.RegisterServiceRequest(context.Background(), r)
+func registerServiceRequest(client internal_proto.ServiceConnectClient,r *internal_proto.C_ServiceMsgRequest)error {
+	md := metadata.Pairs("timestamp", time.Now().Format(time.StampNano))
+	ctx := metadata.NewOutgoingContext(context.Background(), md)
+	stream, err := client.RegisterServiceRequest(ctx, r)
 	if err != nil {
 		return err
 	}

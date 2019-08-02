@@ -72,7 +72,7 @@ func handleKcpMux(conn *kcp.UDPSession) {
 		if KcpConnPtr.ConnectList[conn] != nil {
 			protoNum := common.BytesToInt(buffer[:4])
 			//检测除登陆接口，其余全部检测合法性
-			router.RouterListPtr.CallRouterHandler(protoNum,KcpConnPtr.ConnectList[conn],buffer[4:n])
+			router.RouterListPtr.CallExternalRouterHandler(protoNum,KcpConnPtr.ConnectList[conn],buffer[4:n])
 		}
 	}
 }

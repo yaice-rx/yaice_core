@@ -5,6 +5,7 @@ import (
 	"YaIce/core/etcd_service"
 	"YaIce/core/job"
 	"YaIce/protobuf/external"
+	"YaIce/protobuf/internal_proto"
 	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/xtaci/kcp-go"
@@ -17,12 +18,14 @@ var conn *kcp.UDPSession
 func Initialize(){
 	etcd_service.InitEtcd("YaIce_Service")
 
+	etcd_service.EtcdClient.ConnServiceList["1/game"].Connect.SendMsg(internal_proto.Request_ConnectStruct{});
 
+
+
+	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
 	select {
 
 	}
-
-	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
 	defer  kcpconn.Close()
 	if err != nil {
 		fmt.Println("kcp err",err.Error())

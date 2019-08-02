@@ -23,5 +23,4 @@ func InitConfigData(){
 	ConfigCacheData.loadAllianceGiftData()
 	ConfigCacheData.loadAllianceGiftLvData()
 	ConfigCacheData.loadAllianceRankData()
-
 }

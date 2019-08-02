@@ -3,13 +3,11 @@ package etcd_service
 import (
 	"YaIce/core/config"
 	"YaIce/core/grpc_service"
-	"YaIce/protobuf/internal_proto"
 	"context"
 	"encoding/json"
 	"errors"
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
-	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 	"time"
 )
@@ -33,13 +31,12 @@ func InitEtcd(serviceName string) error{
 	}
 	EtcdClient = &ClientDis{
 		Endpoints:etcdServerList,
-		Header:&internal_proto.Request_HeaderStruct{Uid:uuid.Must(uuid.NewV4()).String()},
 		client:etcdCli,
 		serviceName:serviceName,
 		path:config.ServiceConfigData.ServerGroupId+"/"+serviceName,
 		ConnServiceList:make(map[string]*EtcdConnStruct),
 	}
-	if(config.ServiceConfigData.IsConnect){
+	if config.ServiceConfigData.IsConnect {
 		InternalPort := grpc_service.ServiceGRPCInit()
 		if InternalPort == -1{
 			return errors.New("grpc service start faild")
@@ -151,14 +148,14 @@ func (this *ClientDis) WatchNodes(key string){
 						//如果已连接节点，无须再连接
 						continue
 					}
-					conn := grpc_service.ConnectGRPCService(event.Kv.Value)
-					if nil == conn {
+					client := grpc_service.ConnectGRPCService(event.Kv.Value)
+					if nil == client {
 						continue
 					}
 					this.ConnServiceList[string(event.Kv.Key)] = &EtcdConnStruct{
 						ConfigData:string(event.Kv.Value),
 						ConnectName:string(event.Kv.Key),
-						Connect:conn,
+						Connect:client,
 					}
 				case mvccpb.DELETE:
 					//todo  从列表中删除

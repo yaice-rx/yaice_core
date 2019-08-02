@@ -23,6 +23,7 @@ func registerRouter(){
 
 //处理内部链接
 func registerInterRouter() {
+	//router.RouterListPtr.RegisterInternalRouterHandler(&internal_proto.C_ServiceMsgRequest{},internal.ServiceRegistartHandler)
 }
 
 func Initialize(){
