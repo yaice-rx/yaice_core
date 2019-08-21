@@ -15,40 +15,35 @@ import (
 
 var conn *kcp.UDPSession
 
-func Initialize(){
+func Initialize() {
 	etcd_service.InitEtcd("YaIce_Service")
 
-	etcd_service.EtcdClient.ConnServiceList["1/game"].Connect.SendMsg(internal_proto.Request_ConnectStruct{});
-
-
+	etcd_service.EtcdClient.ConnServiceList["1/game"].Connect.SendMsg(internal_proto.Request_ConnectStruct{})
 
 	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
-	select {
 
-	}
-	defer  kcpconn.Close()
+	defer kcpconn.Close()
 	if err != nil {
-		fmt.Println("kcp err",err.Error())
+		fmt.Println("kcp err", err.Error())
 		return
 	}
 	conn = kcpconn
-	job.JoinJob(1,pingHandler)
+	job.JoinJob(1, pingHandler)
 	go handleKcpConn(conn)
 	select {}
 }
 
-func  pingHandler(){
+func pingHandler() {
 	fmt.Println("-!-!-!")
-	gmCommand := c2game.C2GGmCommand{Command:"test",Params:[]string{"2312312"}}
+	gmCommand := c2game.C2GGmCommand{Command: "test", Params: []string{"2312312"}}
 	data, err := proto.Marshal(&gmCommand)
 	if err != nil {
 		log.Fatalln("Marshal client data error: ", err)
 	}
-	SendMsg(conn, common.ProtocalNumber("c2g_gm_command"),data)
+	SendMsg(conn, common.ProtocalNumber("c2g_gm_command"), data)
 }
 
-
-func SendMsg(conn *kcp.UDPSession,protoNumber int32,data []byte) {
+func SendMsg(conn *kcp.UDPSession, protoNumber int32, data []byte) {
 	if conn != nil {
 		content := common.IntToBytes(protoNumber)
 		content = append(content, data...)
@@ -61,9 +56,8 @@ func SendMsg(conn *kcp.UDPSession,protoNumber int32,data []byte) {
 	}
 }
 
-
 func handleKcpConn(conn *kcp.UDPSession) {
- 	buf := make([]byte, 65535)
+	buf := make([]byte, 65535)
 	for {
 		num, err := conn.Read(buf)
 		if err != nil {

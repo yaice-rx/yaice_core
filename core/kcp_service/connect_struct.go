@@ -7,16 +7,18 @@ import (
 )
 
 type KcpServiceConnectList struct {
-	mutexConns		sync.Mutex
-	MaxConnect 		int 							//最大连接数据
-	ConnectList 	map[*kcp.UDPSession]*model.PlayerConn // uid->连接Conn
+	MutexConns   sync.Mutex
+	MaxConnect   int                                   //最大连接数据
+	ConnectList  map[*kcp.UDPSession]*model.PlayerConn // uid->连接Conn
+	ChanMsgQueue chan *MsgQueue                        //消息队列
 }
 
 var KcpConnPtr *KcpServiceConnectList
 
-func InitKcpServiceConn(maxConn int){
+func InitKcpServiceConn(maxConn int) {
 	KcpConnPtr = &KcpServiceConnectList{
-		MaxConnect:maxConn,
+		MaxConnect:   maxConn,
 		ConnectList:  make(map[*kcp.UDPSession]*model.PlayerConn),
+		ChanMsgQueue: make(chan *MsgQueue),
 	}
 }

@@ -9,10 +9,11 @@ import (
 )
 
 //Gm命令处理
-func  CommandHandler(conn *model.PlayerConn,content []byte){
+func CommandHandler(conn *model.PlayerConn, content []byte) {
+	log.Println("g2c gm command data")
 	data := c2game.C2GGmCommand{}
-	c2g_proto := c2game.C2GSyncTime{ClientTime:"test current time :"+time.Now().String()}
-	err := proto.Unmarshal(content,&data)
+	c2g_proto := c2game.C2GSyncTime{ClientTime: "test current time :" + time.Now().String()}
+	err := proto.Unmarshal(content, &data)
 	if err != nil {
 		log.Fatalln("Unmarshal data error: ", err)
 	}
@@ -20,14 +21,14 @@ func  CommandHandler(conn *model.PlayerConn,content []byte){
 }
 
 //处理ping包
-func  PingHandler(connect *model.PlayerConn,content []byte)  {
+func PingHandler(connect *model.PlayerConn, content []byte) {
 	data := c2game.C2GPing{}
-	err := proto.Unmarshal(content,&data)
+	err := proto.Unmarshal(content, &data)
 	if err != nil {
 		log.Fatalln("Unmarshal data error: ", err)
 	}
 }
 
-func RegisterHandler(connect *model.PlayerConn,content []byte)  {
+func RegisterHandler(connect *model.PlayerConn, content []byte) {
 
 }
