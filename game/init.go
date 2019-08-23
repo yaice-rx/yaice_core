@@ -1,74 +1,66 @@
 package game
 
 import (
+	"YaIce/conf"
 	"YaIce/core/config"
 	"YaIce/core/etcd_service"
+	"YaIce/core/grpc_service"
 	"YaIce/core/kcp_service"
 	"YaIce/core/router"
-	"YaIce/core/temp"
-	"YaIce/game/map"
-	"YaIce/game/map/sort"
 	"YaIce/game/mrg"
+	"YaIce/game/mrg/inside"
 	"YaIce/protobuf/external"
+	"YaIce/protobuf/internal_proto"
 	"encoding/json"
 	"github.com/sirupsen/logrus"
 )
 
 func registerRouter() {
-	router.RouterListPtr.RegisterRouterHandler(&c2game.C2GGmCommand{}, mrg.CommandHandler)
-	router.RouterListPtr.RegisterRouterHandler(&c2game.C2GPing{}, mrg.PingHandler)
-	router.RouterListPtr.RegisterRouterHandler(&c2game.C2GRegister{}, mrg.RegisterHandler)
-	router.RouterListPtr.RegisterRouterHandler(&c2game.C2GJoinMap{}, mrg.JoinMapHandler)
+	registerServiceRouter()
+	router.RegisterRouterHandler(&c2game.C2GGmCommand{}, mrg.CommandHandler)
+	router.RegisterRouterHandler(&c2game.C2GPing{}, mrg.PingHandler)
+	router.RegisterRouterHandler(&c2game.C2GRegister{}, mrg.RegisterHandler)
+	router.RegisterRouterHandler(&c2game.C2GJoinMap{}, mrg.JoinMapHandler)
 }
 
-//处理内部链接
-func registerInterRouter() {
-	//router.RouterListPtr.RegisterInternalRouterHandler(&internal_proto.C_ServiceMsgRequest{},internal.ServiceRegistartHandler)
+func registerServiceRouter() {
+	internal_proto.RegisterServiceConnectServer(grpc_service.GRPCServer, &inside.Service{})
 }
 
 func Initialize() {
-	//-------------------------------------Init-------------------------------------//
-	//加载配置文件
-	temp.InitConfigData()
 	//注册路由
 	registerRouter()
-	//注册内部路由，必须放在etcd连接之后
-	registerInterRouter()
-	//连接Etcd服务,连接服务
-	if err := etcd_service.InitEtcd(config.ServiceConfigData.ServerName); nil != err {
-		logrus.Debug(err.Error())
-		return
-	}
-	//-------------------------------------KCP-------------------------------------//
 	//监听外网端口
-	ExternalPort := kcp_service.ServerExternalInit()
-	logrus.Println("listen port:", ExternalPort)
-	if ExternalPort == -1 {
+	port := kcp_service.Init()
+	if port == -1 {
 		panic("All ports are occupied")
 		return
 	}
-	config.ServiceConfigData.ExternalPort = ExternalPort
-
-	//-------------------------------------End-------------------------------------//
-
-	//-------------------------------------加载路由、初始化数据-------------------------------------//
-	InitServerImpl()
-	//-------------------------------------ETCD 服务发现内容-------------------------------------//
+	//连接Etcd服务,连接服务
+	inPort, err := etcd_service.Init(config.GetName())
+	if nil != err || inPort == -1 {
+		logrus.Debug(err.Error())
+		return
+	}
 	//序列化本服务的内容
-	jsonString, jsonErr := json.Marshal(config.ServiceConfigData)
+	jsonString, jsonErr := json.Marshal(config.GetServiceConfData())
 	if nil != jsonErr {
 		panic("make json data error")
 	}
 	//向服务中注册自己节点数据
 	etcd_service.EtcdClient.RegisterNode(string(jsonString))
-	//-------------------------------------Etcd End-------------------------------------//
-	//阻塞
-	kcp_service.ReadMsgQueueHandler()
+	//-------------------------------------End-------------------------------------//
+	//初始化配置
+	InitServerImpl()
+	//启动服务
+	kcp_service.Run()
 }
 
 //初始化数据
 func InitServerImpl() {
-	//缓存DB数据
+	//初始化CSV配置文件数据
+	conf.InitCSVConfigData()
+	/*//缓存DB数据
 	mrg.InitCacheDBData()
 	//初始化地形
 	_map.InitTerrain()
@@ -79,5 +71,5 @@ func InitServerImpl() {
 	//初始化资源
 	sort.InitResource()
 	//初始化城市
-	sort.InitTown()
+	sort.InitTown()*/
 }

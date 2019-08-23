@@ -2,20 +2,23 @@ syntax="proto3";
 package internal_proto;
 import "response.proto";
 import "request.proto";
+import "proto_struct.proto";
+
+service ServiceConnect {
+    rpc RegisterServiceRequest (C_ServiceMsgRequest) returns (stream  S_ServiceMsgReply){};
+    rpc SyncPlayerRequest (C2S_Register) returns (stream  S2C_Register){};
+}
 
 //客户端请求服务器->服务消息
 message C_ServiceMsgRequest{
     int32 msgHandlerNumber = 1;//处理消息协议号 msgHandlerNumber 对应C_ServiceMsgRequest中的MsgStruct
-    MsgBodyRequest struct = 3;
+    C2S_Body body = 2;
 }
 
-//客户端收到服务器->消息
+//客户端收到服务器->
 message S_ServiceMsgReply{
     int32 msgHandlerNumber = 1;//处理消息协议号 msgHandlerNumber 对应C_ServiceMsgRequest中的MsgStruct
-    ReviceBodyResponse struct = 2;
+    S2C_Body body = 2;
 }
 
 
-service ServiceConnect {
-    rpc RegisterServiceRequest (C_ServiceMsgRequest) returns (stream  S_ServiceMsgReply){};
-}

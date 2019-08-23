@@ -21,71 +21,71 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 //游戏服务器注册到网管服务
-type Request_ConnectStruct struct {
+type C2S_Register struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Request_ConnectStruct) Reset()         { *m = Request_ConnectStruct{} }
-func (m *Request_ConnectStruct) String() string { return proto.CompactTextString(m) }
-func (*Request_ConnectStruct) ProtoMessage()    {}
-func (*Request_ConnectStruct) Descriptor() ([]byte, []int) {
+func (m *C2S_Register) Reset()         { *m = C2S_Register{} }
+func (m *C2S_Register) String() string { return proto.CompactTextString(m) }
+func (*C2S_Register) ProtoMessage()    {}
+func (*C2S_Register) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fc4bef41498765a3, []int{0}
 }
 
-func (m *Request_ConnectStruct) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Request_ConnectStruct.Unmarshal(m, b)
+func (m *C2S_Register) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_C2S_Register.Unmarshal(m, b)
 }
-func (m *Request_ConnectStruct) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Request_ConnectStruct.Marshal(b, m, deterministic)
+func (m *C2S_Register) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_C2S_Register.Marshal(b, m, deterministic)
 }
-func (m *Request_ConnectStruct) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Request_ConnectStruct.Merge(m, src)
+func (m *C2S_Register) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_C2S_Register.Merge(m, src)
 }
-func (m *Request_ConnectStruct) XXX_Size() int {
-	return xxx_messageInfo_Request_ConnectStruct.Size(m)
+func (m *C2S_Register) XXX_Size() int {
+	return xxx_messageInfo_C2S_Register.Size(m)
 }
-func (m *Request_ConnectStruct) XXX_DiscardUnknown() {
-	xxx_messageInfo_Request_ConnectStruct.DiscardUnknown(m)
+func (m *C2S_Register) XXX_DiscardUnknown() {
+	xxx_messageInfo_C2S_Register.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Request_ConnectStruct proto.InternalMessageInfo
+var xxx_messageInfo_C2S_Register proto.InternalMessageInfo
 
 //接收注册的消息
-type Response_ConnectStruct struct {
+type S2C_Register struct {
 	IsConnected          bool     `protobuf:"varint,1,opt,name=isConnected,proto3" json:"isConnected,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Response_ConnectStruct) Reset()         { *m = Response_ConnectStruct{} }
-func (m *Response_ConnectStruct) String() string { return proto.CompactTextString(m) }
-func (*Response_ConnectStruct) ProtoMessage()    {}
-func (*Response_ConnectStruct) Descriptor() ([]byte, []int) {
+func (m *S2C_Register) Reset()         { *m = S2C_Register{} }
+func (m *S2C_Register) String() string { return proto.CompactTextString(m) }
+func (*S2C_Register) ProtoMessage()    {}
+func (*S2C_Register) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fc4bef41498765a3, []int{1}
 }
 
-func (m *Response_ConnectStruct) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Response_ConnectStruct.Unmarshal(m, b)
+func (m *S2C_Register) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_S2C_Register.Unmarshal(m, b)
 }
-func (m *Response_ConnectStruct) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Response_ConnectStruct.Marshal(b, m, deterministic)
+func (m *S2C_Register) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_S2C_Register.Marshal(b, m, deterministic)
 }
-func (m *Response_ConnectStruct) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Response_ConnectStruct.Merge(m, src)
+func (m *S2C_Register) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_S2C_Register.Merge(m, src)
 }
-func (m *Response_ConnectStruct) XXX_Size() int {
-	return xxx_messageInfo_Response_ConnectStruct.Size(m)
+func (m *S2C_Register) XXX_Size() int {
+	return xxx_messageInfo_S2C_Register.Size(m)
 }
-func (m *Response_ConnectStruct) XXX_DiscardUnknown() {
-	xxx_messageInfo_Response_ConnectStruct.DiscardUnknown(m)
+func (m *S2C_Register) XXX_DiscardUnknown() {
+	xxx_messageInfo_S2C_Register.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Response_ConnectStruct proto.InternalMessageInfo
+var xxx_messageInfo_S2C_Register proto.InternalMessageInfo
 
-func (m *Response_ConnectStruct) GetIsConnected() bool {
+func (m *S2C_Register) GetIsConnected() bool {
 	if m != nil {
 		return m.IsConnected
 	}
@@ -93,20 +93,19 @@ func (m *Response_ConnectStruct) GetIsConnected() bool {
 }
 
 func init() {
-	proto.RegisterType((*Request_ConnectStruct)(nil), "internal_proto.Request_ConnectStruct")
-	proto.RegisterType((*Response_ConnectStruct)(nil), "internal_proto.Response_ConnectStruct")
+	proto.RegisterType((*C2S_Register)(nil), "internal_proto.C2S_Register")
+	proto.RegisterType((*S2C_Register)(nil), "internal_proto.S2C_Register")
 }
 
 func init() { proto.RegisterFile("proto_struct.proto", fileDescriptor_fc4bef41498765a3) }
 
 var fileDescriptor_fc4bef41498765a3 = []byte{
-	// 114 bytes of a gzipped FileDescriptorProto
+	// 107 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x2a, 0x28, 0xca, 0x2f,
 	0xc9, 0x8f, 0x2f, 0x2e, 0x29, 0x2a, 0x4d, 0x2e, 0xd1, 0x03, 0x73, 0x84, 0xf8, 0x32, 0xf3, 0x4a,
-	0x52, 0x8b, 0xf2, 0x12, 0x73, 0xe2, 0xc1, 0x7c, 0x25, 0x71, 0x2e, 0xd1, 0xa0, 0xd4, 0xc2, 0xd2,
-	0xd4, 0xe2, 0x92, 0x78, 0xe7, 0xfc, 0xbc, 0xbc, 0xd4, 0xe4, 0x92, 0x60, 0xb0, 0x72, 0x25, 0x2b,
-	0x2e, 0xb1, 0xa0, 0xd4, 0xe2, 0x82, 0xfc, 0xbc, 0xe2, 0x54, 0x54, 0x19, 0x21, 0x05, 0x2e, 0xee,
-	0xcc, 0x62, 0xa8, 0x50, 0x6a, 0x8a, 0x04, 0xa3, 0x02, 0xa3, 0x06, 0x47, 0x10, 0xb2, 0x50, 0x12,
-	0x1b, 0xd8, 0x6c, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0x1f, 0xac, 0x65, 0xf3, 0x81, 0x00,
-	0x00, 0x00,
+	0x52, 0x8b, 0xf2, 0x12, 0x73, 0xe2, 0xc1, 0x7c, 0x25, 0x3e, 0x2e, 0x1e, 0x67, 0xa3, 0xe0, 0xf8,
+	0xa0, 0xd4, 0xf4, 0xcc, 0xe2, 0x92, 0xd4, 0x22, 0x25, 0x03, 0x2e, 0x9e, 0x60, 0x23, 0x67, 0x38,
+	0x5f, 0x48, 0x81, 0x8b, 0x3b, 0xb3, 0xd8, 0x39, 0x3f, 0x2f, 0x2f, 0x35, 0xb9, 0x24, 0x35, 0x45,
+	0x82, 0x51, 0x81, 0x51, 0x83, 0x23, 0x08, 0x59, 0x28, 0x89, 0x0d, 0x6c, 0x90, 0x31, 0x20, 0x00,
+	0x00, 0xff, 0xff, 0x6c, 0x5c, 0x9e, 0x1b, 0x6e, 0x00, 0x00, 0x00,
 }

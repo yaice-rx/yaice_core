@@ -2,6 +2,6 @@ syntax="proto3";
 package internal_proto;
 import "proto_struct.proto";
 
-message ReviceBodyResponse{
-    Response_ConnectStruct  connectReply =1;
+message S2C_Body{
+    S2C_Register register = 1;
 }

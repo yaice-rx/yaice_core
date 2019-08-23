@@ -2,19 +2,20 @@ package kcp_service
 
 import (
 	"YaIce/core/common"
+	"YaIce/core/config"
 	"YaIce/core/model"
 	"YaIce/core/router"
-	"YaIce/core/temp"
 	"github.com/xtaci/kcp-go"
 	"io"
 	"strconv"
 )
 
 //初始化外网监听
-func ServerExternalInit() int {
-	for port := temp.ConfigCacheData.YamlConfigData.PortStart; port <= temp.ConfigCacheData.YamlConfigData.PortEnd; port++ {
+func Init() int {
+	for port := config.GetYamlData().PortStart; port <= config.GetYamlData().PortEnd; port++ {
 		_port := serviceListenAccpet(port)
 		if -1 != _port {
+			config.SetOutPort(port)
 			return _port
 		}
 	}
@@ -69,12 +70,10 @@ func handleKcpMux(conn *kcp.UDPSession) {
 			Session:   KcpConnPtr.ConnectList[conn],
 			msgData:   buffer[4:n],
 		}
-		//write
-
 	}
 }
 
-func ReadMsgQueueHandler() {
+func Run() {
 	for {
 		select {
 		case msg := <-KcpConnPtr.ChanMsgQueue:

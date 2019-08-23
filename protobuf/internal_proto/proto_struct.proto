@@ -2,12 +2,12 @@ syntax="proto3";
 package internal_proto;
 
 //游戏服务器注册到网管服务
-message Request_ConnectStruct{
+message C2S_Register{
 
 }
 
 //接收注册的消息
-message Response_ConnectStruct{
+message S2C_Register{
     bool isConnected=1;
 }
 

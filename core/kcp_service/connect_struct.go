@@ -19,6 +19,6 @@ func InitKcpServiceConn(maxConn int) {
 	KcpConnPtr = &KcpServiceConnectList{
 		MaxConnect:   maxConn,
 		ConnectList:  make(map[*kcp.UDPSession]*model.PlayerConn),
-		ChanMsgQueue: make(chan *MsgQueue),
+		ChanMsgQueue: make(chan *MsgQueue, 2048),
 	}
 }

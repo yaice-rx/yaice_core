@@ -20,59 +20,59 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type ReviceBodyResponse struct {
-	ConnectReply         *Response_ConnectStruct `protobuf:"bytes,1,opt,name=connectReply,proto3" json:"connectReply,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
-	XXX_unrecognized     []byte                  `json:"-"`
-	XXX_sizecache        int32                   `json:"-"`
+type S2C_Body struct {
+	Register             *S2C_Register `protobuf:"bytes,1,opt,name=register,proto3" json:"register,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *ReviceBodyResponse) Reset()         { *m = ReviceBodyResponse{} }
-func (m *ReviceBodyResponse) String() string { return proto.CompactTextString(m) }
-func (*ReviceBodyResponse) ProtoMessage()    {}
-func (*ReviceBodyResponse) Descriptor() ([]byte, []int) {
+func (m *S2C_Body) Reset()         { *m = S2C_Body{} }
+func (m *S2C_Body) String() string { return proto.CompactTextString(m) }
+func (*S2C_Body) ProtoMessage()    {}
+func (*S2C_Body) Descriptor() ([]byte, []int) {
 	return fileDescriptor_0fbc901015fa5021, []int{0}
 }
 
-func (m *ReviceBodyResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ReviceBodyResponse.Unmarshal(m, b)
+func (m *S2C_Body) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_S2C_Body.Unmarshal(m, b)
 }
-func (m *ReviceBodyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ReviceBodyResponse.Marshal(b, m, deterministic)
+func (m *S2C_Body) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_S2C_Body.Marshal(b, m, deterministic)
 }
-func (m *ReviceBodyResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ReviceBodyResponse.Merge(m, src)
+func (m *S2C_Body) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_S2C_Body.Merge(m, src)
 }
-func (m *ReviceBodyResponse) XXX_Size() int {
-	return xxx_messageInfo_ReviceBodyResponse.Size(m)
+func (m *S2C_Body) XXX_Size() int {
+	return xxx_messageInfo_S2C_Body.Size(m)
 }
-func (m *ReviceBodyResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ReviceBodyResponse.DiscardUnknown(m)
+func (m *S2C_Body) XXX_DiscardUnknown() {
+	xxx_messageInfo_S2C_Body.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ReviceBodyResponse proto.InternalMessageInfo
+var xxx_messageInfo_S2C_Body proto.InternalMessageInfo
 
-func (m *ReviceBodyResponse) GetConnectReply() *Response_ConnectStruct {
+func (m *S2C_Body) GetRegister() *S2C_Register {
 	if m != nil {
-		return m.ConnectReply
+		return m.Register
 	}
 	return nil
 }
 
 func init() {
-	proto.RegisterType((*ReviceBodyResponse)(nil), "internal_proto.ReviceBodyResponse")
+	proto.RegisterType((*S2C_Body)(nil), "internal_proto.S2C_Body")
 }
 
 func init() { proto.RegisterFile("response.proto", fileDescriptor_0fbc901015fa5021) }
 
 var fileDescriptor_0fbc901015fa5021 = []byte{
-	// 128 bytes of a gzipped FileDescriptorProto
+	// 115 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2b, 0x4a, 0x2d, 0x2e,
 	0xc8, 0xcf, 0x2b, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0xcb, 0xcc, 0x2b, 0x49,
 	0x2d, 0xca, 0x4b, 0xcc, 0x89, 0x07, 0xf3, 0xa5, 0x84, 0xc0, 0x54, 0x7c, 0x71, 0x49, 0x51, 0x69,
-	0x72, 0x09, 0x44, 0x8d, 0x52, 0x02, 0x97, 0x50, 0x50, 0x6a, 0x59, 0x66, 0x72, 0xaa, 0x53, 0x7e,
-	0x4a, 0x65, 0x10, 0x54, 0xbf, 0x90, 0x17, 0x17, 0x4f, 0x72, 0x7e, 0x5e, 0x5e, 0x6a, 0x72, 0x49,
-	0x50, 0x6a, 0x41, 0x4e, 0xa5, 0x04, 0xa3, 0x02, 0xa3, 0x06, 0xb7, 0x91, 0x9a, 0x1e, 0xaa, 0x81,
-	0x7a, 0x30, 0xf5, 0xf1, 0xce, 0x10, 0xc5, 0xc1, 0x60, 0x93, 0x83, 0x50, 0xf4, 0x26, 0xb1, 0x81,
-	0xd5, 0x1a, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x27, 0x2b, 0x62, 0xb7, 0x9e, 0x00, 0x00, 0x00,
+	0x72, 0x09, 0x44, 0x8d, 0x92, 0x0b, 0x17, 0x47, 0xb0, 0x91, 0x73, 0xbc, 0x53, 0x7e, 0x4a, 0xa5,
+	0x90, 0x05, 0x17, 0x47, 0x51, 0x6a, 0x7a, 0x66, 0x71, 0x49, 0x6a, 0x91, 0x04, 0xa3, 0x02, 0xa3,
+	0x06, 0xb7, 0x91, 0x8c, 0x1e, 0xaa, 0x11, 0x7a, 0x20, 0xb5, 0x41, 0x50, 0x35, 0x41, 0x70, 0xd5,
+	0x49, 0x6c, 0x60, 0x59, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0x9b, 0x9a, 0x49, 0x9b, 0x82,
+	0x00, 0x00, 0x00,
 }

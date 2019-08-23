@@ -6,19 +6,34 @@ import (
 	"YaIce/core/job"
 	"YaIce/protobuf/external"
 	"YaIce/protobuf/internal_proto"
+	"context"
 	"fmt"
 	"github.com/golang/protobuf/proto"
+	"github.com/sirupsen/logrus"
 	"github.com/xtaci/kcp-go"
 	"log"
+	"math/rand"
 	"time"
 )
 
 var conn *kcp.UDPSession
 
 func Initialize() {
-	etcd_service.InitEtcd("YaIce_Service")
+	etcd_service.Init("YaIce_Service")
 
-	etcd_service.EtcdClient.ConnServiceList["1/game"].Connect.SendMsg(internal_proto.Request_ConnectStruct{})
+	Client := internal_proto.NewServiceConnectClient(etcd_service.EtcdClient.ConnServiceList["1/game"].Connect.ClientConn)
+
+	data := &internal_proto.C_ServiceMsgRequest{
+		MsgHandlerNumber: rand.Int31(),
+	}
+
+	resp, err := Client.RegisterServiceRequest(context.Background(), data)
+
+	it := &internal_proto.S_ServiceMsgReply{}
+
+	_ = resp.RecvMsg(it)
+
+	logrus.Println("---------------------", it.MsgHandlerNumber)
 
 	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
 
