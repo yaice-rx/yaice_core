@@ -19,9 +19,7 @@ func (s *Service) RegisterServiceRequest(r *internal_proto.C_ServiceMsgRequest,
 		logrus.Debug("metadata loading faild")
 		return nil
 	}
-	_ = md.Get(":authority")[0]
-
-	logrus.Println("revice value grpc ...", r.MsgHandlerNumber)
+	logrus.Println("revice value grpc ...", r.MsgHandlerNumber, "timestamp", md.Get("timestamp"))
 	err := stream.Send(&internal_proto.S_ServiceMsgReply{MsgHandlerNumber: r.MsgHandlerNumber})
 	if err != nil {
 		fmt.Println(err.Error())

@@ -2,6 +2,7 @@ package client
 
 import (
 	"YaIce/core/common"
+	"YaIce/core/config"
 	"YaIce/core/etcd_service"
 	"YaIce/core/job"
 	"YaIce/protobuf/external"
@@ -11,6 +12,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/sirupsen/logrus"
 	"github.com/xtaci/kcp-go"
+	"google.golang.org/grpc/metadata"
 	"log"
 	"math/rand"
 	"time"
@@ -19,15 +21,18 @@ import (
 var conn *kcp.UDPSession
 
 func Initialize() {
-	etcd_service.Init("YaIce_Service")
+	etcd_service.Init("YaIce_Service", config.GetYamlData().EtcdConnectString)
 
 	Client := internal_proto.NewServiceConnectClient(etcd_service.EtcdClient.ConnServiceList["1/game"].Connect.ClientConn)
+
+	md := metadata.Pairs("timestamp", time.Now().Format(time.StampNano))
+	ctx := metadata.NewOutgoingContext(context.Background(), md)
 
 	data := &internal_proto.C_ServiceMsgRequest{
 		MsgHandlerNumber: rand.Int31(),
 	}
 
-	resp, err := Client.RegisterServiceRequest(context.Background(), data)
+	resp, err := Client.RegisterServiceRequest(ctx, data)
 
 	it := &internal_proto.S_ServiceMsgReply{}
 

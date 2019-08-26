@@ -37,7 +37,7 @@ func Initialize() {
 		return
 	}
 	//连接Etcd服务,连接服务
-	inPort, err := etcd_service.Init(config.GetName())
+	inPort, err := etcd_service.Init(config.GetName(), config.GetYamlData().EtcdConnectString)
 	if nil != err || inPort == -1 {
 		logrus.Debug(err.Error())
 		return

@@ -15,9 +15,9 @@ import (
 //初始化Etcd服务，
 //存储结构表如下：
 //serverId:1=>{"gate_序号":地址，"game_序号"：地址},
-func Init(serviceName string) (int, error) {
-	inPort := -1
-	serverList := []string{"localhost:2379"}
+func Init(serviceName string, etcdConn string) (int, error) {
+	inPort := 0
+	serverList := []string{etcdConn}
 	//连接etcd服务
 	client, err := clientv3.New(clientv3.Config{Endpoints: serverList, DialTimeout: 5 * time.Second})
 	if nil != err {

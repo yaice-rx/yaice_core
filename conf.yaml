@@ -1,4 +1,4 @@
-EtcdConnectString: 127.0.0.1:2181
+EtcdConnectString: 127.0.0.1:2379
 EtcdNameSpace: YaIce_Service
 PortStart: 20001
 PortEnd: 20100
