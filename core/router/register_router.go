@@ -9,15 +9,16 @@ import (
 
 //注册客户端请求协议
 type RouterList struct {
-	mu              sync.RWMutex
-	external_member map[int32]func(conn *model.PlayerConn, content []byte)
+	mu           sync.RWMutex
+	outerFuncMap map[int32]func(conn *model.PlayerConn, content []byte)
+	filterMap    []func(conn *model.PlayerConn, content []byte)
 }
 
-var RouterListPtr *RouterList
+var routerListPtr *RouterList
 
 func InitRouterList() {
-	RouterListPtr = &RouterList{
-		external_member: make(map[int32]func(conn *model.PlayerConn, content []byte)),
+	routerListPtr = &RouterList{
+		outerFuncMap: make(map[int32]func(conn *model.PlayerConn, content []byte)),
 	}
 }
 
@@ -25,18 +26,36 @@ func InitRouterList() {
 func RegisterRouterHandler(msgObj proto.Message, handler func(conn *model.PlayerConn, content []byte)) {
 	msgName := common.GetProtoName(msgObj)
 	//加锁
-	RouterListPtr.mu.Lock()
-	defer RouterListPtr.mu.Unlock()
+	routerListPtr.mu.Lock()
+	defer routerListPtr.mu.Unlock()
 
 	protocolNum := common.ProtocalNumber(msgName)
-	RouterListPtr.external_member[protocolNum] = handler
+	routerListPtr.outerFuncMap[protocolNum] = handler
 }
 
 //调用注册方法
-func (mux *RouterList) CallExternalRouterHandler(protoNo int32, conn *model.PlayerConn, data []byte) {
-	mux.mu.RLock()
-	defer mux.mu.RUnlock()
-	if mux.external_member[protoNo] != nil {
-		mux.external_member[protoNo](conn, data)
+func CallExternalRouterHandler(protoNo int32, conn *model.PlayerConn, data []byte) {
+	routerListPtr.mu.RLock()
+	defer routerListPtr.mu.RUnlock()
+	if routerListPtr.outerFuncMap[protoNo] != nil {
+		routerListPtr.outerFuncMap[protoNo](conn, data)
+	}
+}
+
+//注册过滤处理
+func RegisterFilterHandler(handler func(conn *model.PlayerConn, content []byte)) {
+	//加锁
+	routerListPtr.mu.Lock()
+	defer routerListPtr.mu.Unlock()
+	routerListPtr.filterMap = append(routerListPtr.filterMap, handler)
+}
+
+//注册过滤处理
+func CallFilterHandler(conn *model.PlayerConn, data []byte) {
+	//加锁
+	routerListPtr.mu.Lock()
+	defer routerListPtr.mu.Unlock()
+	for _, handler := range routerListPtr.filterMap {
+		handler(conn, data)
 	}
 }

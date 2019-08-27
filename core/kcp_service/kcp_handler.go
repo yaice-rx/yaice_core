@@ -24,7 +24,7 @@ func Init() int {
 
 //监听端口(kcp)
 func serviceListenAccpet(port int) int {
-	kcpListen, err := kcp.ListenWithOptions(":"+strconv.Itoa(port), nil, 10, 1)
+	kcpListen, err := kcp.ListenWithOptions(":"+strconv.Itoa(port), nil, 10, 3)
 	if nil != err {
 		return -1
 	}
@@ -77,7 +77,9 @@ func Run() {
 	for {
 		select {
 		case msg := <-KcpConnPtr.ChanMsgQueue:
-			router.RouterListPtr.CallExternalRouterHandler(msg.msgNumber, msg.Session, msg.msgData)
+			//需要增加过滤器
+			router.CallFilterHandler(msg.Session, msg.msgData)
+			router.CallExternalRouterHandler(msg.msgNumber, msg.Session, msg.msgData)
 			break
 		default:
 			break
