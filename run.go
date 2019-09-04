@@ -1,18 +1,18 @@
 package main
 
 import (
+	"YaIce/auth"
 	"YaIce/client"
 	"YaIce/core"
 	"YaIce/core/config"
 	"YaIce/game"
-	"YaIce/gate"
 	"flag"
 )
 
 //start server
 func main() {
 	//服务器名称
-	serverName := flag.String("name", "gate", "服务名称")
+	serverName := flag.String("name", "auth", "服务名称")
 	//内网地址
 	internal_host := flag.String("internal_host", "127.0.0.1", "对内监听地址")
 	//外网地址
@@ -35,8 +35,8 @@ func main() {
 	core.NewServerCore()
 	//初始化调用对应的服务
 	switch *serverName {
-	case "gate":
-		gate.Initialize(*http_port, *server_group)
+	case "auth":
+		auth.Initialize(*http_port, *server_group)
 		return
 	case "game":
 		game.Initialize()

@@ -9,7 +9,7 @@ import (
 
 const ttl = 20
 
-var EtcdClient *ClientDis
+var etcdClient *ClientDis
 
 type ClientDis struct {
 	sync.RWMutex

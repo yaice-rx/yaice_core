@@ -25,24 +25,23 @@ func Init(serviceName string, etcdConn string) (int, error) {
 		return -1, err
 	}
 	//初始化连接信息
-	EtcdClient = &ClientDis{
+	etcdClient = &ClientDis{
 		Endpoints:       serverList,
 		client:          client,
 		serviceName:     serviceName,
 		path:            config.GetGroupId() + "/" + serviceName,
 		ConnServiceList: make(map[string]*EtcdConnStruct),
 	}
-
 	//连接成功的时候，获取(同组)服务列表
-	EtcdClient.GetNodesInfo(config.GetGroupId())
+	etcdClient.GetNodesInfo(config.GetGroupId())
 	//连接额外的服务，如果和本组相同，则不再连接
 	if config.GetGroupId() == config.GetServerExtra() {
-		EtcdClient.GetNodesInfo(config.GetServerExtra())
+		etcdClient.GetNodesInfo(config.GetServerExtra())
 	}
 	//是否是需要被其他服务器连接，不需要则不开启对外监听端口
 	if config.GetIsConn() {
 		//监听grpc端口
-		inPort = grpc_service.ServiceInit()
+		inPort = grpc_service.Start()
 		if inPort == -1 {
 			return -1, errors.New("grpc service start faild")
 		}
@@ -52,19 +51,19 @@ func Init(serviceName string, etcdConn string) (int, error) {
 }
 
 //注册节点
-func (c *ClientDis) RegisterNode(value string) {
-	if nil == c {
+func RegisterNode(value string) {
+	if nil == etcdClient {
 		return
 	}
-	c.grantSetLeaseKeepAlive(ttl)
-	c.Lock()
-	_, err := c.client.Put(context.TODO(), c.path, value, clientv3.WithLease(c.leaseRes.ID))
+	etcdClient.grantSetLeaseKeepAlive(ttl)
+	etcdClient.Lock()
+	_, err := etcdClient.client.Put(context.TODO(), etcdClient.path, value, clientv3.WithLease(etcdClient.leaseRes.ID))
 	if err != nil {
 		logrus.Debug("数据注册失败，Error Msg：", err.Error())
 		return
 	}
-	c.Unlock()
-	go c.listenLease()
+	etcdClient.Unlock()
+	go etcdClient.listenLease()
 }
 
 //授权租期，自动续约
@@ -104,7 +103,7 @@ func (this *ClientDis) GetNodesInfo(path string) {
 		return
 	}
 	//连接服务
-	for key, value := range this.extractAddrs(resp) {
+	for key, value := range this.readNodeData(resp) {
 		//排除自己
 		if key == this.path {
 			continue
@@ -122,7 +121,7 @@ func (this *ClientDis) GetNodesInfo(path string) {
 			continue
 		}
 		//添加已连接的服务列表中
-		EtcdClient.ConnServiceList[key] = &EtcdConnStruct{
+		etcdClient.ConnServiceList[key] = &EtcdConnStruct{
 			ConfigData:  value,
 			ConnectName: key,
 			Connect:     client,
@@ -169,18 +168,18 @@ func (this *ClientDis) WatchNodes(key string) {
 }
 
 //读取节点数据
-func (this *ClientDis) extractAddrs(resp *clientv3.GetResponse) map[string]string {
-	addrs := make(map[string]string, 0)
+func (this *ClientDis) readNodeData(resp *clientv3.GetResponse) map[string]string {
+	data := make(map[string]string, 0)
 	if resp == nil || resp.Kvs == nil {
-		return addrs
+		return data
 	}
 	for i := range resp.Kvs {
 		if v := resp.Kvs[i].Value; v != nil {
 			key := string(resp.Kvs[i].Key)
-			addrs[key] = string(v)
+			data[key] = string(v)
 		}
 	}
-	return addrs
+	return data
 }
 
 //删除节点

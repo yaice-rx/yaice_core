@@ -1,13 +1,16 @@
 syntax="proto3";
 package internal_proto;
 
-//游戏服务器注册到网管服务
-message C2S_Register{
-
+//用户信息
+message S_UserInfo{
+    //用户id
+    string userGuid = 1;
+    //用户等级
+    int32 userLv = 2;
+    //用户昵称
+    string userName = 3;
+    //Vip等级
+    int32 vipLV = 4;
 }
 
-//接收注册的消息
-message S2C_Register{
-    bool isConnected=1;
-}
 

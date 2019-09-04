@@ -24,7 +24,7 @@ func registerRouter() {
 }
 
 func registerServiceRouter() {
-	internal_proto.RegisterServiceConnectServer(grpc_service.GRPCServer, &inside.Service{})
+	internal_proto.RegisterServiceConnectServer(grpc_service.GRpcServer, &inside.Service{})
 }
 
 func Initialize() {
@@ -48,7 +48,7 @@ func Initialize() {
 		panic("make json data error")
 	}
 	//向服务中注册自己节点数据
-	etcd_service.EtcdClient.RegisterNode(string(jsonString))
+	etcd_service.RegisterNode(string(jsonString))
 	//-------------------------------------End-------------------------------------//
 	//初始化配置
 	InitServerImpl()

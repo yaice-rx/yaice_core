@@ -1,0 +1,12 @@
+syntax="proto3";
+package internal_proto;
+
+//军械类型
+enum E_LoginCode {
+    //登陆成功
+	L_Success = 0;
+	//用户不存在
+	L_User_Not_Exist = 1;
+	//用户被禁用
+	L_User_Disable = 2;
+}

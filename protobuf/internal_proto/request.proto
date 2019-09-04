@@ -1,7 +1,0 @@
-syntax="proto3";
-package internal_proto;
-import "proto_struct.proto";
-
-message C2S_Body{
-    C2S_Register register = 1;
-}

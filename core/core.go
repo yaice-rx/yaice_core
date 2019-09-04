@@ -6,7 +6,6 @@ import (
 	"YaIce/core/kcp_service"
 	"YaIce/core/model"
 	"YaIce/core/router"
-	"google.golang.org/grpc"
 	"sync"
 )
 
@@ -27,7 +26,7 @@ func NewServerCore() {
 	//初始化网络连接信息
 	kcp_service.InitKcpServiceConn(5000)
 	//初始化grpc服务
-	grpc_service.GRPCServer = grpc.NewServer()
+	grpc_service.Init()
 	//开启定时任务
 	go job.CallJob()
 	//系统核心处理
