@@ -17,6 +17,7 @@ func Initialize(port string, server_id string) {
 		logrus.Debug(err.Error())
 		return
 	}
+	config.SetInPort(inPort)
 	//序列化本服务的内容
 	jsonString, jsonErr := json.Marshal(config.GetServiceConfData())
 	if nil != jsonErr {
@@ -28,10 +29,8 @@ func Initialize(port string, server_id string) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", login)
 	http.ListenAndServe(":"+port, mux)
-	logrus.Println(port)
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("------"))
 	logrus.Println(r.RequestURI)
 }

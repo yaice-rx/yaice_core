@@ -29,8 +29,6 @@ func main() {
 	flag.Parse()
 	//初始化服务配置
 	config.InitServiceConf(*serverName, *server_group, *server_extra, *internal_host, *external_host, *is_connect)
-	//初始化YAML数据
-	config.YamlInit()
 	//配置
 	core.NewServerCore()
 	//初始化调用对应的服务

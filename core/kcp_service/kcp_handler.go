@@ -15,7 +15,6 @@ func Init() int {
 	for port := config.GetYamlData().PortStart; port <= config.GetYamlData().PortEnd; port++ {
 		_port := serviceListenAccpet(port)
 		if -1 != _port {
-			config.SetOutPort(port)
 			return _port
 		}
 	}

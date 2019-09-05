@@ -18,7 +18,6 @@ func Init() *DBModel {
 	if nil == _dbModel {
 		_dbModel = new(DBModel)
 	}
-
 	_dbModel.mutex.Lock()
 
 	defer _dbModel.mutex.Unlock()

@@ -5,65 +5,46 @@ import (
 	"YaIce/core/grpc_service"
 	"context"
 	"encoding/json"
-	"errors"
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	"github.com/sirupsen/logrus"
 	"time"
 )
 
-//初始化Etcd服务，
-//存储结构表如下：
-//serverId:1=>{"gate_序号":地址，"game_序号"：地址},
-func Init(serviceName string, etcdConn string) (int, error) {
-	inPort := 0
+//连接etcd服务
+func Connect(serviceName string, etcdConn string) error {
 	serverList := []string{etcdConn}
 	//连接etcd服务
 	client, err := clientv3.New(clientv3.Config{Endpoints: serverList, DialTimeout: 5 * time.Second})
 	if nil != err {
 		logrus.Debug("Etcd 服务，启动错误，Error Msg：", err.Error())
-		return -1, err
+		return err
 	}
 	//初始化连接信息
-	etcdClient = &ClientDis{
+	EtcdCli = &ClientDis{
 		Endpoints:       serverList,
 		client:          client,
 		serviceName:     serviceName,
 		path:            config.GetGroupId() + "/" + serviceName,
 		ConnServiceList: make(map[string]*EtcdConnStruct),
 	}
-	//连接成功的时候，获取(同组)服务列表
-	etcdClient.GetNodesInfo(config.GetGroupId())
-	//连接额外的服务，如果和本组相同，则不再连接
-	if config.GetGroupId() == config.GetServerExtra() {
-		etcdClient.GetNodesInfo(config.GetServerExtra())
-	}
-	//是否是需要被其他服务器连接，不需要则不开启对外监听端口
-	if config.GetIsConn() {
-		//监听grpc端口
-		inPort = grpc_service.Start()
-		if inPort == -1 {
-			return -1, errors.New("grpc service start faild")
-		}
-	}
-	config.SetInPort(inPort)
-	return inPort, nil
+	return nil
 }
 
 //注册节点
 func RegisterNode(value string) {
-	if nil == etcdClient {
+	if nil == EtcdCli {
 		return
 	}
-	etcdClient.grantSetLeaseKeepAlive(ttl)
-	etcdClient.Lock()
-	_, err := etcdClient.client.Put(context.TODO(), etcdClient.path, value, clientv3.WithLease(etcdClient.leaseRes.ID))
+	EtcdCli.grantSetLeaseKeepAlive(ttl)
+	EtcdCli.Lock()
+	_, err := EtcdCli.client.Put(context.TODO(), EtcdCli.path, value, clientv3.WithLease(EtcdCli.leaseRes.ID))
 	if err != nil {
 		logrus.Debug("数据注册失败，Error Msg：", err.Error())
 		return
 	}
-	etcdClient.Unlock()
-	go etcdClient.listenLease()
+	EtcdCli.Unlock()
+	go EtcdCli.listenLease()
 }
 
 //授权租期，自动续约
@@ -109,7 +90,7 @@ func (this *ClientDis) GetNodesInfo(path string) {
 			continue
 		}
 		//不需要其他连接
-		var _conf config.ServiceModel
+		var _conf config.serviceModel
 		json.Unmarshal([]byte(value), &_conf)
 		//判断对方是否需要被连接，如果不需要，则剔除
 		if !_conf.IsConnect {
@@ -140,7 +121,7 @@ func (this *ClientDis) WatchNodes(key string) {
 				switch event.Type {
 				case mvccpb.PUT:
 					//todo 维护一个列表
-					var _conf config.ServiceModel
+					var _conf config.serviceModel
 					json.Unmarshal(event.Kv.Value, &_conf)
 					if !_conf.IsConnect {
 						continue

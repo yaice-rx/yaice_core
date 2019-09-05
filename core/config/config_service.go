@@ -1,7 +1,40 @@
 package config
 
-//服务配置
+import (
+	"fmt"
+	"github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"sync"
+)
 
+//公共配置
+type commonConfigModel struct {
+	mutex             sync.Mutex
+	EtcdConnectString string `yaml:"EtcdConnectString"`
+	EtcdNameSpace     string `yaml:"EtcdNameSpace"`
+	PortStart         int    `yaml:"PortStart"`
+	PortEnd           int    `yaml:"PortEnd"`
+}
+
+var CommonConfigData commonConfigModel
+
+func InitCommonConfig() {
+	CommonConfigData = commonConfigModel{}
+	CommonConfigData.mutex.Lock()
+	defer CommonConfigData.mutex.Unlock()
+	yamlFile, err := ioutil.ReadFile("conf.yaml")
+	if err != nil {
+		logrus.Println(err.Error())
+		return
+	}
+	err = yaml.Unmarshal(yamlFile, &CommonConfigData)
+	if err != nil {
+		fmt.Printf("Unmarshal: %v", err)
+	}
+}
+
+//服务配置
 type ServiceModel struct {
 	name        string //服务器名称
 	groupId     string //服务器组编号
@@ -13,11 +46,10 @@ type ServiceModel struct {
 	IsConnect   bool   //是否需要连接
 }
 
-//服务配置处理
-var confServiceSystem *ServiceModel
+var confServiceData *ServiceModel
 
 func InitServiceConf(name string, groupId string, serverExtra string, inHost string, outHost string, isConn bool) {
-	confServiceSystem = &ServiceModel{
+	confServiceData = &ServiceModel{
 		name:        name,
 		groupId:     groupId,
 		serverExtra: serverExtra,
@@ -28,48 +60,48 @@ func InitServiceConf(name string, groupId string, serverExtra string, inHost str
 }
 
 func GetName() string {
-	return confServiceSystem.name
+	return confServiceData.name
 }
 
 func GetGroupId() string {
-	return confServiceSystem.groupId
+	return confServiceData.groupId
 }
 
 func GetServerExtra() string {
-	return confServiceSystem.serverExtra
+	return confServiceData.serverExtra
 }
 
 func GetOutHost() string {
-	return confServiceSystem.outHost
+	return confServiceData.outHost
 }
 
 func GetOutPort() int {
-	return confServiceSystem.outPort
+	return confServiceData.outPort
 }
 
 func GetInHost() string {
-	return confServiceSystem.inHost
+	return confServiceData.inHost
 }
 
 func GetInPort() int {
-	return confServiceSystem.inPort
+	return confServiceData.inPort
 }
 
 func GetIsConn() bool {
-	return confServiceSystem.IsConnect
+	return confServiceData.IsConnect
 }
 
 func SetInPort(port int) {
-	confServiceSystem.inPort = port
+	confServiceData.inPort = port
 }
 
 func SetOutPort(port int) {
-	confServiceSystem.outPort = port
+	confServiceData.outPort = port
 }
 
 func GetServiceConfData() ServiceModel {
-	if nil == confServiceSystem {
+	if nil == confServiceData {
 		return ServiceModel{}
 	}
-	return *confServiceSystem
+	return *confServiceData
 }

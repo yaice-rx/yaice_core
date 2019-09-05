@@ -15,9 +15,9 @@ func Init() {
 }
 
 //监听grpc端口
-func Start() int {
+func Listen() int {
 	//端口
-	for port := config.GetYamlData().PortStart; port <= config.GetYamlData().PortEnd; port++ {
+	for port := config.CommonConfigData.PortStart; port <= config.CommonConfigData.PortEnd; port++ {
 		address, err := net.Listen("tcp", ":"+strconv.Itoa(port))
 		if err == nil {
 			go GRpcServer.Serve(address)

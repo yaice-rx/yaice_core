@@ -36,12 +36,14 @@ func Initialize() {
 		panic("All ports are occupied")
 		return
 	}
+	config.SetOutPort(port)
 	//连接Etcd服务,连接服务
 	inPort, err := etcd_service.Init(config.GetName(), config.GetYamlData().EtcdConnectString)
 	if nil != err || inPort == -1 {
 		logrus.Debug(err.Error())
 		return
 	}
+	config.SetInPort(inPort)
 	//序列化本服务的内容
 	jsonString, jsonErr := json.Marshal(config.GetServiceConfData())
 	if nil != jsonErr {
