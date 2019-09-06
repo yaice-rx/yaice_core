@@ -220,10 +220,10 @@ var _ context.Context
 var _ grpc.ClientConn
 
 // This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
+// is compatible with the grpc_handler package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// ServiceConnectClient is the client API for ServiceConnect service.
+// ServiceConnectClient is the mrg API for ServiceConnect service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ServiceConnectClient interface {

@@ -2,10 +2,10 @@ package auth
 
 import (
 	"YaIce/auth/mrg/inside"
-	"YaIce/core/grpc_service"
+	"YaIce/core/handler"
 	"YaIce/protobuf/internal_proto"
 )
 
 func registerRouter() {
-	internal_proto.RegisterServiceConnectServer(grpc_service.GRpcServer, &inside.Service{})
+	internal_proto.RegisterServiceConnectServer(handler.GRPCServer, &inside.Service{})
 }

@@ -3,8 +3,7 @@ package game
 import (
 	"YaIce/conf"
 	"YaIce/core/config"
-	"YaIce/core/etcd_service"
-	"YaIce/core/grpc_service"
+	"YaIce/core/handler"
 	"YaIce/core/kcp_service"
 	"YaIce/core/router"
 	"YaIce/game/mrg"
@@ -12,7 +11,6 @@ import (
 	"YaIce/protobuf/external"
 	"YaIce/protobuf/internal_proto"
 	"encoding/json"
-	"github.com/sirupsen/logrus"
 )
 
 func registerRouter() {
@@ -24,33 +22,35 @@ func registerRouter() {
 }
 
 func registerServiceRouter() {
-	internal_proto.RegisterServiceConnectServer(grpc_service.GRpcServer, &inside.Service{})
+	internal_proto.RegisterServiceConnectServer(handler.GRPCServer, &inside.Service{})
 }
 
 func Initialize() {
 	//注册路由
 	registerRouter()
 	//监听外网端口
-	port := kcp_service.Init()
+	port := kcp_service.Listen()
 	if port == -1 {
 		panic("All ports are occupied")
 		return
 	}
-	config.SetOutPort(port)
-	//连接Etcd服务,连接服务
-	inPort, err := etcd_service.Init(config.GetName(), config.GetYamlData().EtcdConnectString)
-	if nil != err || inPort == -1 {
-		logrus.Debug(err.Error())
+	//设置外网监听端口
+	config.ConfServiceHandler.SetOutPort(port)
+	//监听内网
+	port = handler.GRPCListen()
+	if port == -1 {
+		panic("All ports are occupied")
 		return
 	}
-	config.SetInPort(inPort)
+	//设置内网端口
+	config.ConfServiceHandler.SetInPort(port)
 	//序列化本服务的内容
-	jsonString, jsonErr := json.Marshal(config.GetServiceConfData())
+	jsonString, jsonErr := json.Marshal(config.ConfServiceHandler.GetServiceConfData())
 	if nil != jsonErr {
 		panic("make json data error")
 	}
 	//向服务中注册自己节点数据
-	etcd_service.RegisterNode(string(jsonString))
+	handler.RegisterEtcdData(string(jsonString))
 	//-------------------------------------End-------------------------------------//
 	//初始化配置
 	InitServerImpl()
@@ -60,6 +60,8 @@ func Initialize() {
 
 //初始化数据
 func InitServerImpl() {
+	//开启连接内网服务
+	handler.ConnectGRPC()
 	//初始化CSV配置文件数据
 	conf.InitCSVConfigData()
 	/*//缓存DB数据

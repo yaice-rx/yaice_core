@@ -1,4 +1,4 @@
-package model
+package DataBase
 
 import (
 	_ "github.com/go-sql-driver/mysql"
@@ -14,7 +14,7 @@ type DBModel struct {
 
 var _dbModel *DBModel
 
-func Init() *DBModel {
+func Connect() *DBModel {
 	if nil == _dbModel {
 		_dbModel = new(DBModel)
 	}

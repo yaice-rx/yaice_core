@@ -11,8 +11,8 @@ import (
 )
 
 //初始化外网监听
-func Init() int {
-	for port := config.GetYamlData().PortStart; port <= config.GetYamlData().PortEnd; port++ {
+func Listen() int {
+	for port := config.CommonConfigHandler.PortStart; port <= config.CommonConfigHandler.PortEnd; port++ {
 		_port := serviceListenAccpet(port)
 		if -1 != _port {
 			return _port
@@ -64,10 +64,10 @@ func handleKcpMux(conn *kcp.UDPSession) {
 		}
 		protoNum := common.BytesToInt(buffer[:4])
 
-		KcpConnPtr.ChanMsgQueue <- &MsgQueue{
-			msgNumber: protoNum,
+		KcpConnPtr.ChanMsgQueue <- &model.MsgQueue{
+			MsgNumber: protoNum,
 			Session:   KcpConnPtr.ConnectList[conn],
-			msgData:   buffer[4:n],
+			MsgData:   buffer[4:n],
 		}
 	}
 }
@@ -77,8 +77,8 @@ func Run() {
 		select {
 		case msg := <-KcpConnPtr.ChanMsgQueue:
 			//需要增加过滤器
-			router.CallFilterHandler(msg.Session, msg.msgData)
-			router.CallExternalRouterHandler(msg.msgNumber, msg.Session, msg.msgData)
+			router.CallFilterHandler(msg.Session, msg.MsgData)
+			router.CallExternalRouterHandler(msg.MsgNumber, msg.Session, msg.MsgData)
 			break
 		default:
 			break
