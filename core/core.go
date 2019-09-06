@@ -1,8 +1,8 @@
 package core
 
 import (
-	"YaIce/core/DataBase"
 	"YaIce/core/config"
+	"YaIce/core/dataBase"
 	"YaIce/core/handler"
 	"YaIce/core/job"
 	"YaIce/core/kcp_service"
@@ -14,7 +14,7 @@ import (
 type ServerCore struct {
 	MutexConns sync.Mutex
 	TickTasks  map[string]func() //tick函数列表
-	DB         *DataBase.DBModel //数据库
+	DB         *dataBase.DBModel //数据库
 }
 
 var ServerCoreHandler *ServerCore
@@ -26,7 +26,7 @@ func NewServerCore() {
 	//初始化路由
 	router.InitRouterList()
 	//初始化数据库连接
-	s.DB = DataBase.Connect()
+	s.DB = dataBase.Connect()
 	//连接Etcd
 	err := handler.EtcdConnect(config.ConfServiceHandler.GetGroupId(), config.ConfServiceHandler.GetName(), config.CommonConfigHandler.EtcdConnectString)
 	if nil != err {

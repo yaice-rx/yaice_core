@@ -1,4 +1,4 @@
-package DataBase
+package dataBase
 
 import (
 	_ "github.com/go-sql-driver/mysql"

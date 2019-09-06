@@ -29,7 +29,6 @@ func Initialize() {
 }
 
 func pingHandler() {
-	fmt.Println("-!-!-!")
 	gmCommand := c2game.C2GGmCommand{Command: "test", Params: []string{"2312312"}}
 	data, err := proto.Marshal(&gmCommand)
 	if err != nil {

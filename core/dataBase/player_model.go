@@ -1,4 +1,4 @@
-package DataBase
+package dataBase
 
 type Player struct {
 	Id            uint32 `gorm:"primary_key;column:id"`
