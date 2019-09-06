@@ -10,7 +10,6 @@ import (
 	"YaIce/game/mrg/inside"
 	"YaIce/protobuf/external"
 	"YaIce/protobuf/internal_proto"
-	"encoding/json"
 )
 
 func registerRouter() {
@@ -44,13 +43,8 @@ func Initialize() {
 	}
 	//设置内网端口
 	config.ConfServiceHandler.SetInPort(port)
-	//序列化本服务的内容
-	jsonString, jsonErr := json.Marshal(config.ConfServiceHandler.GetServiceConfData())
-	if nil != jsonErr {
-		panic("make json data error")
-	}
 	//向服务中注册自己节点数据
-	handler.RegisterEtcdData(string(jsonString))
+	handler.RegisterServiceConfigData()
 	//-------------------------------------End-------------------------------------//
 	//初始化配置
 	InitServerImpl()

@@ -14,9 +14,7 @@ import (
 var conn *kcp.UDPSession
 
 func Initialize() {
-
 	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
-
 	defer kcpconn.Close()
 	if err != nil {
 		fmt.Println("kcp err", err.Error())

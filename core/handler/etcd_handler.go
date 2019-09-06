@@ -32,22 +32,31 @@ func EtcdConnect(groupId string, serviceName string, etcdConn string) error {
 	}
 	//初始化连接信息
 	EtcdInit(serverList, clientCli, serviceName, groupId+"/"+serviceName+"/"+pid.String())
+	go watchNodes(groupId)
 	return nil
 }
 
-func RegisterEtcdData(data string) {
-	if nil == etcdCli {
-		return
+func RegisterServiceConfigData() error {
+	data, jsonErr := json.Marshal(config.ConfServiceHandler.GetServiceConfData())
+	if nil != jsonErr {
+		return errors.New("json Serialization failed")
 	}
-	grantSetLeaseKeepAlive(TTL)
+	if nil == etcdCli {
+		return errors.New("etcd not initiated")
+	}
+	keepErr := grantSetLeaseKeepAlive(TTL)
+	if nil != keepErr {
+		logrus.Println(keepErr.Error())
+		return keepErr
+	}
 	etcdCli.Lock()
-	_, err := etcdCli.Client.Put(context.TODO(), etcdCli.Path, data, clientv3.WithLease(etcdCli.LeaseRes.ID))
+	_, err := etcdCli.Client.Put(context.TODO(), etcdCli.Path, string(data), clientv3.WithLease(etcdCli.LeaseRes.ID))
 	if err != nil {
-		logrus.Debug("数据注册失败，Error Msg：", err.Error())
-		return
+		return err
 	}
 	etcdCli.Unlock()
 	go listenLease()
+	return nil
 }
 
 //获取节点数据
@@ -134,13 +143,14 @@ func listenLease() {
 //监听节点数据变化
 func watchNodes(key string) {
 	watcher := clientv3.NewWatcher(etcdCli.Client)
-	path := etcdCli.Path + "/" + key
 	for {
-		rch := watcher.Watch(context.TODO(), path, clientv3.WithPrefix())
+		rch := watcher.Watch(context.TODO(), key, clientv3.WithPrefix())
 		for wresp := range rch {
 			for _, event := range wresp.Events {
 				var _conf config.ServiceConfigModel
-				json.Unmarshal(event.Kv.Value, &_conf)
+				var data string
+				json.Unmarshal(event.Kv.Key, &data)
+				logrus.Println(data)
 				switch event.Type {
 				case mvccpb.PUT:
 					//如果没有所需要连接的服务
