@@ -5,11 +5,15 @@ import (
 	"YaIce/core/config"
 	"YaIce/core/handler"
 	"YaIce/core/kcp_service"
+	"YaIce/core/model"
 	"YaIce/core/router"
 	"YaIce/game/mrg"
 	"YaIce/game/mrg/inside"
 	"YaIce/protobuf/external"
 	"YaIce/protobuf/internal_proto"
+	"encoding/json"
+	"github.com/satori/go.uuid"
+	"github.com/sirupsen/logrus"
 )
 
 func registerRouter() {
@@ -25,6 +29,14 @@ func registerServiceRouter() {
 }
 
 func Initialize() {
+	token := &model.Token{
+		SessionId: uuid.Must(uuid.NewV4()).String(),
+		Port:      1578,
+		Host:      "10.0.0.1",
+	}
+	bt, _ := json.Marshal(token)
+	logrus.Println(len(bt), token)
+
 	//注册路由
 	registerRouter()
 	//监听外网端口

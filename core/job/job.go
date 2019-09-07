@@ -56,13 +56,13 @@ func exec() {
 				if nil == v {
 					continue
 				}
-				if v.execNum != -1 {
-					v.execNum--
-				}
 				curTime := time.Now().Unix()
 				if (v.actionTime + v.intervalTime) <= curTime {
 					go v.fn()
 					v.actionTime = curTime
+					if v.execNum != -1 {
+						v.execNum--
+					}
 				}
 				if v.execNum > 0 || v.execNum == -1 {
 					Crontab.entries <- v
