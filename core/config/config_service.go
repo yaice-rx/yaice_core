@@ -38,14 +38,14 @@ func InitCommonConfig() {
 
 //服务配置
 type ServiceConfigModel struct {
-	pid      string //服务器单独进程编号
-	name     string //服务器名称
-	groupId  string //服务器组编号
-	connList []string
-	outHost  string //内部连接ip
+	Pid      string //服务器单独进程编号
+	Name     string //服务器名称
+	GroupId  string //服务器组编号
+	ConnList []string
+	OutHost  string //内部连接ip
 	outPort  int    //内部连接端口
-	inHost   string //外部连接ip
-	inPort   int    //内部连接端口
+	InHost   string //外部连接ip
+	InPort   int    //内部连接端口
 }
 
 var ConfServiceHandler *ServiceConfigModel
@@ -54,32 +54,32 @@ func InitServiceConf(name string, groupId string, connStr string, inHost string,
 	pid, _ := uuid.NewV4()
 	connList := strings.Split(connStr, ",")
 	ConfServiceHandler = &ServiceConfigModel{
-		pid:      pid.String(),
-		name:     name,
-		groupId:  groupId,
-		connList: connList,
-		inHost:   inHost,
-		outHost:  outHost,
+		Pid:      pid.String(),
+		Name:     name,
+		GroupId:  groupId,
+		ConnList: connList,
+		InHost:   inHost,
+		OutHost:  outHost,
 	}
 }
 func (this *ServiceConfigModel) GetPid() string {
-	return this.pid
+	return this.Pid
 }
 
 func (this *ServiceConfigModel) GetName() string {
-	return this.name
+	return this.Name
 }
 
 func (this *ServiceConfigModel) GetGroupId() string {
-	return this.groupId
+	return this.GroupId
 }
 
 func (this *ServiceConfigModel) GetConnList() []string {
-	return this.connList
+	return this.ConnList
 }
 
 func (this *ServiceConfigModel) GetOutHost() string {
-	return this.outHost
+	return this.OutHost
 }
 
 func (this *ServiceConfigModel) GetOutPort() int {
@@ -87,15 +87,15 @@ func (this *ServiceConfigModel) GetOutPort() int {
 }
 
 func (this *ServiceConfigModel) GetInHost() string {
-	return this.inHost
+	return this.InHost
 }
 
 func (this *ServiceConfigModel) GetInPort() int {
-	return this.inPort
+	return this.InPort
 }
 
 func (this *ServiceConfigModel) SetInPort(port int) {
-	this.inPort = port
+	this.InPort = port
 }
 
 func (this *ServiceConfigModel) SetOutPort(port int) {

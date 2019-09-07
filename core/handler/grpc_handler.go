@@ -20,6 +20,11 @@ func InitGPRCService() {
 	GRPCServer = grpc.NewServer()
 }
 
+//初始化连接
+func initClientapacity() {
+	ServerMapHandler = make(map[string]map[string]*grpc.ClientConn)
+}
+
 //监听grpc端口
 func GRPCListen() int {
 	//端口

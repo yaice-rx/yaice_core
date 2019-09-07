@@ -21,7 +21,7 @@ func Initialize() {
 		return
 	}
 	conn = kcpconn
-	job.JoinJob(1, pingHandler)
+	job.Crontab.AddCronTask(1, -1, pingHandler)
 	go handleKcpConn(conn)
 	select {}
 }

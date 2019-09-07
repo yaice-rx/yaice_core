@@ -10,6 +10,7 @@ import (
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 	"time"
 )
 
@@ -19,6 +20,8 @@ var etcdCli *model.ClientModel
 
 //连接etcd服务
 func EtcdConnect(groupId string, serviceName string, etcdConn string) error {
+	//初始化连接容量
+	initClientapacity()
 	pid, err := uuid.NewV4()
 	if err != nil {
 		return errors.New("uuid must exist")
@@ -37,7 +40,8 @@ func EtcdConnect(groupId string, serviceName string, etcdConn string) error {
 }
 
 func RegisterServiceConfigData() error {
-	data, jsonErr := json.Marshal(config.ConfServiceHandler.GetServiceConfData())
+	configData := config.ConfServiceHandler.GetServiceConfData()
+	data, jsonErr := json.Marshal(configData)
 	if nil != jsonErr {
 		return errors.New("json Serialization failed")
 	}
@@ -79,8 +83,7 @@ func GetEtcdNodeData(path string) []config.ServiceConfigModel {
 func DelNode(key string) {
 	etcdCli.Lock()
 	defer etcdCli.Unlock()
-	path := etcdCli.Path + "/" + key
-	response, err := etcdCli.Client.Delete(context.TODO(), path, clientv3.WithPrefix())
+	response, err := etcdCli.Client.Delete(context.TODO(), key)
 	if nil != err {
 		logrus.Println("Error:", err.Error())
 	}
@@ -148,9 +151,7 @@ func watchNodes(key string) {
 		for wresp := range rch {
 			for _, event := range wresp.Events {
 				var _conf config.ServiceConfigModel
-				var data string
-				json.Unmarshal(event.Kv.Key, &data)
-				logrus.Println(data)
+				json.Unmarshal(event.Kv.Value, &_conf)
 				switch event.Type {
 				case mvccpb.PUT:
 					//如果没有所需要连接的服务
@@ -161,8 +162,15 @@ func watchNodes(key string) {
 						//如果已连接节点，无须再连接
 						return
 					}
+					if nil == ServerMapHandler[_conf.GetName()] {
+						ServerMapHandler[_conf.GetName()] = make(map[string]*grpc.ClientConn)
+					}
+					if etcdCli.Path == string(event.Kv.Key) {
+						continue
+					}
 					GRPCConnect(ServerMapHandler[_conf.GetName()], _conf)
 				case mvccpb.DELETE:
+					DelNode(string(event.Kv.Key))
 					//TODO 删除etcd剔除的服务，首先从服务器断掉该连接，然后再删除该数据
 					DeleteGRPCConn(_conf.GetName(), _conf.GetPid())
 				}

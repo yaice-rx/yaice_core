@@ -5,40 +5,68 @@ import (
 	"time"
 )
 
-type JobItem struct{
-	guid 	string
-	fn		func()	//调用函数
-	actionTime  int64	//执行时间
-	intervalTime int64	//间隔时间
+type JobItem struct {
+	guid         string
+	fn           func() //调用函数
+	actionTime   int64  //执行时间
+	intervalTime int64  //间隔时间
+	execNum      int    //执行次数
 }
 
-var JobList []*JobItem
+type Cron struct {
+	cronInterface
+	running bool
+	entries chan *JobItem
+}
+
+var Crontab *Cron
+
+func Start() {
+	Crontab = &Cron{
+		running: true,
+		entries: make(chan *JobItem, 100),
+	}
+	go exec()
+}
+
+type cronInterface interface {
+	AddCronTask(_time int64, execNum int, handler func())
+}
 
 //加入工作列表
 // t = 秒
-func JoinJob(t int64,fn_ func()){
+func (this *Cron) AddCronTask(_time int64, execNum int, fn_ func()) {
 	job := &JobItem{
-		guid:uuid.Must(uuid.NewV4()).String(),
-		fn:fn_,
-		intervalTime:t,
-		actionTime:time.Now().Unix(),
+		guid:         uuid.Must(uuid.NewV4()).String(),
+		fn:           fn_,
+		intervalTime: _time,
+		actionTime:   time.Now().Unix(),
+		execNum:      execNum,
 	}
-	JobList = append(JobList, job)
+	this.entries <- job
 }
 
-func CallJob(){
-	t := time.NewTicker(time.Second)
-	defer t.Stop()
+func exec() {
+	timer := time.NewTicker(time.Second)
+	defer timer.Stop()
 	for {
-		<- t.C
-		for _,v := range JobList{
-			if nil == v {
-				continue
-			}
-			curTime := time.Now().Unix()
-			if (v.actionTime + v.intervalTime) >= curTime{
-				go v.fn()
-				v.actionTime = curTime
+		select {
+		case <-timer.C:
+			for v := range Crontab.entries {
+				if nil == v {
+					continue
+				}
+				if v.execNum != -1 {
+					v.execNum--
+				}
+				curTime := time.Now().Unix()
+				if (v.actionTime + v.intervalTime) <= curTime {
+					go v.fn()
+					v.actionTime = curTime
+				}
+				if v.execNum > 0 || v.execNum == -1 {
+					Crontab.entries <- v
+				}
 			}
 		}
 	}

@@ -20,13 +20,17 @@ type ServerCore struct {
 var ServerCoreHandler *ServerCore
 
 func NewServerCore() {
-	s := new(ServerCore)
+	ServerCoreHandler := new(ServerCore)
 	//初始化公共配置数据
 	config.InitCommonConfig()
 	//初始化路由
 	router.InitRouterList()
 	//初始化数据库连接
-	s.DB = dataBase.Connect()
+	ServerCoreHandler.DB = dataBase.Connect()
+	//初始化grpc服务
+	handler.InitGPRCService()
+	//初始化定时器
+	job.Start()
 	//连接Etcd
 	err := handler.EtcdConnect(config.ConfServiceHandler.GetGroupId(), config.ConfServiceHandler.GetName(), config.CommonConfigHandler.EtcdConnectString)
 	if nil != err {
@@ -35,10 +39,4 @@ func NewServerCore() {
 	}
 	//初始化网络连接信息
 	kcp_service.InitNetWork(5000)
-	//初始化grpc服务
-	handler.InitGPRCService()
-	//开启定时任务
-	go job.CallJob()
-	//系统核心处理
-	ServerCoreHandler = s
 }
