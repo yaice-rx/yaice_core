@@ -1,11 +1,18 @@
 package auth
 
 import (
+	Auth_Model "YaIce/auth/model"
+	"YaIce/core/config"
 	"YaIce/core/handler"
 	"YaIce/core/job"
-	"github.com/sirupsen/logrus"
+	"YaIce/core/model"
+	"encoding/json"
+	"github.com/satori/go.uuid"
 	"net/http"
+	"time"
 )
+
+var accountLoginSessionMap map[string]Auth_Model.AccountLoginSession = make(map[string]Auth_Model.AccountLoginSession)
 
 func Initialize(port string, server_id string) {
 	//初始化定时器
@@ -18,10 +25,20 @@ func Initialize(port string, server_id string) {
 	handler.RegisterServiceConfigData()
 	//监听Http服务器
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", login)
+	mux.HandleFunc("/login", login)
 	http.ListenAndServe(":"+port, mux)
 }
 
-func login(w http.ResponseWriter, r *http.Request) {
-	logrus.Println(r.RequestURI)
+func login(w http.ResponseWriter, resp *http.Request) {
+	session := uuid.Must(uuid.NewV4()).String()
+	guid := time.Now().Unix()
+	token := model.LoginToken{
+		Pid:        config.ConfServiceHandler.GetPid(),
+		SessionKey: session,
+		Host:       "10.0.0.10",
+		Port:       20001,
+	}
+	data, _ := json.Marshal(token)
+	accountLoginSessionMap[session] = Auth_Model.AccountLogin(session, guid)
+	w.Write(data)
 }

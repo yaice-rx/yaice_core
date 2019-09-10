@@ -3,36 +3,59 @@ package client
 import (
 	"YaIce/core/common"
 	"YaIce/core/job"
+	"YaIce/core/model"
 	"YaIce/protobuf/external"
+	"encoding/json"
 	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/xtaci/kcp-go"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"strconv"
+	"strings"
 	"time"
 )
 
 var conn *kcp.UDPSession
+var token model.LoginToken
 
 func Initialize() {
-	kcpconn, err := kcp.DialWithOptions("127.0.0.1:20001", nil, 10, 1)
+	resp, err := http.Post("http://10.0.0.10:8888/login",
+		"application/x-www-form-urlencoded",
+		strings.NewReader("userName=admin"))
+	if err != nil {
+		fmt.Println(err)
+	}
+	body, _ := ioutil.ReadAll(resp.Body)
+	json.Unmarshal(body, &token)
+	kcpconn, err := kcp.DialWithOptions(token.Host+":"+strconv.Itoa(token.Port), nil, 10, 1)
 	defer kcpconn.Close()
 	if err != nil {
 		fmt.Println("kcp err", err.Error())
 		return
 	}
 	conn = kcpconn
-	job.Crontab.AddCronTask(1, -1, pingHandler)
+	RegisterHandler()
+	job.Crontab.AddCronTask(5, -1, pingHandler)
 	go handleKcpConn(conn)
 	select {}
 }
-
-func pingHandler() {
-	gmCommand := c2game.C2GGmCommand{Command: "test", Params: []string{"2312312"}}
+func RegisterHandler() {
+	gmCommand := c2game.C2GRegister{Pid: token.Pid, SessionId: token.SessionKey}
 	data, err := proto.Marshal(&gmCommand)
 	if err != nil {
 		log.Fatalln("Marshal mrg data error: ", err)
 	}
-	SendMsg(conn, common.ProtocalNumber("c2g_gm_command"), data)
+	SendMsg(conn, common.ProtocalNumber(common.GetProtoName(&c2game.C2GRegister{})), data)
+}
+func pingHandler() {
+	gmCommand := c2game.C2GPing{}
+	data, err := proto.Marshal(&gmCommand)
+	if err != nil {
+		log.Fatalln("Marshal mrg data error: ", err)
+	}
+	SendMsg(conn, common.ProtocalNumber(common.GetProtoName(&c2game.C2GPing{})), data)
 }
 
 func SendMsg(conn *kcp.UDPSession, protoNumber int32, data []byte) {

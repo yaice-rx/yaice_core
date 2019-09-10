@@ -11,6 +11,8 @@ import (
 
 //start server
 func main() {
+	/*cpuProfile, _ := os.Create("cpu_profile_"+uuid.Must(uuid.NewV4()).String())
+	pprof.StartCPUProfile(cpuProfile)*/
 	//服务器名称
 	serverName := flag.String("name", "auth", "服务名称")
 	//内网地址
@@ -29,6 +31,10 @@ func main() {
 	config.InitServiceConf(*serverName, *server_group, *connect_service, *in_host, *outer_host)
 	//配置
 	core.NewServerCore()
+	//初始化定时器
+	/*job.Crontab.AddCronTask(1, 200, func() {
+		pprof.StopCPUProfile()
+	})*/
 	//初始化调用对应的服务
 	switch *serverName {
 	case "auth":
@@ -37,7 +43,7 @@ func main() {
 	case "game":
 		game.Initialize()
 		return
-	case "mrg":
+	case "client":
 		client.Initialize()
 		return
 	}

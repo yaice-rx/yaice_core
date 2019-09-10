@@ -1,7 +1,8 @@
 package model
 
-type Token struct {
-	SessionId string
-	Port      int
-	Host      string
+type LoginToken struct {
+	Pid        string
+	SessionKey string
+	Port       int
+	Host       string
 }

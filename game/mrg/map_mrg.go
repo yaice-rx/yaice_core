@@ -3,8 +3,6 @@ package mrg
 import (
 	"YaIce/core/model"
 	"YaIce/game/map"
-	"YaIce/protobuf/external"
-	"github.com/golang/protobuf/proto"
 )
 
 type MapMrg struct {
@@ -12,13 +10,7 @@ type MapMrg struct {
 }
 
 //加入世界地图
-func JoinMapHandler(connect *model.PlayerConn,content []byte){
-	protoData := c2game.C2GJoinMap{}
-	err := proto.Unmarshal(content,&protoData)
-	if nil !=  err {
-		//todo send error
-	}
-
+func JoinMapHandler(connect *model.PlayerConn, content []byte) {
 	//_map.ConversionCoord();
 	//初始化大地图用户信息
 	//_map.VisionData.AddObserver();
