@@ -22,9 +22,9 @@ func RegisterHandler(connect *model.PlayerConn, content []byte) {
 	if err != nil {
 		logrus.Println("Unmarshal data error: ", err)
 	}
-	logrus.Println(handler.ServerMapHandler["auth"][data.Pid])
+	logrus.Println(handler.ServerConnMap["auth"][data.Pid])
 	//向auth服务器发起请求
-	Client := internal_proto.NewServiceConnectClient(handler.ServerMapHandler["auth"][data.Pid])
+	Client := internal_proto.NewServiceConnectClient(handler.ServerConnMap["auth"][data.Pid])
 
 	_, err = Client.RegisterServiceRequest(context.Background(), &internal_proto.C2S_Register{})
 	if nil != err {

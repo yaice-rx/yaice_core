@@ -10,7 +10,7 @@ import (
 )
 
 //连接列表
-var ServerMapHandler map[string]map[string]*grpc.ClientConn
+var ServerConnMap map[string]map[string]*grpc.ClientConn
 
 //服务
 var GRPCServer *grpc.Server
@@ -22,7 +22,7 @@ func InitGPRCService() {
 
 //初始化连接
 func initClientapacity() {
-	ServerMapHandler = make(map[string]map[string]*grpc.ClientConn)
+	ServerConnMap = make(map[string]map[string]*grpc.ClientConn)
 }
 
 //监听grpc端口
@@ -76,10 +76,10 @@ func ConnectGRPC() {
 		for _, data := range nodeData {
 			GRPCConnect(connList, data)
 		}
-		ServerMapHandler[serverName] = connList
+		ServerConnMap[serverName] = connList
 	}
 }
 
 func DeleteGRPCConn(name string, key string) {
-	delete(ServerMapHandler[name], key)
+	delete(ServerConnMap[name], key)
 }

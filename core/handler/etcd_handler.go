@@ -158,17 +158,17 @@ func watchNodes(key string) {
 					if len(_conf.GetConnList()) <= 0 {
 						continue
 					}
-					if nil != ServerMapHandler[_conf.GetName()][_conf.GetPid()] {
+					if nil != ServerConnMap[_conf.GetName()][_conf.GetPid()] {
 						//如果已连接节点，无须再连接
 						return
 					}
-					if nil == ServerMapHandler[_conf.GetName()] {
-						ServerMapHandler[_conf.GetName()] = make(map[string]*grpc.ClientConn)
+					if nil == ServerConnMap[_conf.GetName()] {
+						ServerConnMap[_conf.GetName()] = make(map[string]*grpc.ClientConn)
 					}
 					if etcdCli.Path == string(event.Kv.Key) {
 						continue
 					}
-					GRPCConnect(ServerMapHandler[_conf.GetName()], _conf)
+					GRPCConnect(ServerConnMap[_conf.GetName()], _conf)
 				case mvccpb.DELETE:
 					DelNode(string(event.Kv.Key))
 					//TODO 删除etcd剔除的服务，首先从服务器断掉该连接，然后再删除该数据

@@ -58,3 +58,7 @@ func CallFilterHandler(conn *model.PlayerConn, data []byte) {
 		handler(conn, data)
 	}
 }
+
+func RegisterInterServiceHandler(handler interface{}) {
+
+}
