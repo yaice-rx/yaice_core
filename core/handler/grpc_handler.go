@@ -49,7 +49,7 @@ func gRPCConnInit(connect string) *grpc.ClientConn {
 				//重连次数
 				grpc_retry.WithMax(3))),
 	)
-	if nil != err {
+	if nil != err || nil == conn {
 		return nil
 	}
 	return conn
@@ -57,6 +57,7 @@ func gRPCConnInit(connect string) *grpc.ClientConn {
 
 func GRPCConnect(connList map[string]*grpc.ClientConn, data config.ServiceConfigModel) {
 	grpcConn := gRPCConnInit(data.GetInHost() + ":" + strconv.Itoa(data.GetInPort()))
+	//grpcConn := gRPCConnInit(data.GetInHost() + ":0" )
 	if nil != grpcConn {
 		connList[data.GetPid()] = grpcConn
 	}

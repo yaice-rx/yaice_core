@@ -24,11 +24,10 @@ func InitRouterList() {
 
 //注册客户端请求方法
 func RegisterRouterHandler(msgObj proto.Message, handler func(conn *model.PlayerConn, content []byte)) {
-	msgName := common.GetProtoName(msgObj)
 	//加锁
 	routerListPtr.mu.Lock()
 	defer routerListPtr.mu.Unlock()
-
+	msgName := common.GetProtoName(msgObj)
 	protocolNum := common.ProtocalNumber(msgName)
 	routerListPtr.outerFuncMap[protocolNum] = handler
 }

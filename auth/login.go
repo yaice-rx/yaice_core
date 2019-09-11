@@ -4,7 +4,6 @@ import (
 	Auth_Model "YaIce/auth/model"
 	"YaIce/core/config"
 	"YaIce/core/handler"
-	"YaIce/core/job"
 	"YaIce/core/model"
 	"encoding/json"
 	"github.com/satori/go.uuid"
@@ -15,10 +14,6 @@ import (
 var accountLoginSessionMap map[string]Auth_Model.AccountLoginSession = make(map[string]Auth_Model.AccountLoginSession)
 
 func Initialize(port string, server_id string) {
-	//初始化定时器
-	job.Crontab.AddCronTask(10, -1, func() {
-
-	})
 	//注册内部路由
 	registerRouter()
 	//向服务中注册自己节点数据
@@ -30,6 +25,7 @@ func Initialize(port string, server_id string) {
 }
 
 func login(w http.ResponseWriter, resp *http.Request) {
+	//获取已经连接的设备
 	session := uuid.Must(uuid.NewV4()).String()
 	guid := time.Now().Unix()
 	token := model.LoginToken{

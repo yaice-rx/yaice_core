@@ -19,6 +19,7 @@ func registerRouter() {
 }
 
 func registerServiceRouter() {
+	//注册内部服务
 	internal_proto.RegisterServiceConnectServer(handler.GRPCServer, &inside.Service{})
 }
 
@@ -33,16 +34,6 @@ func Initialize() {
 	}
 	//设置外网监听端口
 	config.ConfServiceHandler.SetOutPort(port)
-	//开启连接内网服务
-	handler.ConnectGRPC()
-	//监听内网
-	port = handler.GRPCListen()
-	if port == -1 {
-		panic("All ports are occupied")
-		return
-	}
-	//设置内网端口
-	config.ConfServiceHandler.SetInPort(port)
 	//向服务中注册自己节点数据
 	handler.RegisterServiceConfigData()
 	//-------------------------------------End-------------------------------------//
@@ -54,7 +45,6 @@ func Initialize() {
 
 //初始化数据
 func initServerImpl() {
-
 	//初始化CSV配置文件数据
 	conf.InitCSVConfigData()
 	/*//缓存DB数据
