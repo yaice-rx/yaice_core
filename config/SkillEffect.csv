@@ -1,3 +1,0 @@
-##技能效果,不导出,释放位置0：自身，1：随机友军2：当前敌方目标，3：随机敌方目标,"效果目标0:己方，1：敌方,2双方",效果范围（范围类型#参数）,技能效果ID,效果参数1,参数2,参数3,起手特效,受击特效1,持续特效,起手音效,受击音效
-ID,EffectName,TargetSelect,EffectType,EffectRange,Effect,Param1,Param2,Param3,ParicleName1,ParicleName2,ParicleName3,SfxName_1,SfxName_2
-int,string,int,int,string,int,int,int,int,string,string,string,string,string

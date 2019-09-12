@@ -1,6 +1,0 @@
-##EquipID,名称文本配置,品质,图标,等级限制,出处（副本ID）,合成配方,碎片（合成配方为0，该列有效）,力量加值,敏捷加值,智力加值,攻击加值,物防加值,法术强度加值,法防加值,生命上限加值,物穿加值,法穿加值,暴击加值,生命回复,初始怒气加值,怒气回复
-ID,Desc,Quality,Icon,Level,Dungeon,Formula,Scrap,Str,Agi,Int,Atk,Pdef,Mag,Mdef,Hp,Ppenetrate,Mpenetrate,Crit,HpRestore,InitialAnger,AngerRecovery
-int,string,int,string,int,string,string,string,int,int,int,int,int,int,int,int,int,int,int,int,int,int
-1001,短剑,0,1,1,0,0,0,0,0,0,20,0,20,0,0,10,5,0,0,0,0
-1002,手套,0,1,1,0,0,0,0,0,0,0,10,0,0,0,0,0,0,0,0,0
-1003,披风,0,1,1,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0,0

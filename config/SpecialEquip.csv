@@ -1,5 +1,0 @@
-##套装ID,套装中包含装备ID,套装名称
-ID,EquipID,Name
-int,string,string
-2,65#66#67#68,LC_EQUIP_SpecialEquip_Name1
-3,69#70#71,LC_EQUIP_SpecialEquip_Name2
