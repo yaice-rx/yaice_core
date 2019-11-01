@@ -2,8 +2,6 @@ package auth
 
 import (
 	Auth_Model "YaIce/auth/model"
-	"YaIce/core/config"
-	"YaIce/core/handler"
 	"YaIce/core/model"
 	"encoding/json"
 	"github.com/satori/go.uuid"
@@ -17,11 +15,14 @@ func Initialize(port string, server_id string) {
 	//注册内部路由
 	registerRouter()
 	//向服务中注册自己节点数据
-	handler.RegisterServiceConfigData()
+	//handler.RegisterServiceConfigData()
 	//监听Http服务器
 	mux := http.NewServeMux()
 	mux.HandleFunc("/login", login)
 	http.ListenAndServe(":"+port, mux)
+	select {
+
+	}
 }
 
 func login(w http.ResponseWriter, resp *http.Request) {
@@ -29,7 +30,7 @@ func login(w http.ResponseWriter, resp *http.Request) {
 	session := uuid.Must(uuid.NewV4()).String()
 	guid := time.Now().Unix()
 	token := model.LoginToken{
-		Pid:        config.ConfServiceHandler.GetPid(),
+		//Pid:        config.ConfServiceHandler.GetPid(),
 		SessionKey: session,
 		Host:       "10.0.0.10",
 		Port:       20001,

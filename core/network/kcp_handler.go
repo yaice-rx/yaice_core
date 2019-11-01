@@ -1,24 +1,27 @@
-package kcp_service
+package network
 
 import (
 	"YaIce/core/common"
 	"YaIce/core/config"
 	"YaIce/core/model"
 	"YaIce/core/router"
+	"errors"
+	"github.com/golang/protobuf/proto"
 	"github.com/xtaci/kcp-go"
 	"io"
 	"strconv"
 )
 
 //初始化外网监听
-func Listen() int {
-	for port := config.CommonConfigHandler.PortStart; port <= config.CommonConfigHandler.PortEnd; port++ {
+func Listen() error {
+	for port := config.ConfDevMrg.NetworkPortStart; port <= config.ConfDevMrg.NetworkPortEnd; port++ {
 		_port := serviceListenAccpet(port)
 		if -1 != _port {
-			return _port
+			config.StartupConfigMrg.OutPort = strconv.Itoa(_port)
+			return nil
 		}
 	}
-	return -1
+	return errors.New("没有监听的端口")
 }
 
 //监听端口(kcp)
@@ -33,16 +36,16 @@ func serviceListenAccpet(port int) int {
 			if nil != err || nil == conn {
 				continue
 			}
-			KcpConnPtr.MutexConns.Lock()
-			if len(KcpConnPtr.ConnectList) >= KcpConnPtr.MaxConnect {
+			kcpConnsPtr.MutexConns.Lock()
+			if len(kcpConnsPtr.ConnectList) >= kcpConnsPtr.MaxConnect {
 				//todo  返回客户端 服务器承载已满
 				continue
 			}
 			//从conn读取玩家的playerGuid
-			if nil == KcpConnPtr.ConnectList[conn] {
-				KcpConnPtr.ConnectList[conn] = model.InitPlayerConn(conn)
+			if nil == kcpConnsPtr.ConnectList[conn] {
+				kcpConnsPtr.ConnectList[conn] = model.InitPlayerConn(conn)
 			}
-			KcpConnPtr.MutexConns.Unlock()
+			kcpConnsPtr.MutexConns.Unlock()
 			// 开启协程处理客户端请求，防止一条请求未处理完时，另一条请求阻塞
 			go handleKcpMux(conn)
 		}
@@ -63,10 +66,9 @@ func handleKcpMux(conn *kcp.UDPSession) {
 			break
 		}
 		protoNum := common.BytesToInt(buffer[:4])
-
-		KcpConnPtr.ChanMsgQueue <- &model.MsgQueue{
+		kcpConnsPtr.ChanMsgReviceQueue <- &model.MsgQueue{
 			MsgNumber: protoNum,
-			Session:   KcpConnPtr.ConnectList[conn],
+			Session:   kcpConnsPtr.ConnectList[conn],
 			MsgData:   buffer[4:n],
 		}
 	}
@@ -75,13 +77,26 @@ func handleKcpMux(conn *kcp.UDPSession) {
 func Run() {
 	for {
 		select {
-		case msg := <-KcpConnPtr.ChanMsgQueue:
+		case msg := <-kcpConnsPtr.ChanMsgReviceQueue:
 			//需要增加过滤器
 			router.CallFilterHandler(msg.Session, msg.MsgData)
 			router.CallExternalRouterHandler(msg.MsgNumber, msg.Session, msg.MsgData)
 			break
+		case msg := <- kcpConnsPtr.ChanMshSendQueue:
+			msg.Session.WriteMsg(*msg)
+			break
 		default:
 			break
 		}
+	}
+}
+
+func SendMsg(connect *model.PlayerConn,protoData proto.Message){
+	protoNum := common.ProtocalNumber(common.GetProtoName(protoData))
+	data, _ := proto.Marshal(protoData)
+	kcpConnsPtr.ChanMshSendQueue <- &model.MsgQueue{
+		MsgNumber: protoNum,
+		Session:   connect,
+		MsgData:   data,
 	}
 }

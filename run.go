@@ -11,40 +11,34 @@ import (
 
 //start server
 func main() {
-	/*cpuProfile, _ := os.Create("cpu_profile_"+uuid.Must(uuid.NewV4()).String())
-	pprof.StartCPUProfile(cpuProfile)*/
 	//服务器名称
-	serverName := flag.String("name", "auth", "服务名称")
+	serverType 		:= flag.String("type", "auth", "服务类型")
 	//内网地址
-	in_host := flag.String("in_host", "127.0.0.1", "对内监听地址")
+	in_host 		:= flag.String("in_host", "127.0.0.1", "对内监听地址")
 	//外网地址
-	outer_host := flag.String("outer_host", "", "对外监听地址")
-	//外网监听http端口
-	http_port := flag.String("http_port", "8080", "http监听端口")
-	//服务分组Id（自己本身的服务）
-	server_group := flag.String("server_group", "1", "服务分组")
+	outer_host 		:= flag.String("outer_host", "", "对外监听地址")
+	//http端口
+	http_port 		:= flag.String("http_port", "8080", "http监听端口")
+	//服务分组Id [center代表服务列表中中心处理器]
+	server_group 	:= flag.String("server_group", "center", "服务分组")
 	//需要连接的扩展服务
-	connect_service := flag.String("connect_service", "", "需要连接的服务")
+	connect_service_list := flag.String("connect_service_list", "", "需要连接的服务类型")
 	//解析数据
 	flag.Parse()
 	//初始化服务配置
-	config.InitServiceConf(*serverName, *server_group, *connect_service, *in_host, *outer_host)
-	//配置
-	core.NewServerCore()
-	//初始化定时器
-	/*job.Crontab.AddCronTask(1, 200, func() {
-		pprof.StopCPUProfile()
-	})*/
+	config.InitStartup(*serverType,*server_group, *connect_service_list, *in_host, *outer_host)
 	//初始化调用对应的服务
-	switch *serverName {
+	switch *serverType {
 	case "auth":
 		auth.Initialize(*http_port, *server_group)
 		return
 	case "game":
-		game.Initialize()
+		core.Run(game.ModelMrg)
 		return
 	case "client":
 		client.Initialize()
+		return
+	case "close":
 		return
 	}
 }

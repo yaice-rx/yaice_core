@@ -1,52 +1,87 @@
 package core
 
 import (
+	"YaIce/core/agent"
+	"YaIce/core/cluster"
 	"YaIce/core/config"
-	"YaIce/core/dataBase"
-	"YaIce/core/handler"
+	"YaIce/core/database"
 	"YaIce/core/job"
-	"YaIce/core/kcp_service"
+	"YaIce/core/network"
 	"YaIce/core/router"
-	"github.com/sirupsen/logrus"
-	"sync"
 )
 
-type ServerCore struct {
-	MutexConns sync.Mutex
-	TickTasks  map[string]func() //tick函数列表
-	DB         *dataBase.DBModel //数据库
+var ConnCount int = 5000
+
+type ModuleCore interface {
+	//注册路由
+	RegisterRouter()
+	//监听端口或者连接
+	ListenOrConnect()
+	//初始化配置
+	StartHook()
 }
 
-var ServerCoreHandler *ServerCore
+func Run(m ModuleCore){
+	//初始化程序
+	onInit()
+	//连接网络
+	m.ListenOrConnect()
+	//注册路由
+	m.RegisterRouter()
+	//启动程序所需配置
+	m.StartHook()
+	//执行程序
+	onExec()
+}
 
-func NewServerCore() {
-	ServerCoreHandler := new(ServerCore)
-	//初始化公共配置数据
-	config.InitCommonConfig()
+func onInit() {
+	//初始化网络连接信息
+	network.Init(ConnCount)
+	//初始化Etcd和网络端口连接数据
+	config.InitImplEtcd()
 	//初始化路由
-	router.InitRouterList()
+	router.Init()
+	//初始化Etcd
+	agent.Init()
+	//初始化集群
+	cluster.Init()
 	//初始化数据库连接
-	ServerCoreHandler.DB = dataBase.Connect()
-	//连接Etcd
-	err := handler.EtcdConnect(config.ConfServiceHandler.GetGroupId(), config.ConfServiceHandler.GetName(), config.CommonConfigHandler.EtcdConnectString)
-	if nil != err {
-		logrus.Debug(err.Error())
-		return
-	}
-	//初始化grpc服务
-	handler.InitGPRCService()
-	//开启连接内网服务
-	handler.ConnectGRPC()
-	//监听内网
-	port := handler.GRPCListen()
-	if port == -1 {
-		panic("All ports are occupied")
-		return
-	}
-	//设置内网端口
-	config.ConfServiceHandler.SetInPort(port)
+	database.Connect()
+}
+
+func onExec(){
+	//连接集群
+	connClusterServer()
+	//注册到etcd服务上
+	agent.RegisterData()
 	//初始化定时器
 	job.Start()
-	//初始化网络连接信息
-	kcp_service.InitNetWork(5000)
+	//启动服务
+	network.Run()
 }
+
+//grpc连接
+func connClusterServer(){
+	for _,value := range agent.GetNodeData(""){
+		//判断当前那些服务是自己需要连接的
+		for _,self := range config.StartupConfigMrg.ConnServerNameList {
+			if self == value.TypeName {
+				//如果是中心服务 或者 属于自己分组内部服务 都是可以连接的
+				if  value.GroupName == "center" || value.GroupName == config.StartupConfigMrg.GroupName {
+					cluster.Handler.Connect(config.ConfDevMrg.ClusterName+"/"+value.GroupName+"/"+value.TypeName+"/"+value.Pid,value.InHost+":"+value.InPort);
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+

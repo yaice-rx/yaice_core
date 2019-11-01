@@ -1,11 +1,8 @@
 package mrg
 
 import (
-	"YaIce/core/handler"
 	"YaIce/core/model"
 	"YaIce/protobuf/external"
-	"YaIce/protobuf/internal_proto"
-	"context"
 	"github.com/golang/protobuf/proto"
 	"github.com/sirupsen/logrus"
 	"time"
@@ -22,14 +19,4 @@ func RegisterHandler(connect *model.PlayerConn, content []byte) {
 	if err != nil {
 		logrus.Println("Unmarshal data error: ", err)
 	}
-	logrus.Println(handler.ServerConnMap["auth"][data.Pid])
-	//向auth服务器发起请求
-	Client := internal_proto.NewServiceConnectClient(handler.ServerConnMap["auth"][data.Pid])
-
-	_, err = Client.RegisterServiceRequest(context.Background(), &internal_proto.C2S_Register{})
-	if nil != err {
-		logrus.Println("logrus error :", err.Error())
-	}
-
-	logrus.Println("==========register============", data.SessionId, data.Pid)
 }

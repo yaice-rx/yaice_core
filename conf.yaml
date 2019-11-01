@@ -1,4 +1,5 @@
-EtcdConnectString: 127.0.0.1:2379
-EtcdNameSpace: YaIce_Service
-PortStart: 20001
-PortEnd: 20100
+EtcdConnectString: 127.0.0.1:2379 #etcd连接地址 如果是连接多个地址，请用#分割
+EtcdNameSpace: YaIce_Service  #标识
+NetworkPortStart: 20001 #网络端口开始位置
+NetworkPortEnd: 20100   #网络端口结束位置
+ClusterName: YaIce  #用于Etcd存储key

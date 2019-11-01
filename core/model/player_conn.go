@@ -38,12 +38,10 @@ func (conn *PlayerConn)GetPlayerGuid()string{
 }
 
 //发送数据
-func (conn *PlayerConn)WriteMsg(protoMsg proto.Message)  {
-	protoNumber := common.ProtocalNumber(common.GetProtoName(protoMsg))
-	data,_ := proto.Marshal(protoMsg)
+func (conn *PlayerConn)WriteMsg(data MsgQueue)  {
 	if conn != nil {
-		content := common.IntToBytes(protoNumber)
-		content = append(content,data...)
+		content := common.IntToBytes(data.MsgNumber)
+		content = append(content,data.MsgData...)
 		_,err := conn.session.Write(content)
 		if err != nil{
 			fmt.Println("send msg error ", err.Error())

@@ -16,7 +16,7 @@ type RouterList struct {
 
 var routerListPtr *RouterList
 
-func InitRouterList() {
+func Init() {
 	routerListPtr = &RouterList{
 		outerFuncMap: make(map[int32]func(conn *model.PlayerConn, content []byte)),
 	}
