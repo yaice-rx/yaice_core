@@ -231,7 +231,7 @@ At [Branch][branch], we use kubernetes heavily as our core microservice platform
 
 ## Hosted Graphite
 
-- *Application*: Service discovery, locking, ephemeral application data
+- *Application*: Inside discovery, locking, ephemeral application data
 - *Launched*: January 2017
 - *Cluster Size*: 2 clusters of 7 members
 - *Order of Data Size*: Megabytes

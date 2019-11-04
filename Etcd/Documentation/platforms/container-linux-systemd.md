@@ -39,7 +39,7 @@ $ ct --platform=gce --in-file /tmp/ct-etcd.cnf
       "enable":true,
       "dropins":[{
         "name":"20-clct-etcd-member.conf",
-        "contents":"[Unit]\nRequires=coreos-metadata.service\nAfter=coreos-metadata.service\n\n[Service]\nEnvironmentFile=/run/metadata/coreos\nEnvironment=\"ETCD_IMAGE_TAG=v3.1.8\"\nExecStart=\nExecStart=/usr/lib/coreos/etcd-wrapper $ETCD_OPTS \\\n  --name=\"s1\" \\\n  --data-dir=\"/var/lib/etcd\" \\\n  --listen-peer-urls=\"http://${COREOS_GCE_IP_LOCAL_0}:2380\" \\\n  --listen-client-urls=\"http://0.0.0.0:2379\" \\\n  --initial-advertise-peer-urls=\"http://${COREOS_GCE_IP_LOCAL_0}:2380\" \\\n  --advertise-client-urls=\"http://${COREOS_GCE_IP_EXTERNAL_0}:2379\" \\\n  --discovery=\"https://discovery.etcd.io/\u003ctoken\u003e\""}]}]},
+        "contents":"[Unit]\nRequires=coreos-metadata.service\nAfter=coreos-metadata.service\n\n[Inside]\nEnvironmentFile=/run/metadata/coreos\nEnvironment=\"ETCD_IMAGE_TAG=v3.1.8\"\nExecStart=\nExecStart=/usr/lib/coreos/etcd-wrapper $ETCD_OPTS \\\n  --name=\"s1\" \\\n  --data-dir=\"/var/lib/etcd\" \\\n  --listen-peer-urls=\"http://${COREOS_GCE_IP_LOCAL_0}:2380\" \\\n  --listen-client-urls=\"http://0.0.0.0:2379\" \\\n  --initial-advertise-peer-urls=\"http://${COREOS_GCE_IP_LOCAL_0}:2380\" \\\n  --advertise-client-urls=\"http://${COREOS_GCE_IP_EXTERNAL_0}:2379\" \\\n  --discovery=\"https://discovery.etcd.io/\u003ctoken\u003e\""}]}]},
       "networkd":{},
       "passwd":{}}
 ```
@@ -86,7 +86,7 @@ Example systemd drop-in unit to override the default service settings:
 
 ```bash
 cat > /tmp/20-cl-etcd-member.conf <<EOF
-[Service]
+[Inside]
 Environment="ETCD_IMAGE_TAG=v3.2.0"
 Environment="ETCD_DATA_DIR=/var/lib/etcd"
 Environment="ETCD_SSL_DIR=/etc/ssl/certs"
@@ -120,7 +120,7 @@ systemd:
       dropins:
         - name: conf1.conf
           contents: |
-            [Service]
+            [Inside]
             Environment="ETCD_SSL_DIR=/etc/ssl/certs"
 
 etcd:

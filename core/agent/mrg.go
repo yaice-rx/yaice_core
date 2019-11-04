@@ -1,11 +1,12 @@
 package agent
 
 import (
-	"YaIce/core/config"
 	"YaIce/core/cluster"
+	"YaIce/core/config"
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	"github.com/sirupsen/logrus"
@@ -23,28 +24,27 @@ type AgentModel struct {
 	sync.RWMutex
 	context.Context
 	Client        *clientv3.Client
-	Conns     		[]string                     	//需要连接服务列表
-	Key          	string                     		//服务在Etcd中的key
-	LeaseRes      	*clientv3.LeaseGrantResponse 	//自己配置租约
-	KeepAliveChan 	<-chan *clientv3.LeaseKeepAliveResponse
+	Conns         []string                     //需要连接服务列表
+	Key           string                       //服务在Etcd中的key
+	LeaseRes      *clientv3.LeaseGrantResponse //自己配置租约
+	KeepAliveChan <-chan *clientv3.LeaseKeepAliveResponse
 }
 
-
-func Init()*AgentModel {
-	conns := strings.Split(config.ConfDevMrg.EtcdConnectString,"#")
-	key := config.ConfDevMrg.ClusterName+"/"+config.StartupConfigMrg.GroupName+"/"+config.StartupConfigMrg.TypeName+"/"+config.StartupConfigMrg.Pid
-	mrg = &AgentModel{Conns: conns,Key:key,}
+func Init() *AgentModel {
+	conns := strings.Split(config.ConfDevMrg.EtcdConnectString, "#")
+	key := config.ConfDevMrg.ClusterName + "/" + config.StartupConfigMrg.GroupName + "/" + config.StartupConfigMrg.TypeName + "/" + config.StartupConfigMrg.Pid
+	mrg = &AgentModel{Conns: conns, Key: key}
 	if nil != Connect() {
 		return nil
 	}
-	return  mrg
+	return mrg
 
 }
 
 //连接etcd服务
 func Connect() error {
 	//连接etcd服务
-	etcdCli ,err := clientv3.New(clientv3.Config{Endpoints: mrg.Conns, DialTimeout: 5 * time.Second})
+	etcdCli, err := clientv3.New(clientv3.Config{Endpoints: mrg.Conns, DialTimeout: 5 * time.Second})
 	if nil != err {
 		logrus.Debug("Etcd 服务，启动错误，Error Msg：", err.Error())
 		return err
@@ -58,14 +58,14 @@ func Connect() error {
 
 func RegisterData() error {
 	if nil == mrg {
-		zap.Error( errors.New("agent not initiated"))
+		zap.Error(errors.New("agent not initiated"))
 		return errors.New("agent not initiated")
 	}
 	mrg.Lock()
-	defer  mrg.Unlock()
+	defer mrg.Unlock()
 	data, jsonErr := json.Marshal(config.StartupConfigMrg)
 	if nil != jsonErr {
-		zap.Error( errors.New("json Serialization failed"))
+		zap.Error(errors.New("json Serialization failed"))
 		return errors.New("json Serialization failed")
 	}
 	//保持连接的时间
@@ -86,7 +86,7 @@ func RegisterData() error {
 //获取节点数据
 func GetNodeData(key string) []config.StartupConfigModel {
 	serviceConfList := []config.StartupConfigModel{}
-	key = config.ConfDevMrg.ClusterName+"/"+key
+	key = config.ConfDevMrg.ClusterName + "/" + key
 	resp, err := mrg.Client.Get(context.TODO(), key, clientv3.WithPrefix())
 	if err != nil {
 		logrus.Error("Etcd 获取内容失败")
@@ -111,9 +111,8 @@ func DelNode(key string) {
 	logrus.Println("Delete node", response.Deleted)
 }
 
-
 //读取节点数据
-func (this *AgentModel)readNodeData(resp *clientv3.GetResponse) map[string]string {
+func (this *AgentModel) readNodeData(resp *clientv3.GetResponse) map[string]string {
 	data := make(map[string]string, 0)
 	if resp == nil || resp.Kvs == nil {
 		return data
@@ -128,7 +127,7 @@ func (this *AgentModel)readNodeData(resp *clientv3.GetResponse) map[string]strin
 }
 
 //授权租期，自动续约
-func (this *AgentModel)grantSetLeaseKeepAlive(ttl int64) error {
+func (this *AgentModel) grantSetLeaseKeepAlive(ttl int64) error {
 	response, err := this.Client.Lease.Grant(context.TODO(), ttl)
 	if nil != err {
 		return err
@@ -143,7 +142,7 @@ func (this *AgentModel)grantSetLeaseKeepAlive(ttl int64) error {
 }
 
 //监测是否续约
-func (this *AgentModel)listenLease() {
+func (this *AgentModel) listenLease() {
 	for {
 		select {
 		case res := <-this.KeepAliveChan:
@@ -157,31 +156,32 @@ func (this *AgentModel)listenLease() {
 }
 
 //监听节点数据变化
-func (this *AgentModel)watchNodes() {
+func (this *AgentModel) watchNodes() {
 	watcher := clientv3.NewWatcher(this.Client)
 	for {
 		rch := watcher.Watch(context.TODO(), config.ConfDevMrg.ClusterName, clientv3.WithPrefix())
 		for wresp := range rch {
 			for _, event := range wresp.Events {
 				key := string(event.Kv.Key)
+				fmt.Println("etcd 接收数据：", string(event.Kv.Value))
 				data := config.StartupConfigModel{}
 				json.Unmarshal(event.Kv.Value, &data)
 				switch event.Type {
 				case mvccpb.PUT:
 					//判断新服务，是否是自己所需要的
-					for _,conn := range config.StartupConfigMrg.ConnServerNameList {
+					for _, conn := range config.StartupConfigMrg.ConnServerNameList {
 						if data.TypeName == conn {
 							//排除属于自己的额
-							if this.Key ==  key{
+							if this.Key == key {
 								continue
 							}
 							//服务是否已经在连接池中
-							if nil != cluster.Handler.ConnMap[key]{
+							if nil != cluster.Handler.ConnMap[key] {
 								continue
 							}
 							if data.GroupName == "center" || data.GroupName == config.StartupConfigMrg.GroupName {
 								//连接该服务
-								cluster.Handler.Connect(key,data.InHost+":"+data.InPort)
+								cluster.Handler.Connect(key, data.InHost+":"+data.InPort)
 							}
 						}
 					}

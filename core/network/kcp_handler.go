@@ -28,8 +28,10 @@ func Listen() error {
 func serviceListenAccpet(port int) int {
 	kcpListen, err := kcp.ListenWithOptions(":"+strconv.Itoa(port), nil, 10, 3)
 	if nil != err {
+		kcpConnsPtr = nil
 		return -1
 	}
+	kcpConnsPtr.KcpListen = kcpListen
 	go func() {
 		for {
 			conn, err := kcpListen.AcceptKCP()
@@ -75,23 +77,27 @@ func handleKcpMux(conn *kcp.UDPSession) {
 }
 
 func Run() {
-	for {
-		select {
-		case msg := <-kcpConnsPtr.ChanMsgReviceQueue:
-			//需要增加过滤器
-			router.CallFilterHandler(msg.Session, msg.MsgData)
-			router.CallExternalRouterHandler(msg.MsgNumber, msg.Session, msg.MsgData)
-			break
-		case msg := <- kcpConnsPtr.ChanMshSendQueue:
-			msg.Session.WriteMsg(*msg)
-			break
-		default:
-			break
+	if nil == kcpConnsPtr.KcpListen {
+		return
+	} else {
+		for {
+			select {
+			case msg := <-kcpConnsPtr.ChanMsgReviceQueue:
+				//需要增加过滤器
+				router.CallFilterHandler(msg.Session, msg.MsgData)
+				router.CallExternalRouterHandler(msg.MsgNumber, msg.Session, msg.MsgData)
+				break
+			case msg := <-kcpConnsPtr.ChanMshSendQueue:
+				msg.Session.WriteMsg(*msg)
+				break
+			default:
+				break
+			}
 		}
 	}
 }
 
-func SendMsg(connect *model.PlayerConn,protoData proto.Message){
+func SendMsg(connect *model.PlayerConn, protoData proto.Message) {
 	protoNum := common.ProtocalNumber(common.GetProtoName(protoData))
 	data, _ := proto.Marshal(protoData)
 	kcpConnsPtr.ChanMshSendQueue <- &model.MsgQueue{

@@ -2,7 +2,7 @@
 title: Versioning
 ---
 
-## Service versioning
+## Inside versioning
 
 etcd uses [semantic versioning](http://semver.org)
 New minor versions may add additional features to the API.

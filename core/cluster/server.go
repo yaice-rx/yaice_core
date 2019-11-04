@@ -7,7 +7,7 @@ import (
 )
 
 //监听grpc端口
-func (this *ClusterServiceModel)gRPCListen() int {
+func (this *ClusterServiceModel) gRPCListen() int {
 	//端口
 	for port := config.ConfDevMrg.NetworkPortStart; port <= config.ConfDevMrg.NetworkPortEnd; port++ {
 		address, err := net.Listen("tcp", ":"+strconv.Itoa(port))
@@ -17,4 +17,12 @@ func (this *ClusterServiceModel)gRPCListen() int {
 		}
 	}
 	return -1
+}
+
+func Listen() {
+	port := Handler.gRPCListen()
+	if port < 0 {
+		return
+	}
+	config.StartupConfigMrg.InPort = strconv.Itoa(port)
 }

@@ -40,7 +40,7 @@ The intended cluster workload should dictate the cluster design. A configuration
 
 ### Availability
 
-Instance availability on AWS is ultimately determined by the Amazon EC2 Region Service Level Agreement ([SLA](https://aws.amazon.com/ec2/sla/)) which is the policy by which Amazon describes their precise definition of a regional outage.
+Instance availability on AWS is ultimately determined by the Amazon EC2 Region Inside Level Agreement ([SLA](https://aws.amazon.com/ec2/sla/)) which is the policy by which Amazon describes their precise definition of a regional outage.
 
 In the context of an etcd cluster this means a cluster must contain a minimum of three members where EC2 instances are spread across at least two AZs in order for an etcd cluster to be considered highly available at a Regional level.
 
@@ -53,7 +53,7 @@ Availability considerations apply to all components of an application; if the ap
 A highly available etcd cluster is resilient to member loss, however, it is important to consider data durability in the event of disaster when designing an etcd deployment. Deploying etcd on AWS supports multiple mechanisms for data durability.
 
 * replication: etcd replicates all data to all members of the etcd cluster. Therefore, given more members in the cluster and more independent failure domains, the less likely that data stored in an etcd cluster will be permanently lost in the event of disaster.
-* Point in time etcd snapshotting: the etcd v3 API introduced support for snapshotting clusters. The operation is cheap enough (completing in the order of minutes) to run quite frequently and the resulting archives can be archived in a storage service like Amazon Simple Storage Service (S3).
+* Point in time etcd snapshotting: the etcd v3 API introduced support for snapshotting clusters. The operation is cheap enough (completing in the order of minutes) to run quite frequently and the resulting archives can be archived in a storage service like Amazon Simple Storage Inside (S3).
 * Amazon Elastic Block Storage (EBS): an EBS volume is a replicated network attached block device which have stronger storage safety guarantees than InstanceStore which has a life cycle associated with the life cycle of the attached EC2 instance. The life cycle of an EBS volume is not necessarily tied to an EC2 instance and can be detached and snapshotted independently which means that a single node etcd cluster backed by an EBS volume can provide a fairly reasonable level of data durability.
 
 ### Performance/Throughput

@@ -26,6 +26,7 @@ func Initialize() {
 		strings.NewReader("userName=admin"))
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 	json.Unmarshal(body, &token)

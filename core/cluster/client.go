@@ -1,40 +1,33 @@
 package cluster
 
 import (
-	"YaIce/core/config"
 	"github.com/grpc-ecosystem/go-grpc-middleware/retry"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"strconv"
 	"sync"
 )
 
 type ClusterServiceModel struct {
 	sync.RWMutex
-	ConnMap map[string]*grpc.ClientConn
+	ConnMap    map[string]*grpc.ClientConn
 	GRpcServer *grpc.Server
 }
 
 var Handler *ClusterServiceModel
 
-func Init()*ClusterServiceModel {
-	if  Handler != nil {
-		return  Handler
+func Init() {
+	if Handler != nil {
+		return
 	}
 	Handler = &ClusterServiceModel{
-		ConnMap:make(map[string]*grpc.ClientConn),
-		GRpcServer : grpc.NewServer(),
+		ConnMap:    make(map[string]*grpc.ClientConn),
+		GRpcServer: grpc.NewServer(),
 	}
-	port := Handler.gRPCListen()
-	if port < 0 {
-		return nil
-	}
-	config.StartupConfigMrg.InPort = strconv.Itoa(port)
-	return Handler
 }
 
 //启动连接GRPCService服务
-func (this *ClusterServiceModel)Connect(key string,connect string) {
+func (this *ClusterServiceModel) Connect(key string, connect string) {
 	conn, _ := grpc.Dial(connect,
 		grpc.WithInsecure(),
 		grpc.WithUnaryInterceptor(
@@ -44,12 +37,13 @@ func (this *ClusterServiceModel)Connect(key string,connect string) {
 				//重连次数
 				grpc_retry.WithMax(3))),
 	)
-	if nil != conn{
+	if nil != conn {
+		logrus.Println("grpc 连接数据：", key, conn)
 		this.ConnMap[key] = conn
 	}
 }
 
-
-func (this *ClusterServiceModel)DeleteGRPCConn( key string) {
-	delete(this.ConnMap,key)
+func (this *ClusterServiceModel) DeleteGRPCConn(key string) {
+	logrus.Println("移除grpc连接信息：", key)
+	delete(this.ConnMap, key)
 }

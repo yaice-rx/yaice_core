@@ -7,11 +7,11 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-type Service struct {
+type Inside struct {
 }
 
 //处理客户端发送过来的数据
-func (s *Service) RegisterServiceRequest(r *internal_proto.C2S_Register,
+func (s *Inside) RegisterServiceRequest(r *internal_proto.C2S_Register,
 	stream internal_proto.ServiceConnect_RegisterServiceRequestServer) error {
 	//接收headers数据
 	_, ok := metadata.FromIncomingContext(stream.Context())
@@ -26,7 +26,7 @@ func (s *Service) RegisterServiceRequest(r *internal_proto.C2S_Register,
 	return nil
 }
 
-func (s *Service) SyncPlayerRequest(r *internal_proto.C2S_UserLogin,
+func (s *Inside) SyncPlayerRequest(r *internal_proto.C2S_UserLogin,
 	stream internal_proto.ServiceConnect_SyncPlayerRequestServer) error {
 
 	return nil
