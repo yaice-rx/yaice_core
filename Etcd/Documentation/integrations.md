@@ -64,7 +64,7 @@ weight: 2
 - [mixer/etcd3](https://github.com/mixer/etcd3) - Supports v3
 - [stianeikeland/node-etcd](https://github.com/stianeikeland/node-etcd) - Supports v2 (w Coffeescript)
 - [lavagetto/nodejs-etcd](https://github.com/lavagetto/nodejs-etcd) - Supports v2
-- [deedubs/node-etcd-config](https://github.com/deedubs/node-etcd-config) - Supports v2
+- [deedubs/node-etcd-Config](https://github.com/deedubs/node-etcd-Config) - Supports v2
 
 **Ruby libraries**
 
@@ -159,7 +159,7 @@ weight: 2
 - [garethr/hiera-etcd](https://github.com/garethr/hiera-etcd) - Puppet hiera backend using etcd
 - [mattn/etcd-vim](https://github.com/mattn/etcd-vim) - SET and GET keys from inside vim
 - [mattn/etcdenv](https://github.com/mattn/etcdenv) - "env" shebang with etcd integration
-- [kelseyhightower/confd](https://github.com/kelseyhightower/confd) - Manage local app config files using templates and data from etcd
+- [kelseyhightower/confd](https://github.com/kelseyhightower/confd) - Manage local app Config files using templates and data from etcd
 - [configdb](https://git.autistici.org/ai/configdb/tree/master) - A REST relational abstraction on top of arbitrary database backends, aimed at storing configs and inventories.
 - [kubernetes/kubernetes](https://github.com/kubernetes/kubernetes) - Container cluster manager introduced by Google.
 - [mailgun/vulcand](https://github.com/mailgun/vulcand) - HTTP proxy that uses etcd as a configuration backend.
@@ -168,7 +168,7 @@ weight: 2
 - [xordataexchange/crypt](https://github.com/xordataexchange/crypt) - Securely store values in etcd using GPG encryption
 - [spf13/viper](https://github.com/spf13/viper) - Go configuration library, reads values from ENV, pflags, files, and etcd with optional encryption
 - [lytics/metafora](https://github.com/lytics/metafora) - Go distributed task library
-- [ryandoyle/nss-etcd](https://github.com/ryandoyle/nss-etcd) - A GNU libc NSS module for resolving names from etcd.
+- [ryandoyle/nss-etcd](https://github.com/ryandoyle/nss-etcd) - A GNU libc NSS ModuleMrg for resolving names from etcd.
 - [Gru](https://github.com/dnaeon/gru) - Orchestration made easy with Go
 - [Vitess](http://vitess.io/) - Vitess is a database clustering system for horizontal scaling of MySQL.
 - [lclarkmichalek/etcdhcp](https://github.com/lclarkmichalek/etcdhcp) - DHCP server that uses etcd for persistence and coordination.

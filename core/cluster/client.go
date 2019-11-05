@@ -2,7 +2,6 @@ package cluster
 
 import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/retry"
-	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"sync"
@@ -38,12 +37,10 @@ func (this *ClusterServiceModel) Connect(key string, connect string) {
 				grpc_retry.WithMax(3))),
 	)
 	if nil != conn {
-		logrus.Println("grpc 连接数据：", key, conn)
 		this.ConnMap[key] = conn
 	}
 }
 
 func (this *ClusterServiceModel) DeleteGRPCConn(key string) {
-	logrus.Println("移除grpc连接信息：", key)
 	delete(this.ConnMap, key)
 }

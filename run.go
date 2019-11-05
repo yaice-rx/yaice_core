@@ -26,7 +26,7 @@ func main() {
 	//解析数据
 	flag.Parse()
 	//初始化服务配置
-	config.InitStartup(*serverType, *server_group, *connect_service_list, *in_host, *outer_host, *http_port)
+	config.Init(*serverType, *server_group, *connect_service_list, *in_host, *outer_host, *http_port)
 	//初始化调用对应的服务
 	switch *serverType {
 	case "auth":

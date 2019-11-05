@@ -2,6 +2,7 @@ package cluster
 
 import (
 	"YaIce/core/config"
+	"YaIce/core/yaml"
 	"net"
 	"strconv"
 )
@@ -9,7 +10,7 @@ import (
 //监听grpc端口
 func (this *ClusterServiceModel) gRPCListen() int {
 	//端口
-	for port := config.ConfDevMrg.NetworkPortStart; port <= config.ConfDevMrg.NetworkPortEnd; port++ {
+	for port := yaml.YamlDevMrg.NetworkPortStart; port <= yaml.YamlDevMrg.NetworkPortEnd; port++ {
 		address, err := net.Listen("tcp", ":"+strconv.Itoa(port))
 		if err == nil {
 			go this.GRpcServer.Serve(address)
@@ -24,5 +25,5 @@ func Listen() {
 	if port < 0 {
 		return
 	}
-	config.StartupConfigMrg.InPort = strconv.Itoa(port)
+	config.Config.InPort = strconv.Itoa(port)
 }

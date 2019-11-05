@@ -65,12 +65,12 @@ Now, **`etcd --logger=zap`** is the default.
 +etcd --logger=zap --log-outputs=stderr
 ```
 
-#### Deprecated `[CLIENT-URL]/config/local/log`
+#### Deprecated `[CLIENT-URL]/Config/local/log`
 
-**`/config/local/log` endpoint is being deprecated in v3.5, as is `etcd --log-package-levels` flag.**
+**`/Config/local/log` endpoint is being deprecated in v3.5, as is `etcd --log-package-levels` flag.**
 
 ```diff
--$ curl http://127.0.0.1:2379/config/local/log -XPUT -d '{"Level":"DEBUG"}'
+-$ curl http://127.0.0.1:2379/Config/local/log -XPUT -d '{"Level":"DEBUG"}'
 -# debug logging enabled
 ```
 

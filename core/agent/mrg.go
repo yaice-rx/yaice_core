@@ -3,6 +3,7 @@ package agent
 import (
 	"YaIce/core/cluster"
 	"YaIce/core/config"
+	"YaIce/core/yaml"
 	"context"
 	"encoding/json"
 	"errors"
@@ -30,15 +31,16 @@ type AgentModel struct {
 	KeepAliveChan <-chan *clientv3.LeaseKeepAliveResponse
 }
 
-func Init() *AgentModel {
-	conns := strings.Split(config.ConfDevMrg.EtcdConnectString, "#")
-	key := config.ConfDevMrg.ClusterName + "/" + config.StartupConfigMrg.GroupName + "/" + config.StartupConfigMrg.TypeName + "/" + config.StartupConfigMrg.Pid
+func Init() {
+	//连接的服务
+	conns := strings.Split(yaml.YamlDevMrg.EtcdConnectString, "#")
+	//唯一key值
+	key := yaml.YamlDevMrg.ClusterName + "/" + config.Config.GroupName + "/" + config.Config.TypeName + "/" + config.Config.Pid
+	//初始化代理、连接
 	mrg = &AgentModel{Conns: conns, Key: key}
 	if nil != Connect() {
-		return nil
+		mrg = nil
 	}
-	return mrg
-
 }
 
 //连接etcd服务
@@ -63,7 +65,7 @@ func RegisterData() error {
 	}
 	mrg.Lock()
 	defer mrg.Unlock()
-	data, jsonErr := json.Marshal(config.StartupConfigMrg)
+	data, jsonErr := json.Marshal(config.Config)
 	if nil != jsonErr {
 		zap.Error(errors.New("json Serialization failed"))
 		return errors.New("json Serialization failed")
@@ -84,16 +86,16 @@ func RegisterData() error {
 }
 
 //获取节点数据
-func GetNodeData(key string) []config.StartupConfigModel {
-	serviceConfList := []config.StartupConfigModel{}
-	key = config.ConfDevMrg.ClusterName + "/" + key
+func GetNodeData(key string) []config.ModuleConfig {
+	serviceConfList := []config.ModuleConfig{}
+	key = yaml.YamlDevMrg.ClusterName + "/" + key
 	resp, err := mrg.Client.Get(context.TODO(), key, clientv3.WithPrefix())
 	if err != nil {
 		logrus.Error("Etcd 获取内容失败")
 		return serviceConfList
 	}
 	for _, value := range mrg.readNodeData(resp) {
-		var _conf config.StartupConfigModel
+		var _conf config.ModuleConfig
 		json.Unmarshal([]byte(value), &_conf)
 		serviceConfList = append(serviceConfList, _conf)
 	}
@@ -159,17 +161,17 @@ func (this *AgentModel) listenLease() {
 func (this *AgentModel) watchNodes() {
 	watcher := clientv3.NewWatcher(this.Client)
 	for {
-		rch := watcher.Watch(context.TODO(), config.ConfDevMrg.ClusterName, clientv3.WithPrefix())
+		rch := watcher.Watch(context.TODO(), yaml.YamlDevMrg.ClusterName, clientv3.WithPrefix())
 		for wresp := range rch {
 			for _, event := range wresp.Events {
 				key := string(event.Kv.Key)
 				fmt.Println("etcd 接收数据：", string(event.Kv.Value))
-				data := config.StartupConfigModel{}
+				data := config.ModuleConfig{}
 				json.Unmarshal(event.Kv.Value, &data)
 				switch event.Type {
 				case mvccpb.PUT:
 					//判断新服务，是否是自己所需要的
-					for _, conn := range config.StartupConfigMrg.ConnServerNameList {
+					for _, conn := range config.Config.ConnServerNameList {
 						if data.TypeName == conn {
 							//排除属于自己的额
 							if this.Key == key {
@@ -179,7 +181,7 @@ func (this *AgentModel) watchNodes() {
 							if nil != cluster.Handler.ConnMap[key] {
 								continue
 							}
-							if data.GroupName == "center" || data.GroupName == config.StartupConfigMrg.GroupName {
+							if data.GroupName == "center" || data.GroupName == config.Config.GroupName {
 								//连接该服务
 								cluster.Handler.Connect(key, data.InHost+":"+data.InPort)
 							}

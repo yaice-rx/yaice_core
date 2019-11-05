@@ -6,8 +6,7 @@ import (
 	"strings"
 )
 
-//服务启动配置
-type StartupConfigModel struct {
+type ModuleConfig struct {
 	Pid                string   //服务进程编号
 	TypeName           string   //服务类型
 	GroupName          string   //服务组编号
@@ -20,11 +19,10 @@ type StartupConfigModel struct {
 	HttpPort           string
 }
 
-var StartupConfigMrg *StartupConfigModel
+var Config *ModuleConfig
 
-//初始化启动配置
-func InitStartup(_type string, groupName string, connStr string, inHost string, outHost string, port string) {
-	StartupConfigMrg = &StartupConfigModel{
+func Init(_type string, groupName string, connStr string, inHost string, outHost string, port string) {
+	Config = &ModuleConfig{
 		Pid:                strconv.Itoa(os.Getpid()),
 		TypeName:           _type,
 		GroupName:          groupName,

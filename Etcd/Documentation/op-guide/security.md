@@ -418,7 +418,7 @@ Add the following section to openssl.cnf:
 When creating the cert be sure to reference it in the `-extensions` flag:
 
 ```
-$ openssl ca -config openssl.cnf -policy policy_anything -extensions ssl_client -out certs/machine.crt -infiles machine.csr
+$ openssl ca -Config openssl.cnf -policy policy_anything -extensions ssl_client -out certs/machine.crt -infiles machine.csr
 ```
 
 ### With peer certificate authentication I receive "certificate is valid for 127.0.0.1, not $MY_IP"

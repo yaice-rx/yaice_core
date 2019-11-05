@@ -5,6 +5,7 @@ import (
 	"YaIce/core/config"
 	"YaIce/core/model"
 	"YaIce/core/router"
+	"YaIce/core/yaml"
 	"errors"
 	"github.com/golang/protobuf/proto"
 	"github.com/xtaci/kcp-go"
@@ -14,10 +15,10 @@ import (
 
 //初始化外网监听
 func Listen() error {
-	for port := config.ConfDevMrg.NetworkPortStart; port <= config.ConfDevMrg.NetworkPortEnd; port++ {
-		_port := serviceListenAccpet(port)
+	for port := yaml.YamlDevMrg.NetworkPortStart; port <= yaml.YamlDevMrg.NetworkPortEnd; port++ {
+		_port := listenAccpet(port)
 		if -1 != _port {
-			config.StartupConfigMrg.OutPort = strconv.Itoa(_port)
+			config.Config.OutPort = strconv.Itoa(_port)
 			return nil
 		}
 	}
@@ -25,7 +26,7 @@ func Listen() error {
 }
 
 //监听端口(kcp)
-func serviceListenAccpet(port int) int {
+func listenAccpet(port int) int {
 	kcpListen, err := kcp.ListenWithOptions(":"+strconv.Itoa(port), nil, 10, 3)
 	if nil != err {
 		kcpConnsPtr = nil

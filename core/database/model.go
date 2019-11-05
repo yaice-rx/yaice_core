@@ -14,7 +14,7 @@ type DBModel struct {
 
 var DBMrg *DBModel
 
-func Connect() *DBModel {
+func Init() *DBModel {
 	if nil != DBMrg {
 		return DBMrg
 	}

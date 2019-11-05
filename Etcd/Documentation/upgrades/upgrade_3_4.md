@@ -79,7 +79,7 @@ Rename [`etcd --log-output` to `--log-outputs`](https://github.com/etcd-io/etcd/
 
 v3.4 adds `etcd --logger=zap --log-outputs=stderr` support for structured logging and multiple log outputs. Main motivation is to promote automated etcd monitoring, rather than looking back server logs when it starts breaking. Future development will make etcd log as few as possible, and make etcd easier to monitor with metrics and alerts. **`etcd --logger=capnslog` will be deprecated in v3.5**.
 
-#### Changed `log-outputs` field type in `etcd --config-file` to `[]string`
+#### Changed `log-outputs` field type in `etcd --Config-file` to `[]string`
 
 Now that `log-outputs` (old field name `log-output`) accepts multiple writers, etcd configuration YAML file `log-outputs` field must be changed to `[]string` type as below:
 
@@ -103,7 +103,7 @@ cfg := &embed.Config{Debug: false}
 
 #### v3.5 deprecates `capnslog`
 
-**v3.5 will deprecate `etcd --log-package-levels` flag for `capnslog`**; `etcd --logger=zap --log-outputs=stderr` will the default. **v3.5 will deprecate `[CLIENT-URL]/config/local/log` endpoint.**
+**v3.5 will deprecate `etcd --log-package-levels` flag for `capnslog`**; `etcd --logger=zap --log-outputs=stderr` will the default. **v3.5 will deprecate `[CLIENT-URL]/Config/local/log` endpoint.**
 
 #### Deprecated `pkg/transport.TLSInfo.CAFile` field
 

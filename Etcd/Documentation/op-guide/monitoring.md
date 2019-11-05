@@ -96,7 +96,7 @@ Set up the Prometheus handler:
 
 ```sh
 nohup /tmp/prometheus \
-    -config.file /tmp/test-etcd.yaml \
+    -Config.file /tmp/test-etcd.yaml \
     -web.listen-address ":9090" \
     -storage.local.path "test-etcd.data" >> /tmp/test-etcd.log  2>&1 &
 ```

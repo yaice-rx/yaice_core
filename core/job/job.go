@@ -21,7 +21,7 @@ type Cron struct {
 
 var Crontab *Cron
 
-func Start() {
+func Init() {
 	Crontab = &Cron{
 		running: true,
 		entries: make(chan *JobItem, 100),

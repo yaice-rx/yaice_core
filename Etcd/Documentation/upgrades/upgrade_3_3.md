@@ -16,10 +16,10 @@ Highlighted breaking changes in 3.3.
 
 #### Changed value type of `etcd --auto-compaction-retention` flag to `string`
 
-Changed `--auto-compaction-retention` flag to [accept string values](https://github.com/etcd-io/etcd/pull/8563) with [finer granularity](https://github.com/etcd-io/etcd/issues/8503). Now that `--auto-compaction-retention` accepts string values, etcd configuration YAML file `auto-compaction-retention` field must be changed to `string` type. Previously, `--config-file etcd.config.yaml` can have `auto-compaction-retention: 24` field, now must be `auto-compaction-retention: "24"` or `auto-compaction-retention: "24h"`. If configured as `--auto-compaction-mode periodic --auto-compaction-retention "24h"`, the time duration value for `--auto-compaction-retention` flag must be valid for [`time.ParseDuration`](https://golang.org/pkg/time/#ParseDuration) function in Go.
+Changed `--auto-compaction-retention` flag to [accept string values](https://github.com/etcd-io/etcd/pull/8563) with [finer granularity](https://github.com/etcd-io/etcd/issues/8503). Now that `--auto-compaction-retention` accepts string values, etcd configuration YAML file `auto-compaction-retention` field must be changed to `string` type. Previously, `--Config-file etcd.Config.yaml` can have `auto-compaction-retention: 24` field, now must be `auto-compaction-retention: "24"` or `auto-compaction-retention: "24h"`. If configured as `--auto-compaction-mode periodic --auto-compaction-retention "24h"`, the time duration value for `--auto-compaction-retention` flag must be valid for [`time.ParseDuration`](https://golang.org/pkg/time/#ParseDuration) function in Go.
 
 ```diff
-# etcd.config.yaml
+# etcd.Config.yaml
 +auto-compaction-mode: periodic
 -auto-compaction-retention: 24
 +auto-compaction-retention: "24"
@@ -38,22 +38,22 @@ import "github.com/coreos/etcd/etcdserver"
 
 type EtcdServer struct {
 	*etcdserver.EtcdServer
--	config *etcdserver.ServerConfig
-+	config etcdserver.ServerConfig
+-	Config *etcdserver.ServerConfig
++	Config etcdserver.ServerConfig
 }
 
 func NewEtcd(dataDir string) *EtcdServer {
--	config := &etcdserver.ServerConfig{
-+	config := etcdserver.ServerConfig{
+-	Config := &etcdserver.ServerConfig{
++	Config := etcdserver.ServerConfig{
 		DataDir: dataDir,
         ...
 	}
-	return &EtcdServer{config: config}
+	return &EtcdServer{Config: Config}
 }
 
 func (e *EtcdServer) Start() error {
 	var err error
-	e.EtcdServer, err = etcdserver.NewServer(e.config)
+	e.EtcdServer, err = etcdserver.NewServer(e.Config)
     ...
 ```
 

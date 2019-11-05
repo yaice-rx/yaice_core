@@ -10,7 +10,7 @@ Cluster bootstrapping in Container Linux is simplest with [Ignition][container-l
 
 The [Container Linux Config Transpiler][container-linux-ct] compiles etcd configuration files into Ignition configuration files:
 
-```yaml container-linux-config:norender
+```yaml container-linux-Config:norender
 etcd:
   version: 3.2.0
   name: s1
@@ -26,12 +26,12 @@ etcd:
 
 ```
 $ ct --platform=gce --in-file /tmp/ct-etcd.cnf
-{"ignition":{"version":"2.0.0","config"...
+{"ignition":{"version":"2.0.0","Config"...
 ```
 
-```json ignition-config
+```json ignition-Config
 {
-  "ignition":{"version":"2.0.0","config":{}},
+  "ignition":{"version":"2.0.0","Config":{}},
   "storage":{},
   "systemd":{
     "units":[{
@@ -46,7 +46,7 @@ $ ct --platform=gce --in-file /tmp/ct-etcd.cnf
 
 To avoid accidental misconfiguration, the transpiler helpfully verifies etcd configurations when generating Ignition files:
 
-```yaml container-linux-config:norender
+```yaml container-linux-Config:norender
 etcd:
   version: 3.2.0
   name: s1
@@ -113,7 +113,7 @@ mv /tmp/20-cl-etcd-member.conf /etc/systemd/system/etcd-member.service.d/20-cl-e
 
 Or use a Container Linux Config:
 
-```yaml container-linux-config:norender
+```yaml container-linux-Config:norender
 systemd:
   units:
     - name: etcd-member.service
@@ -147,7 +147,7 @@ etcd:
 
 ```
 $ ct --platform=gce --in-file /tmp/ct-etcd.cnf
-{"ignition":{"version":"2.0.0","config"...
+{"ignition":{"version":"2.0.0","Config"...
 ```
 
 To see all runtime drop-in changes for system units:
@@ -202,4 +202,4 @@ systemctl disable --now etcd2.service
 [container-linux-faq]: https://github.com/coreos/docs/blob/master/etcd/os-faq.md
 [container-linux-provision]: https://github.com/coreos/docs/blob/master/os/provisioning.md
 [container-linux-ignition]: https://github.com/coreos/docs/blob/master/ignition/what-is-ignition.md
-[container-linux-ct]: https://github.com/coreos/container-linux-config-transpiler
+[container-linux-ct]: https://github.com/coreos/container-linux-Config-transpiler

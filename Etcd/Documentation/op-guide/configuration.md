@@ -4,10 +4,10 @@ title: Configuration flags
 
 etcd is configurable through a configuration file, various command-line flags, and environment variables.
 
-A reusable configuration file is a YAML file made with name and value of one or more command-line flags described below. In order to use this file, specify the file path as a value to the `--config-file` flag. The [sample configuration file][sample-config-file] can be used as a starting point to create a new configuration file as needed.
+A reusable configuration file is a YAML file made with name and value of one or more command-line flags described below. In order to use this file, specify the file path as a value to the `--Config-file` flag. The [sample configuration file][sample-Config-file] can be used as a starting point to create a new configuration file as needed.
 
 Options set on the command line take precedence over those from the environment. If a configuration file is provided, other command line flags and environment variables will be ignored.
-For example, `etcd --config-file etcd.conf.yml.sample --data-dir /tmp` will ignore the `--data-dir` flag.
+For example, `etcd --Config-file etcd.conf.yml.sample --data-dir /tmp` will ignore the `--data-dir` flag.
 
 The format of environment variable for flag `--my-flag` is `ETCD_MY_FLAG`. It applies to all flags.
 
@@ -342,7 +342,7 @@ The security flags help to [build a secure etcd cluster][security].
 + Specify 'stdout' or 'stderr' to skip journald logging even when running under systemd, or list of comma separated output targets.
 + default: default
 + env variable: ETCD_LOG_OUTPUTS
-+ 'default' use 'stderr' config for v3.4 during zap logger migraion
++ 'default' use 'stderr' Config for v3.4 during zap logger migraion
 
 ### --debug
 + Drop the default log level to DEBUG for all subpackages.
@@ -371,10 +371,10 @@ Follow the instructions when using these flags.
 + Print the version and exit.
 + default: false
 
-### --config-file
+### --Config-file
 + Load server configuration from a file.
 + default: ""
-+ example: [sample configuration file][sample-config-file]
++ example: [sample configuration file][sample-Config-file]
 + env variable: ETCD_CONFIG_FILE
 
 ## Profiling flags
@@ -429,5 +429,5 @@ Follow the instructions when using these flags.
 [security]: security.md
 [systemd-intro]: http://freedesktop.org/wiki/Software/systemd/
 [tuning]: ../tuning.md#time-parameters
-[sample-config-file]: ../../etcd.conf.yml.sample
+[sample-Config-file]: ../../etcd.conf.yml.sample
 [recovery]: recovery.md#disaster-recovery

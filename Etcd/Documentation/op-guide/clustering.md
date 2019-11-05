@@ -175,7 +175,7 @@ $ etcd --name infra1 --initial-advertise-peer-urls http://10.0.1.11:2380 \
   --advertise-client-urls http://10.0.1.11:2379 \
   --initial-cluster infra0=http://10.0.1.10:2380 \
   --initial-cluster-state new
-etcd: infra1 not listed in the initial cluster config
+etcd: infra1 not listed in the initial cluster Config
 exit 1
 ```
 

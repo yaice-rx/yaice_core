@@ -6,7 +6,7 @@ Runtime reconfiguration is one of the hardest and most error prone features in a
 
 Read on to learn about the design of etcd's runtime reconfiguration commands and how we tackled these problems.
 
-## Two phase config changes keep the cluster safe
+## Two phase Config changes keep the cluster safe
 
 In etcd, every runtime reconfiguration has to go through [two phases][add-member] for safety reasons. For example, to add a member, first inform the cluster of the new configuration and then start the new member.
 
