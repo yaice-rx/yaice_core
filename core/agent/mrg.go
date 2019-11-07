@@ -7,7 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	"github.com/sirupsen/logrus"
@@ -86,18 +85,18 @@ func RegisterData() error {
 }
 
 //获取节点数据
-func GetNodeData(key string) []config.ModuleConfig {
-	serviceConfList := []config.ModuleConfig{}
-	key = yaml.YamlDevMrg.ClusterName + "/" + key
-	resp, err := mrg.Client.Get(context.TODO(), key, clientv3.WithPrefix())
+func GetNodeData(key string) map[string]config.ModuleConfig {
+	serviceConfList := make(map[string]config.ModuleConfig)
+
+	resp, err := mrg.Client.Get(context.TODO(), yaml.YamlDevMrg.ClusterName+"/"+key, clientv3.WithPrefix())
 	if err != nil {
 		logrus.Error("Etcd 获取内容失败")
 		return serviceConfList
 	}
-	for _, value := range mrg.readNodeData(resp) {
+	for key, value := range mrg.readNodeData(resp) {
 		var _conf config.ModuleConfig
 		json.Unmarshal([]byte(value), &_conf)
-		serviceConfList = append(serviceConfList, _conf)
+		serviceConfList[key] = _conf
 	}
 	return serviceConfList
 }
@@ -165,9 +164,9 @@ func (this *AgentModel) watchNodes() {
 		for wresp := range rch {
 			for _, event := range wresp.Events {
 				key := string(event.Kv.Key)
-				fmt.Println("etcd 接收数据：", string(event.Kv.Value))
-				data := config.ModuleConfig{}
-				json.Unmarshal(event.Kv.Value, &data)
+				data := &config.ModuleConfig{}
+				logrus.Println("etcd 接收数据：", key, string(event.Kv.Value))
+				json.Unmarshal(event.Kv.Value, data)
 				switch event.Type {
 				case mvccpb.PUT:
 					//判断新服务，是否是自己所需要的
@@ -178,19 +177,20 @@ func (this *AgentModel) watchNodes() {
 								continue
 							}
 							//服务是否已经在连接池中
-							if nil != cluster.Handler.ConnMap[key] {
-								continue
-							}
 							if data.GroupName == "center" || data.GroupName == config.Config.GroupName {
 								//连接该服务
-								cluster.Handler.Connect(key, data.InHost+":"+data.InPort)
+								if conn := cluster.Connect(data); nil != conn {
+									//连接列表 集群名称+服务器组编号+服务类型
+									logrus.Println("connect cluster error ...")
+									continue
+								}
 							}
 						}
 					}
 				case mvccpb.DELETE:
 					DelNode(string(event.Kv.Key))
 					//TODO 删除etcd剔除的服务，首先从服务器断掉该连接，然后再删除该数据
-					cluster.Handler.DeleteGRPCConn(string(event.Kv.Key))
+					cluster.Delete(key)
 				}
 			}
 		}

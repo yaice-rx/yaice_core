@@ -2,12 +2,13 @@ package inside
 
 import (
 	"YaIce/protobuf/inside_proto"
-	"fmt"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/metadata"
+	"sync"
 )
 
 type Service struct {
+	mu sync.Mutex
 }
 
 //处理客户端发送过来的数据
@@ -17,7 +18,7 @@ func (s *Service) RegisterServiceRequest(r *inside_proto.C2S_Register,
 	md, _ := metadata.FromIncomingContext(stream.Context())
 	logrus.Println("接收grpc", md["key"])
 	if err != nil {
-		fmt.Println(err.Error())
+		logrus.Println(err.Error())
 	}
 	return nil
 }

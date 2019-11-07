@@ -9,6 +9,7 @@ import (
 	"YaIce/core/network"
 	"YaIce/core/router"
 	"YaIce/core/yaml"
+	"github.com/xtaci/kcp-go"
 )
 
 var ConnCount int = 5000
@@ -32,9 +33,9 @@ func onInit() {
 	ModuleMrg = new(Module)
 	network.Init(ConnCount)
 	yaml.Init()
-	router.Init()   //router 注册
+	router.Init() //router 注册
+	cluster.Init()
 	agent.Init()    //etcd 注册
-	cluster.Init()  //grpc注册
 	database.Init() //数据库注册
 	job.Init()      //定时器注册
 }
@@ -43,14 +44,13 @@ func Run(m ModuleCore) {
 	onInit()
 	m.RegisterHook()
 	m.RegisterRouter()
-	connClusterServer()
-	cluster.Listen()
+	connectClusterServer()
 	agent.RegisterData()
 	m.Listen()
 }
 
-//grpc连接
-func connClusterServer() {
+//连接服务
+func connectClusterServer() {
 	for _, value := range agent.GetNodeData("") {
 		//判断当前那些服务是自己需要连接的
 		for _, self := range config.Config.ConnServerNameList {
@@ -58,9 +58,16 @@ func connClusterServer() {
 				//如果是中心服务 或者 属于自己分组内部服务 都是可以连接的
 				if value.GroupName == "center" ||
 					value.GroupName == config.Config.GroupName {
-					cluster.Handler.Connect(
-						yaml.YamlDevMrg.ClusterName+"/"+value.GroupName+"/"+value.TypeName+"/"+value.Pid,
-						value.InHost+":"+value.InPort)
+					//连接服务
+					_, err := kcp.DialWithOptions(
+						value.InHost+":"+value.InPort,
+						nil,
+						10,
+						1)
+					if err != nil {
+						return
+					}
+					//cluster.ConnList[key] = kcpConn
 				}
 			}
 		}

@@ -5,12 +5,11 @@ import (
 	"YaIce/protobuf/external"
 	"github.com/golang/protobuf/proto"
 	"github.com/sirupsen/logrus"
-	"time"
 )
 
 //处理ping包
 func PingHandler(connect *model.PlayerConn, content []byte) {
-	logrus.Println("=========ping=============", time.Now().String())
+
 }
 
 func RegisterHandler(connect *model.PlayerConn, content []byte) {

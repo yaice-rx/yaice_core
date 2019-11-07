@@ -8,6 +8,7 @@ import (
 	"YaIce/core/yaml"
 	"errors"
 	"github.com/golang/protobuf/proto"
+	"github.com/sirupsen/logrus"
 	"github.com/xtaci/kcp-go"
 	"io"
 	"strconv"
@@ -16,7 +17,7 @@ import (
 //初始化外网监听
 func Listen() error {
 	for port := yaml.YamlDevMrg.NetworkPortStart; port <= yaml.YamlDevMrg.NetworkPortEnd; port++ {
-		_port := listenAccpet(port)
+		_port := ListenAccpet(port)
 		if -1 != _port {
 			config.Config.OutPort = strconv.Itoa(_port)
 			return nil
@@ -26,10 +27,10 @@ func Listen() error {
 }
 
 //监听端口(kcp)
-func listenAccpet(port int) int {
+func ListenAccpet(port int) int {
 	kcpListen, err := kcp.ListenWithOptions(":"+strconv.Itoa(port), nil, 10, 3)
 	if nil != err {
-		kcpConnsPtr = nil
+		kcpConnsPtr.KcpListen = nil
 		return -1
 	}
 	kcpConnsPtr.KcpListen = kcpListen
@@ -84,6 +85,7 @@ func Run() {
 		for {
 			select {
 			case msg := <-kcpConnsPtr.ChanMsgReviceQueue:
+				logrus.Println(msg.MsgNumber, "数据", msg.MsgData)
 				//需要增加过滤器
 				router.CallFilterHandler(msg.Session, msg.MsgData)
 				router.CallExternalRouterHandler(msg.MsgNumber, msg.Session, msg.MsgData)

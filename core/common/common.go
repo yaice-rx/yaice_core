@@ -5,10 +5,13 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/csv"
+	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/sirupsen/logrus"
 	"io"
 	"os"
+	"runtime"
+	"strconv"
 	"strings"
 	"sync"
 )
@@ -116,4 +119,20 @@ func ReadTXTData(_file string) []string {
 	}
 	mutex.Unlock()
 	return dataRecords
+}
+
+func GetGoid() int64 {
+	var (
+		buf [64]byte
+		n   = runtime.Stack(buf[:], false)
+		stk = strings.TrimPrefix(string(buf[:n]), "goroutine ")
+	)
+
+	idField := strings.Fields(stk)[0]
+	id, err := strconv.Atoi(idField)
+	if err != nil {
+		panic(fmt.Errorf("can not get goroutine id: %v", err))
+	}
+
+	return int64(id)
 }
