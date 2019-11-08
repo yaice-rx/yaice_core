@@ -6,7 +6,7 @@ import (
 	"YaIce/core/network"
 	"YaIce/core/router"
 	"YaIce/game/mrg"
-	"YaIce/protobuf/external"
+	"YaIce/protobuf/outer_proto"
 	"github.com/sirupsen/logrus"
 )
 
@@ -17,12 +17,8 @@ type module struct {
 var ModuleMrg *module = new(module)
 
 func (this *module) RegisterRouter() {
-	registerServiceRouter()
-	router.RegisterRouterHandler(&c2game.C2GPing{}, mrg.PingHandler)
-	router.RegisterRouterHandler(&c2game.C2GRegister{}, mrg.RegisterHandler)
-}
-
-func registerServiceRouter() { //注册内部服务
+	router.RegisterRouterHandler(&outer_proto.C2GPing{}, mrg.PingHandler)
+	router.RegisterRouterHandler(&outer_proto.C2GLogin{}, mrg.LoginHandler)
 }
 
 func (this *module) RegisterHook() {

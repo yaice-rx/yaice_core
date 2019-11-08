@@ -9,10 +9,9 @@ import (
 	"YaIce/core/network"
 	"YaIce/core/router"
 	"YaIce/core/yaml"
+	"github.com/sirupsen/logrus"
 	"github.com/xtaci/kcp-go"
 )
-
-var ConnCount int = 5000
 
 type ModuleCore interface {
 	//注册钩子
@@ -31,10 +30,10 @@ var ModuleMrg *Module
 
 func onInit() {
 	ModuleMrg = new(Module)
-	network.Init(ConnCount)
+	network.Init()
 	yaml.Init()
-	router.Init() //router 注册
-	cluster.Init()
+	router.Init()   //router 注册
+	cluster.Init()  //集群注册
 	agent.Init()    //etcd 注册
 	database.Init() //数据库注册
 	job.Init()      //定时器注册
@@ -67,7 +66,11 @@ func connectClusterServer() {
 					if err != nil {
 						return
 					}
-					//cluster.ConnList[key] = kcpConn
+					if conn := cluster.Connect(value); nil != conn {
+						//连接列表 集群名称+服务器组编号+服务类型
+						logrus.Println("connect cluster error ...")
+						continue
+					}
 				}
 			}
 		}

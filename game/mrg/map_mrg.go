@@ -10,7 +10,7 @@ type MapMrg struct {
 }
 
 //加入世界地图
-func JoinMapHandler(connect *model.PlayerConn, content []byte) {
+func JoinMapHandler(connect *model.Conn, content []byte) {
 	//_map.ConversionCoord();
 	//初始化大地图用户信息
 	//_map.VisionData.AddObserver();

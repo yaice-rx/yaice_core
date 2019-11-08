@@ -2,7 +2,6 @@ package model
 
 type MsgQueue struct {
 	MsgNumber int32
-	Token     []byte
-	Session   *PlayerConn
+	Session   *Conn
 	MsgData   []byte
 }

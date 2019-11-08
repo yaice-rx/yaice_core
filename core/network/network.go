@@ -8,7 +8,6 @@ import (
 	"YaIce/core/yaml"
 	"errors"
 	"github.com/golang/protobuf/proto"
-	"github.com/sirupsen/logrus"
 	"github.com/xtaci/kcp-go"
 	"io"
 	"strconv"
@@ -47,7 +46,7 @@ func ListenAccpet(port int) int {
 			}
 			//从conn读取玩家的playerGuid
 			if nil == kcpConnsPtr.ConnectList[conn] {
-				kcpConnsPtr.ConnectList[conn] = model.InitPlayerConn(conn)
+				kcpConnsPtr.ConnectList[conn] = model.InitConn(conn)
 			}
 			kcpConnsPtr.MutexConns.Unlock()
 			// 开启协程处理客户端请求，防止一条请求未处理完时，另一条请求阻塞
@@ -85,13 +84,12 @@ func Run() {
 		for {
 			select {
 			case msg := <-kcpConnsPtr.ChanMsgReviceQueue:
-				logrus.Println(msg.MsgNumber, "数据", msg.MsgData)
 				//需要增加过滤器
 				router.CallFilterHandler(msg.Session, msg.MsgData)
 				router.CallExternalRouterHandler(msg.MsgNumber, msg.Session, msg.MsgData)
 				break
-			case msg := <-kcpConnsPtr.ChanMshSendQueue:
-				msg.Session.WriteMsg(*msg)
+			case msg := <-kcpConnsPtr.ChanMsgSendQueue:
+				msg.Session.WriteMsg(msg.MsgData)
 				break
 			default:
 				break
@@ -100,12 +98,14 @@ func Run() {
 	}
 }
 
-func SendMsg(connect *model.PlayerConn, protoData proto.Message) {
+func SendMsg(session *model.Conn, protoData proto.Message) {
 	protoNum := common.ProtocalNumber(common.GetProtoName(protoData))
 	data, _ := proto.Marshal(protoData)
-	kcpConnsPtr.ChanMshSendQueue <- &model.MsgQueue{
+	content := common.IntToBytes(protoNum)
+	content = append(content, data...)
+	kcpConnsPtr.ChanMsgSendQueue <- &model.MsgQueue{
+		Session:   session,
 		MsgNumber: protoNum,
-		Session:   connect,
-		MsgData:   data,
+		MsgData:   content,
 	}
 }

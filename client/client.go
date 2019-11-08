@@ -4,7 +4,7 @@ import (
 	"YaIce/core/common"
 	"YaIce/core/job"
 	"YaIce/core/model"
-	"YaIce/protobuf/external"
+	"YaIce/protobuf/outer_proto"
 	"encoding/json"
 	"fmt"
 	"github.com/golang/protobuf/proto"
@@ -37,26 +37,26 @@ func Initialize() {
 		return
 	}
 	conn = kcpconn
-	RegisterHandler()
+	LoginHandler()
 	job.Crontab.AddCronTask(5, -1, pingHandler)
 	go handleKcpConn(conn)
 	select {}
 }
-func RegisterHandler() {
-	gmCommand := c2game.C2GRegister{Pid: token.Pid, SessionId: token.SessionKey}
+func LoginHandler() {
+	gmCommand := outer_proto.C2GLogin{Pid: token.Pid}
 	data, err := proto.Marshal(&gmCommand)
 	if err != nil {
 		log.Fatalln("Marshal mrg data error: ", err)
 	}
-	SendMsg(conn, common.ProtocalNumber(common.GetProtoName(&c2game.C2GRegister{})), data)
+	SendMsg(conn, common.ProtocalNumber(common.GetProtoName(&outer_proto.C2GLogin{})), data)
 }
 func pingHandler() {
-	gmCommand := c2game.C2GPing{}
+	gmCommand := outer_proto.C2GPing{}
 	data, err := proto.Marshal(&gmCommand)
 	if err != nil {
 		log.Fatalln("Marshal mrg data error: ", err)
 	}
-	SendMsg(conn, common.ProtocalNumber(common.GetProtoName(&c2game.C2GPing{})), data)
+	SendMsg(conn, common.ProtocalNumber(common.GetProtoName(&outer_proto.C2GPing{})), data)
 }
 
 func SendMsg(conn *kcp.UDPSession, protoNumber int32, data []byte) {

@@ -1,0 +1,1 @@
+protoc.exe --go_out=.  ./c2game.proto

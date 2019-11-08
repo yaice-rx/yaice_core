@@ -1,1 +1,0 @@
-protoc.exe --go_out=plugins=grpc:.  ./c2game.proto

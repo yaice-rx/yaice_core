@@ -8,7 +8,7 @@ import (
 	"YaIce/core/model"
 	"YaIce/core/network"
 	"YaIce/core/router"
-	"YaIce/protobuf/external"
+	"YaIce/protobuf/inside_proto"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -20,8 +20,7 @@ type module struct {
 var ModuleMrg *module = new(module)
 
 func (this *module) RegisterRouter() {
-	router.RegisterRouterHandler(&c2game.C2GPing{}, PingHandler)
-	router.RegisterRouterHandler(&c2game.C2GRegister{}, RegisterHandler)
+	router.RegisterRouterHandler(&inside_proto.C2SLogin{}, RegisterHandler)
 }
 
 func (this *module) RegisterHook() {}
@@ -35,10 +34,10 @@ func (this *module) Listen() {
 }
 
 //处理ping包
-func PingHandler(connect *model.PlayerConn, content []byte) {
+func PingHandler(connect *model.Conn, content []byte) {
 	logrus.Println("ping data ", common.GetGoid())
 }
 
-func RegisterHandler(connect *model.PlayerConn, content []byte) {
+func RegisterHandler(connect *model.Conn, content []byte) {
 	logrus.Println("register data ")
 }

@@ -1,0 +1,14 @@
+syntax="proto3";
+package _proto;
+
+//注册
+message c2g_game_register{
+    string groupId = 1;
+    string typeName = 2;
+    string pid = 3;
+}
+
+//接收注册的消息
+message s2c_game_register{
+
+}

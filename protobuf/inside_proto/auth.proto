@@ -1,0 +1,17 @@
+syntax="proto3";
+package inside_proto;
+
+//游戏服务器注册到验证服务器
+message c2s_login{
+    string userGuid = 1;
+}
+
+//接收注册的消息
+message s2c_login{
+
+}
+
+
+
+
+

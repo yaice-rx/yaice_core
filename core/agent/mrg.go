@@ -85,8 +85,8 @@ func RegisterData() error {
 }
 
 //获取节点数据
-func GetNodeData(key string) map[string]config.ModuleConfig {
-	serviceConfList := make(map[string]config.ModuleConfig)
+func GetNodeData(key string) map[string]*config.ModuleConfig {
+	serviceConfList := make(map[string]*config.ModuleConfig)
 
 	resp, err := mrg.Client.Get(context.TODO(), yaml.YamlDevMrg.ClusterName+"/"+key, clientv3.WithPrefix())
 	if err != nil {
@@ -96,7 +96,7 @@ func GetNodeData(key string) map[string]config.ModuleConfig {
 	for key, value := range mrg.readNodeData(resp) {
 		var _conf config.ModuleConfig
 		json.Unmarshal([]byte(value), &_conf)
-		serviceConfList[key] = _conf
+		serviceConfList[key] = &_conf
 	}
 	return serviceConfList
 }
@@ -161,11 +161,10 @@ func (this *AgentModel) watchNodes() {
 	watcher := clientv3.NewWatcher(this.Client)
 	for {
 		rch := watcher.Watch(context.TODO(), yaml.YamlDevMrg.ClusterName, clientv3.WithPrefix())
-		for wresp := range rch {
-			for _, event := range wresp.Events {
+		for response := range rch {
+			for _, event := range response.Events {
 				key := string(event.Kv.Key)
 				data := &config.ModuleConfig{}
-				logrus.Println("etcd 接收数据：", key, string(event.Kv.Value))
 				json.Unmarshal(event.Kv.Value, data)
 				switch event.Type {
 				case mvccpb.PUT:

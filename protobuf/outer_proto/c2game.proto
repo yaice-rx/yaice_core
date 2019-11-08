@@ -1,10 +1,9 @@
 syntax="proto3";
-package c2game;
+package outer_proto;
 
 //向game服务器注册
-message c2g_register{
+message c2g_login{
     string pid = 1;
-    string sessionId = 2;
 }
 
 //向服务器定时发送ping,保证存活

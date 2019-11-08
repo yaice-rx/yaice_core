@@ -10,20 +10,20 @@ import (
 //注册客户端请求协议
 type RouterList struct {
 	mu           sync.RWMutex
-	outerFuncMap map[int32]func(conn *model.PlayerConn, content []byte)
-	filterMap    []func(conn *model.PlayerConn, content []byte)
+	outerFuncMap map[int32]func(conn *model.Conn, content []byte)
+	filterMap    []func(conn *model.Conn, content []byte)
 }
 
 var routerListPtr *RouterList
 
 func Init() {
 	routerListPtr = &RouterList{
-		outerFuncMap: make(map[int32]func(conn *model.PlayerConn, content []byte)),
+		outerFuncMap: make(map[int32]func(conn *model.Conn, content []byte)),
 	}
 }
 
 //注册客户端请求方法
-func RegisterRouterHandler(msgObj proto.Message, handler func(conn *model.PlayerConn, content []byte)) {
+func RegisterRouterHandler(msgObj proto.Message, handler func(conn *model.Conn, content []byte)) {
 	//加锁
 	routerListPtr.mu.Lock()
 	defer routerListPtr.mu.Unlock()
@@ -33,7 +33,7 @@ func RegisterRouterHandler(msgObj proto.Message, handler func(conn *model.Player
 }
 
 //调用注册方法
-func CallExternalRouterHandler(protoNo int32, conn *model.PlayerConn, data []byte) {
+func CallExternalRouterHandler(protoNo int32, conn *model.Conn, data []byte) {
 	routerListPtr.mu.RLock()
 	defer routerListPtr.mu.RUnlock()
 	if routerListPtr.outerFuncMap[protoNo] != nil {
@@ -42,7 +42,7 @@ func CallExternalRouterHandler(protoNo int32, conn *model.PlayerConn, data []byt
 }
 
 //注册过滤处理
-func RegisterFilterHandler(handler func(conn *model.PlayerConn, content []byte)) {
+func RegisterFilterHandler(handler func(conn *model.Conn, content []byte)) {
 	//加锁
 	routerListPtr.mu.Lock()
 	defer routerListPtr.mu.Unlock()
@@ -50,7 +50,7 @@ func RegisterFilterHandler(handler func(conn *model.PlayerConn, content []byte))
 }
 
 //注册过滤处理
-func CallFilterHandler(conn *model.PlayerConn, data []byte) {
+func CallFilterHandler(conn *model.Conn, data []byte) {
 	//加锁
 	routerListPtr.mu.Lock()
 	defer routerListPtr.mu.Unlock()
